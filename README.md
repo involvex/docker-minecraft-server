@@ -342,6 +342,32 @@ docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /d
 - `command_output` - Command execution results
 - `log_data` - Live log streaming
 
+## 🤝 Supporting the Project
+
+### 💖 Support Our Work
+
+This project is maintained by the community, for the community. Your support helps us continue development, maintain infrastructure, and add new features to make Minecraft server management even better.
+
+### ☕ Funding Options
+
+**Buy Me a Coffee:**  
+Fuel our development with a coffee! Every cup helps us code longer and build better features.
+
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/button-80x15.png)](https://www.buymeacoffee.com/involvex)
+
+**GitHub Sponsors:**  
+Sponsor our work on GitHub and get recognized as a supporter of open source Minecraft tools.
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-4285F4?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/involvex)
+
+### 🌟 Other Ways to Help
+
+- **🐛 Report Bugs**: Help us identify and fix issues
+- **💻 Contribute Code**: Submit pull requests for new features or improvements
+- **📖 Improve Documentation**: Help make our guides clearer and more comprehensive
+- **🆘 Help Others**: Support fellow users in issues and discussions
+- **⭐ Star the Project**: Show your appreciation by starring our repository
+
 ## 🤝 Contributing
 
 This project provides a complete foundation for Minecraft server management. The web UI is built with modern technologies and can be extended with additional features:
