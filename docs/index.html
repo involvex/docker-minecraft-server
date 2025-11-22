@@ -214,6 +214,35 @@
         font-size: 0.9rem;
         color: #e2e8f0;
         overflow-x: auto;
+        position: relative;
+      }
+
+      .copy-button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 10;
+      }
+
+      .copy-button:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+      }
+
+      .copy-button.copied {
+        background: #10b981;
+      }
+
+      .copy-button.copied:hover {
+        background: #059669;
       }
 
       .architecture-diagram {
@@ -648,16 +677,95 @@
 
         <div class="row">
           <div class="col-lg-8 mx-auto">
-            <!-- One-click Setup -->
+            <!-- One-click Setup - HIGHLIGHTED -->
+            <div class="card-custom p-4 mb-4 border border-warning border-2">
+              <h4 class="fw-bold mb-3 text-warning">
+                <i class="fas fa-magic-wand-sparkles me-2"></i>
+                🚀 Quick Setup - One Command Setup (Windows)
+              </h4>
+
+              <div class="alert alert-warning mb-3">
+                <strong>⚡ Fastest Way to Get Started:</strong> Copy and paste
+                one of these commands below!
+              </div>
+
+              <div class="mb-4">
+                <p class="text-warning mb-2">
+                  <strong>PowerShell (Recommended):</strong>
+                </p>
+                <div
+                  class="code-snippet bg-success bg-opacity-10 border border-success"
+                >
+                  <button
+                    class="copy-button"
+                    onclick="copyCommand(this, 'iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1 | iex')"
+                  >
+                    <i class="fas fa-copy me-1"></i>Copy
+                  </button>
+                  <span class="text-success"
+                    ># Download and run setup automatically</span
+                  ><br />
+                  <span class="text-white fw-bold"
+                    >iwr -useb
+                    https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1
+                    | iex</span
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <p class="text-warning mb-2">
+                  <strong>Command Prompt:</strong>
+                </p>
+                <div
+                  class="code-snippet bg-success bg-opacity-10 border border-success"
+                >
+                  <button
+                    class="copy-button"
+                    onclick="copyCommand(this, 'curl -o setup.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat && setup.bat && manage.bat start')"
+                  >
+                    <i class="fas fa-copy me-1"></i>Copy
+                  </button>
+                  <span class="text-success"
+                    ># Download and run setup automatically</span
+                  ><br />
+                  <span class="text-white fw-bold"
+                    >curl -o setup.bat
+                    https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat
+                    && setup.bat && manage.bat start</span
+                  >
+                </div>
+              </div>
+
+              <div class="small text-muted">
+                <strong>Prerequisites:</strong> Docker and Docker Desktop must
+                be installed first.
+                <a
+                  href="https://docs.docker.com/get-docker/"
+                  target="_blank"
+                  rel="noopener"
+                  class="text-warning"
+                  >Get Docker here</a
+                >
+              </div>
+            </div>
+
+            <!-- Alternative Setup Methods -->
             <div class="card-custom p-4 mb-4">
               <h4 class="fw-bold mb-3">
-                <i class="fas fa-magic-wand-sparkles text-primary me-2"></i>
-                One-Click Setup (Windows)
+                <i class="fas fa-tools text-primary me-2"></i>
+                Alternative Setup Methods
               </h4>
 
               <div class="mb-3">
-                <p class="text-muted mb-3">PowerShell (Recommended):</p>
+                <p class="text-muted mb-3">PowerShell (Manual):</p>
                 <div class="code-snippet">
+                  <button
+                    class="copy-button"
+                    onclick="copyCommand(this, 'winget install Docker.DockerDesktop\n\ngit clone https://github.com/involvex/docker-minecraft-server.git\ncd docker-minecraft-server\n.\setup.ps1')"
+                  >
+                    <i class="fas fa-copy me-1"></i>Copy
+                  </button>
                   winget install Docker.DockerDesktop
                   <br /><br />
                   # Clone and setup the repository git clone
@@ -667,8 +775,14 @@
               </div>
 
               <div class="mb-3">
-                <p class="text-muted mb-3">Command Prompt:</p>
+                <p class="text-muted mb-3">Command Prompt (Manual):</p>
                 <div class="code-snippet">
+                  <button
+                    class="copy-button"
+                    onclick="copyCommand(this, 'git clone https://github.com/involvex/docker-minecraft-server.git\ncd docker-minecraft-server\n\nsetup.bat\n\nmanage.bat start')"
+                  >
+                    <i class="fas fa-copy me-1"></i>Copy
+                  </button>
                   REM Clone the repository<br />
                   git clone
                   https://github.com/involvex/docker-minecraft-server.git<br />
@@ -734,6 +848,12 @@
                 Quick Configuration (.env)
               </h4>
               <div class="code-snippet">
+                <button
+                  class="copy-button"
+                  onclick="copyCommand(this, '# Server Configuration\nSERVER_NAME=My Amazing Server\nMAX_MEMORY=4G\nMAX_PLAYERS=20\nDIFFICULTY=normal\n\n# Security (CHANGE THESE!)\nRCON_PASSWORD=your_secure_rcon_password\nWEBUI_SECRET_KEY=your_web_ui_secret_key')"
+                >
+                  <i class="fas fa-copy me-1"></i>Copy
+                </button>
                 # Server Configuration SERVER_NAME="My Amazing Server"
                 MAX_MEMORY=4G MAX_PLAYERS=20 DIFFICULTY=normal # Security
                 (CHANGE THESE!) RCON_PASSWORD=your_secure_rcon_password
@@ -965,6 +1085,63 @@
     <script>
       // Simple page view tracking
       console.log("🎮 Minecraft Server GitHub Pages loaded successfully");
+
+      // Copy to clipboard functionality
+      function copyCommand(button, command) {
+        // Use modern clipboard API if available
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard
+            .writeText(command)
+            .then(function () {
+              showCopiedFeedback(button);
+            })
+            .catch(function () {
+              fallbackCopyTextToClipboard(command, button);
+            });
+        } else {
+          fallbackCopyTextToClipboard(command, button);
+        }
+      }
+
+      function fallbackCopyTextToClipboard(text, button) {
+        // Create a temporary textarea element
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        // Add to DOM, select, copy, and remove
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          document.execCommand("copy");
+          showCopiedFeedback(button);
+        } catch (err) {
+          console.error("Fallback: Oops, unable to copy", err);
+          // If copy fails, show the command text for manual selection
+          alert(
+            "Copy failed. Please manually select and copy the command:\n\n" +
+              text,
+          );
+        }
+
+        document.body.removeChild(textArea);
+      }
+
+      function showCopiedFeedback(button) {
+        const originalHTML = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+        button.classList.add("copied");
+
+        // Reset after 2 seconds
+        setTimeout(function () {
+          button.innerHTML = originalHTML;
+          button.classList.remove("copied");
+        }, 2000);
+      }
 
       // Debug button clicks
       document.addEventListener("DOMContentLoaded", function () {
