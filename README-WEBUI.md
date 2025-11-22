@@ -33,13 +33,24 @@ A modern, feature-rich web interface for managing your Minecraft server with RCO
 **PowerShell:**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.ps1 | iex
+# Clone and setup the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+.\setup.ps1
 ```
 
 **Command Prompt:**
 
 ```cmd
-curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
+REM Clone the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+
+REM Run setup
+setup.bat
+
+REM Start the server
+manage.bat start
 ```
 
 ### Manual Setup
@@ -183,31 +194,38 @@ rcon.password=your_secure_password
 
 ## Management Scripts
 
-### rebuild-webui.bat
+### manage.bat
 
-Rebuilds and restarts the web UI container:
+Windows batch script for server management:
 
-```bash
-rebuild-webui.bat
+```cmd
+manage.bat start    # Start the server
+manage.bat stop     # Stop the server
+manage.bat restart  # Restart the server
+manage.bat status   # Show server status
+manage.bat logs     # View server logs
+manage.bat update   # Update Docker images
 ```
 
-### setup-and-manage.bat
+### manage.ps1
 
-Combined setup and management script:
+PowerShell alternative for Windows:
 
-```bash
-setup-and-manage.bat
+```powershell
+.\manage.ps1 -Command start
+.\manage.ps1 -Command status
+.\manage.ps1 -Command logs
 ```
 
-Options:
+### setup.sh
 
-1. Initial Setup
-2. Start Services
-3. Stop Services
-4. Restart Services
-5. View Logs
-6. Rebuild Web UI
-7. Update Configuration
+Linux/macOS setup and management script:
+
+```bash
+./setup.sh start    # Start the server
+./setup.sh status   # Check status
+./setup.sh stop     # Stop the server
+```
 
 ## Architecture
 

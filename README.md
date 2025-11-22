@@ -2,6 +2,25 @@
 
 🎮 **Complete Minecraft server setup with modern web-based administration interface**
 
+## 📦 Version 2.1.0 - Major Bug Fixes & Improvements
+
+**Latest Release:** November 22, 2025
+
+### 🐛 **Critical Fixes in v2.1.0**
+
+- ✅ **FIXED**: WebUI constant restarting issue (containers now run stably)
+- ✅ **FIXED**: PowerShell encoding problems with Unicode characters  
+- ✅ **FIXED**: manage.bat script output suppression
+- ✅ **CLEANED**: Removed 5 duplicate management scripts
+- ✅ **UPDATED**: All documentation to reflect current file structure
+
+### 🚀 **What's New**
+
+- **Simplified Management**: Streamlined batch scripts with clean ASCII output
+- **Better Documentation**: Updated all setup guides with correct file references  
+- **Enhanced Stability**: Improved health checks and service dependencies
+- **Cross-Platform**: Works reliably in both PowerShell and Command Prompt
+
 This project provides a production-ready Minecraft server with a comprehensive web management system, built using Docker and modern web technologies.
 
 ## ✨ Features
@@ -79,13 +98,24 @@ manage.bat update
 **PowerShell:**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.ps1 | iex
+# Clone and setup the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+.\setup.ps1
 ```
 
 **Command Prompt:**
 
 ```cmd
-curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
+REM Clone the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+
+REM Run setup
+setup.bat
+
+REM Start the server
+manage.bat start
 ```
 
 ### Manual Setup
@@ -152,13 +182,12 @@ cd docker-minecraft-server
 ├── setup.sh                    # Linux/macOS bash setup script
 ├── manage.bat                  # Windows batch management script
 ├── manage.ps1                  # Windows PowerShell management script
-├── manage.sh                   # Linux/macOS bash management script
 ├── SETUP_GUIDE.md             # Comprehensive documentation
 ├── README.md                  # This file
+├── MANAGEMENT.md              # Management commands documentation
 ├── .env                       # Environment configuration (auto-generated)
 ├── config/
 │   ├── server.properties      # Server configuration template
-│   ├── .env.example          # Environment template
 │   ├── plugins/              # Plugin JAR files directory
 │   └── plugin-configs/       # Plugin configurations
 ├── webui/
@@ -166,8 +195,6 @@ cd docker-minecraft-server
 │   ├── requirements.txt     # Python dependencies
 │   ├── Dockerfile          # Web UI container definition
 │   └── templates/          # HTML templates
-│       ├── base.html       # Base template with navigation
-│       └── dashboard.html  # Main dashboard
 └── logs/                   # Server logs mount point
 ```
 

@@ -7,9 +7,11 @@ This document explains how to manage your Docker Minecraft server using the avai
 ### Windows Users
 
 #### `manage.bat` (Recommended)
+
 Comprehensive batch script with logging and error handling.
 
 **Usage:**
+
 ```cmd
 manage.bat start        # Start the server
 manage.bat stop         # Stop the server
@@ -24,6 +26,7 @@ manage.bat help         # Show all commands
 ```
 
 **Features:**
+
 - Detailed logging with timestamps
 - Input sanitization for security
 - Error handling with detailed messages
@@ -32,9 +35,11 @@ manage.bat help         # Show all commands
 - Health check functionality
 
 #### `manage.ps1` (Alternative)
+
 Simpler PowerShell script for basic operations.
 
 **Usage:**
+
 ```powershell
 .\manage.ps1 -Command start
 .\manage.ps1 -Command stop
@@ -45,9 +50,11 @@ Simpler PowerShell script for basic operations.
 ### Linux Users
 
 #### `setup.sh`
+
 Setup and management script for Linux systems.
 
 **Usage:**
+
 ```bash
 chmod +x setup.sh
 ./setup.sh start
@@ -63,10 +70,11 @@ chmod +x setup.sh
    - Run setup: `./setup.sh` (Linux) or use `manage.bat` (Windows)
 
 2. **Start the Server:**
+
    ```bash
    # Windows
    manage.bat start
-   
+
    # Linux
    ./setup.sh start
    ```
@@ -78,22 +86,26 @@ chmod +x setup.sh
 ## Management Features
 
 ### Backup
+
 - Automatic and manual backup creation
 - Backups stored in `/backups` directory
 - Compressed format (tar.gz)
 
 ### RCON Commands
+
 - Execute Minecraft commands remotely
 - Input sanitization for security
 - Command logging and history
 
 ### Monitoring
+
 - Real-time server status
 - Player list monitoring
 - Health checks for containers
 - Log aggregation
 
 ### Updates
+
 - Docker image updates
 - Container recreation
 - Zero-downtime deployments
@@ -101,14 +113,18 @@ chmod +x setup.sh
 ## Configuration
 
 ### Environment Variables
+
 Edit `.env` file to configure:
+
 - `RCON_PASSWORD`: Server RCON password
 - `WEBUI_SECRET_KEY`: Web UI security key
 - `SERVER_NAME`: Server display name
 - `SERVER_VERSION`: Minecraft version
 
 ### Server Properties
+
 Modify `config/server.properties` for server settings:
+
 - Game mode, difficulty, max players
 - World settings, PvP configuration
 - Network and security options
@@ -133,7 +149,9 @@ Modify `config/server.properties` for server settings:
    - Review web UI logs for errors
 
 ### Health Checks
+
 Both Minecraft server and web UI have health checks:
+
 - Server: RCON connection test (30s interval)
 - Web UI: HTTP health endpoint (30s interval)
 
@@ -166,6 +184,7 @@ docker-minecraft-server/
 ## Support
 
 For issues and support:
+
 1. Check logs: `manage.bat logs`
 2. Review configuration files
 3. Consult server documentation

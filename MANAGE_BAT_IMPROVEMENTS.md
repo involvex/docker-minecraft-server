@@ -7,6 +7,7 @@ This document details the improvements made to the `manage.bat` script to addres
 ### 1. Logging & Error Handling
 
 All commands now include:
+
 - Comprehensive logging to `logs\server.log` with timestamps
 - Error handling using `errorlevel` checks after each operation
 - Error logging to a dedicated log file
@@ -15,6 +16,7 @@ All commands now include:
 ### 2. Command Validation & Parameter Handling
 
 The script now includes:
+
 - Validation for all commands that require parameters
 - Enhanced validation for the `rcon` command with required argument check
 - Input sanitization function to prevent potential security issues
@@ -29,6 +31,7 @@ The script now includes:
 ### 4. Auto-Start/Stop with Scheduled Tasks
 
 New functionality includes:
+
 - `auto-start` command that creates a Windows Task Scheduler task
 - Automatic server startup on user login
 - Proper task creation with appropriate permissions
@@ -36,6 +39,7 @@ New functionality includes:
 ### 5. UI Improvements
 
 Enhanced the user interface with:
+
 - More detailed help section with examples
 - Visual status indicators for all commands
 - Version information displayed in help output
@@ -44,6 +48,7 @@ Enhanced the user interface with:
 ### 6. Support for Multiple Server Types
 
 Added support for:
+
 - `multi-server` command to create and manage multiple Minecraft server instances
 - Automatic generation of separate docker-compose files for each server
 - Proper isolation of multiple server instances
@@ -51,6 +56,7 @@ Added support for:
 ### 7. Advanced Features
 
 New commands and functionality:
+
 - `health` command to check server health via RCON
 - Improved restart functionality that properly handles stop/start
 - Better error recovery in all commands
@@ -63,14 +69,14 @@ New commands and functionality:
 
 ## Key Changes Summary
 
-| Feature | Implementation |
-|--------|---------------|
-| **Logging** | Log files created in `logs\server.log` with timestamps |
-| **Security** | Input sanitization for all user inputs |
-| **User Experience** | Enhanced help output with examples and version info |
-| **Automation** | Auto-start functionality with Task Scheduler |
-| **Multi-Instance** | Support for multiple Minecraft servers |
-| **Error Handling** | Proper error detection and reporting |
+| Feature             | Implementation                                         |
+| ------------------- | ------------------------------------------------------ |
+| **Logging**         | Log files created in `logs\server.log` with timestamps |
+| **Security**        | Input sanitization for all user inputs                 |
+| **User Experience** | Enhanced help output with examples and version info    |
+| **Automation**      | Auto-start functionality with Task Scheduler           |
+| **Multi-Instance**  | Support for multiple Minecraft servers                 |
+| **Error Handling**  | Proper error detection and reporting                   |
 
 ## Example Usage
 
@@ -96,4 +102,3 @@ manage.bat rcon save-all
 ## Conclusion
 
 The enhanced script maintains full compatibility with the original functionality while adding robust logging, error handling, and security features. These improvements make it more suitable for production environments and automated deployments while remaining user-friendly for manual operation.
-
