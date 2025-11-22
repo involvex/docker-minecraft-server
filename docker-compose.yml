@@ -42,11 +42,11 @@ services:
     networks:
       - minecraft-network
     healthcheck:
-      test: ["CMD", "rcon", "-a", "localhost", "-p", "25575", "-c", "list"]
+      test: ["CMD", "rcon-cli", "list"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 120s
 
   minecraft-webui:
     build:
@@ -80,7 +80,14 @@ services:
     networks:
       - minecraft-network
     depends_on:
-      - minecraft
+      minecraft:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 volumes:
   minecraft-data:
