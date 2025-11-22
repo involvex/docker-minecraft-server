@@ -58,6 +58,7 @@ services:
     volumes:
       - minecraft-data:/data
       - ./config:/config
+      - ./config/server.properties:/data/server.properties:rw  # Mount server.properties for editing
       - ./webui/data:/app/data
     environment:
       # RCON Connection
