@@ -120,7 +120,7 @@
                 <div class="nav-item">
                     <span class="nav-link">
                         <i class="fas fa-circle status-indicator" id="server-status-indicator"></i>
-                        <span id="server-status-text">Checking...</span>
+                        <span id="server-status-text">Loading...</span>
                     </span>
                 </div>
             </div>
@@ -160,6 +160,11 @@
                         <li class="nav-item">
                             <a class="nav-link {% if 'banlist' in request.endpoint %}active{% endif %}" href="#" onclick="showBanlist()">
                                 <i class="fas fa-ban"></i> Ban List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'worlds' in request.endpoint %}active{% endif %}" href="#" onclick="showWorlds()">
+                                <i class="fas fa-globe"></i> World Manager
                             </a>
                         </li>
                         <li class="nav-item">
@@ -225,7 +230,97 @@
                     <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="plugins-list"></div>
+                    <!-- Plugin Tabs -->
+                    <ul class="nav nav-tabs" id="pluginsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="installed-tab" data-bs-toggle="tab" data-bs-target="#installed" type="button" role="tab">Installed</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab">Download</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab">Upload</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3" id="pluginsTabsContent">
+                        <!-- Installed Plugins Tab -->
+                        <div class="tab-pane fade show active" id="installed" role="tabpanel">
+                            <div id="plugins-list"></div>
+                        </div>
+                        
+                        <!-- Download Plugins Tab -->
+                        <div class="tab-pane fade" id="download" role="tabpanel">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="plugin-search" placeholder="Search for plugins...">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="searchPlugins()">Search</button>
+                                </div>
+                                <div class="btn-group mt-2" role="group">
+                                    <input type="radio" class="btn-check" name="plugin-source" id="source-spiget" checked>
+                                    <label class="btn btn-outline-primary" for="source-spiget">Spiget (Bukkit/Spigot)</label>
+
+                                    <input type="radio" class="btn-check" name="plugin-source" id="source-curseforge">
+                                    <label class="btn btn-outline-primary" for="source-curseforge">CurseForge</label>
+
+                                    <input type="radio" class="btn-check" name="plugin-source" id="source-github">
+                                    <label class="btn btn-outline-primary" for="source-github">GitHub</label>
+                                </div>
+                            </div>
+                            <div id="plugin-search-results"></div>
+                        </div>
+                        
+                        <!-- Upload Plugin Tab -->
+                        <div class="tab-pane fade" id="upload" role="tabpanel">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                <p>Upload a plugin JAR file</p>
+                                <form id="upload-plugin-form">
+                                    <div class="mb-3">
+                                        <input title="file" type="file" class="form-control" id="plugin-file" accept=".jar" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload"></i> Upload Plugin
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- World Manager Modal -->
+    <div class="modal fade" id="worldsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-globe"></i> World Manager</h5>
+                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- World Tabs -->
+                    <ul class="nav nav-tabs" id="worldsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="worlds-tab" data-bs-toggle="tab" data-bs-target="#worlds-list" type="button" role="tab">Available Worlds</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="backups-tab" data-bs-toggle="tab" data-bs-target="#backups-list" type="button" role="tab">Backups</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3" id="worldsTabsContent">
+                        <!-- Worlds List Tab -->
+                        <div class="tab-pane fade show active" id="worlds-list" role="tabpanel">
+                            <div id="worlds-list-content"></div>
+                        </div>
+                        
+                        <!-- Backups Tab -->
+                        <div class="tab-pane fade" id="backups-list" role="tabpanel">
+                            <div id="backups-list-content"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -383,6 +478,12 @@
             loadLogs();
         }
         
+        function showWorlds() {
+            const modal = new bootstrap.Modal(document.getElementById('worldsModal'));
+            modal.show();
+            loadWorlds();
+        }
+        
         function sendCommand() {
             const input = document.getElementById('command-input');
             const command = input.value.trim();
@@ -476,6 +577,303 @@
                     document.getElementById('plugins-list').innerHTML = html;
                 })
                 .catch(error => console.error('Error loading plugins:', error));
+        }
+        
+        function removePlugin(pluginName) {
+            if (confirm(`Remove plugin ${pluginName}?`)) {
+                fetch(`/api/plugins/${pluginName}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        loadPlugins(); // Refresh the list
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => console.error('Error removing plugin:', error));
+            }
+        }
+        
+        function searchPlugins() {
+            const query = document.getElementById('plugin-search').value.trim();
+            const source = document.querySelector('input[name="plugin-source"]:checked').id;
+            
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+            
+            let apiEndpoint;
+            if (source === 'source-spiget') {
+                apiEndpoint = `/api/plugins/search/bukkit?q=${encodeURIComponent(query)}`;
+            } else if (source === 'source-curseforge') {
+                apiEndpoint = `/api/plugins/search/curseforge?q=${encodeURIComponent(query)}`;
+            } else {
+                apiEndpoint = `/api/plugins/search/github?q=${encodeURIComponent(query)}`;
+            }
+            
+            fetch(apiEndpoint)
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<h6>Search Results:</h6>';
+                    if (data.plugins && data.plugins.length > 0) {
+                        html += '<div class="row">';
+                        data.plugins.forEach(plugin => {
+                            html += `<div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">${plugin.name}</h6>
+                                        <p class="card-text">${plugin.description || 'No description available'}</p>
+                                        <small class="text-muted">Version: ${plugin.version || 'Unknown'}</small><br>
+                                        <small class="text-muted">Source: ${plugin.source}</small>
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-success" onclick="downloadPlugin('${plugin.name}', '${plugin.source}', '${plugin.download_url || ''}', '${plugin.id || ''}')">
+                                                <i class="fas fa-download"></i> Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                        html += '</div>';
+                    } else {
+                        html += '<p class="text-muted">No plugins found</p>';
+                    }
+                    document.getElementById('plugin-search-results').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error searching plugins:', error);
+                    document.getElementById('plugin-search-results').innerHTML = '<p class="text-danger">Error searching plugins</p>';
+                });
+        }
+        
+        function downloadPlugin(name, source, downloadUrl, pluginId) {
+            let url = downloadUrl;
+            let filename = name + '.jar';
+            
+            if (source === 'spiget' && pluginId) {
+                // For Spiget, we need to get the download URL first
+                fetch(`/api/plugins/search/bukkit?q=${encodeURIComponent(name)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.plugins && data.plugins.length > 0) {
+                            const plugin = data.plugins.find(p => p.id == pluginId || p.name === name);
+                            if (plugin) {
+                                // Use Spiget download API
+                                url = `https://api.spiget.org/v2/resources/${plugin.id}/download`;
+                                downloadPluginFromUrl(url, filename, source);
+                            }
+                        }
+                    });
+            } else if (url) {
+                downloadPluginFromUrl(url, filename, source);
+            } else {
+                alert('Download URL not available for this plugin');
+            }
+        }
+        
+        function downloadPluginFromUrl(url, filename, source) {
+            fetch('/api/plugins/download', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url, filename: filename, source: source})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    loadPlugins(); // Refresh the installed plugins list
+                } else {
+                    alert(`Error downloading plugin: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error downloading plugin:', error);
+                alert('Error downloading plugin');
+            });
+        }
+        
+        // Handle plugin upload
+        document.getElementById('upload-plugin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('plugin-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/api/plugins/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    fileInput.value = ''; // Clear the file input
+                    // Switch to installed tab
+                    document.getElementById('installed-tab').click();
+                    loadPlugins(); // Refresh the installed plugins list
+                } else {
+                    alert(`Error uploading plugin: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading plugin:', error);
+                alert('Error uploading plugin');
+            });
+        });
+        
+        function loadWorlds() {
+            fetch('/api/worlds')
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<h6>Available Worlds:</h6>';
+                    if (data.worlds && data.worlds.length > 0) {
+                        html += '<div class="row">';
+                        data.worlds.forEach(world => {
+                            const isCurrent = world.name === data.current_world;
+                            const sizeMB = (world.size / (1024 * 1024)).toFixed(1);
+                            html += `<div class="col-md-6 mb-3">
+                                <div class="card ${isCurrent ? 'border-success' : ''}">
+                                    <div class="card-body">
+                                        <h6 class="card-title">${world.name} ${isCurrent ? '<span class="badge bg-success">Current</span>' : ''}</h6>
+                                        <p class="card-text">
+                                            <small class="text-muted">Size: ${sizeMB} MB | Files: ${world.file_count}</small>
+                                        </p>
+                                        <div class="btn-group" role="group">
+                                            ${!isCurrent ? `<button class="btn btn-sm btn-primary" onclick="switchWorld('${world.name}')">
+                                                <i class="fas fa-play"></i> Switch
+                                            </button>` : ''}
+                                            <button class="btn btn-sm btn-warning" onclick="backupWorld('${world.name}')">
+                                                <i class="fas fa-save"></i> Backup
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                        html += '</div>';
+                    } else {
+                        html += '<p class="text-muted">No worlds found</p>';
+                    }
+                    document.getElementById('worlds-list-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error loading worlds:', error);
+                    document.getElementById('worlds-list-content').innerHTML = '<p class="text-danger">Error loading worlds</p>';
+                });
+            
+            // Load backups
+            loadBackups();
+        }
+        
+        function loadBackups() {
+            fetch('/api/worlds/backups')
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<h6>World Backups:</h6>';
+                    if (data.backups && data.backups.length > 0) {
+                        html += '<ul class="list-group">';
+                        data.backups.forEach(backup => {
+                            const sizeMB = (backup.size / (1024 * 1024)).toFixed(1);
+                            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>${backup.world}</strong><br>
+                                    <small class="text-muted">${backup.created} | ${sizeMB} MB</small>
+                                </div>
+                                <button class="btn btn-sm btn-success" onclick="restoreWorld('${backup.world}', '${backup.name}')">
+                                    <i class="fas fa-undo"></i> Restore
+                                </button>
+                            </li>`;
+                        });
+                        html += '</ul>';
+                    } else {
+                        html += '<p class="text-muted">No backups available</p>';
+                    }
+                    document.getElementById('backups-list-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error loading backups:', error);
+                    document.getElementById('backups-list-content').innerHTML = '<p class="text-danger">Error loading backups</p>';
+                });
+        }
+        
+        function switchWorld(worldName) {
+            if (confirm(`Switch to world "${worldName}"? This will update server.properties and may require a server restart.`)) {
+                fetch(`/api/worlds/${worldName}/switch`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        loadWorlds(); // Refresh the worlds list
+                    } else {
+                        alert(`Error switching world: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error switching world:', error);
+                    alert('Error switching world');
+                });
+            }
+        }
+        
+        function backupWorld(worldName) {
+            if (confirm(`Create a backup of world "${worldName}"?`)) {
+                fetch(`/api/worlds/${worldName}/backup`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        loadBackups(); // Refresh the backups list
+                    } else {
+                        alert(`Error creating backup: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating backup:', error);
+                    alert('Error creating backup');
+                });
+            }
+        }
+        
+        function restoreWorld(worldName, backupFile) {
+            if (confirm(`Restore world "${worldName}" from backup "${backupFile}"? This will replace the current world.`)) {
+                fetch(`/api/worlds/${worldName}/restore`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({backup_file: backupFile})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        loadWorlds(); // Refresh the worlds list
+                    } else {
+                        alert(`Error restoring world: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error restoring world:', error);
+                    alert('Error restoring world');
+                });
+            }
         }
         
         function loadPlayers() {
@@ -707,8 +1105,29 @@
             fetch('/api/status')
                 .then(response => response.json())
                 .then(data => updateStatus(data))
-                .catch(error => console.error('Error updating status:', error));
+                .catch(error => {
+                    console.error('Error updating status:', error);
+                    // Update navbar status on error
+                    const indicator = document.getElementById('server-status-indicator');
+                    const text = document.getElementById('server-status-text');
+                    indicator.className = 'fas fa-circle status-offline';
+                    text.textContent = 'Error';
+                });
         }, 30000);
+        
+        // Initial status update
+        setTimeout(function() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => updateStatus(data))
+                .catch(error => {
+                    console.error('Error loading initial status:', error);
+                    const indicator = document.getElementById('server-status-indicator');
+                    const text = document.getElementById('server-status-text');
+                    indicator.className = 'fas fa-circle status-offline';
+                    text.textContent = 'Error';
+                });
+        }, 1000);
     </script>
     
     {% block extra_js %}{% endblock %}

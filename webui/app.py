@@ -437,15 +437,469 @@ def api_config():
             logging.error(f"Error writing config: {e}")
             return jsonify({'error': str(e)}), 500
 
+@app.route('/api/worlds', methods=['GET'])
+def api_worlds():
+    """List available worlds"""
+    try:
+        worlds_dir = '/data/worlds'
+        worlds = []
+        
+        # Check if worlds directory exists
+        if not os.path.exists(worlds_dir):
+            return jsonify({'worlds': [], 'current_world': 'world'})
+        
+        # List world directories
+        for item in os.listdir(worlds_dir):
+            world_path = os.path.join(worlds_dir, item)
+            if os.path.isdir(world_path):
+                # Check if it looks like a world directory (has level.dat or region files)
+                has_level_dat = os.path.exists(os.path.join(world_path, 'level.dat'))
+                has_region_dir = os.path.exists(os.path.join(world_path, 'region'))
+                
+                if has_level_dat or has_region_dir:
+                    # Calculate world size
+                    total_size = 0
+                    file_count = 0
+                    for root, dirs, files in os.walk(world_path):
+                        for file in files:
+                            try:
+                                file_path = os.path.join(root, file)
+                                total_size += os.path.getsize(file_path)
+                                file_count += 1
+                            except (OSError, IOError):
+                                continue
+                    
+                    worlds.append({
+                        'name': item,
+                        'size': total_size,
+                        'file_count': file_count,
+                        'path': world_path
+                    })
+        
+        # Get current world (try multiple methods)
+        current_world = 'world'  # default
+        try:
+            with Client(RCON_HOST, RCON_PORT, passwd=RCON_PASSWORD, timeout=5) as client:
+                result = client.run("save query")
+                if "world" in result:
+                    current_world = "world"
+        except:
+            pass  # RCON not available
+        
+        return jsonify({
+            'worlds': sorted(worlds, key=lambda x: x['name']),
+            'current_world': current_world
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/worlds/<world_name>/backup', methods=['POST'])
+def api_backup_world(world_name):
+    """Create a backup of a world"""
+    try:
+        import shutil
+        from datetime import datetime
+        
+        worlds_dir = '/data/worlds'
+        backup_dir = '/data/backups'
+        
+        world_path = os.path.join(worlds_dir, world_name)
+        if not os.path.exists(world_path):
+            return jsonify({'error': 'World not found'}), 404
+        
+        os.makedirs(backup_dir, exist_ok=True)
+        
+        # Create backup with timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        backup_name = f"{world_name}_{timestamp}"
+        backup_path = os.path.join(backup_dir, backup_name)
+        
+        # Create compressed backup (zip)
+        backup_file = f"{backup_path}.zip"
+        shutil.make_archive(backup_path, 'zip', world_path)
+        
+        return jsonify({
+            'success': True,
+            'message': f'World {world_name} backed up successfully',
+            'backup_file': f"{backup_name}.zip",
+            'backup_path': backup_file
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/worlds/backups', methods=['GET'])
+def api_list_backups():
+    """List available world backups"""
+    try:
+        backup_dir = '/data/backups'
+        backups = []
+        
+        if os.path.exists(backup_dir):
+            for file in os.listdir(backup_dir):
+                if file.endswith('.zip'):
+                    file_path = os.path.join(backup_dir, file)
+                    file_size = os.path.getsize(file_path)
+                    modified_time = datetime.fromtimestamp(os.path.getmtime(file_path))
+                    
+                    # Extract world name and timestamp from filename
+                    parts = file.replace('.zip', '').split('_')
+                    if len(parts) >= 2:
+                        world_name = '_'.join(parts[:-1])
+                        timestamp = parts[-1]
+                        if len(timestamp) == 14:  # YYYYMMDD_HHMMSS
+                            formatted_time = f"{timestamp[:4]}-{timestamp[4:6]}-{timestamp[6:8]} {timestamp[9:11]}:{timestamp[11:13]}:{timestamp[13:15]}"
+                        else:
+                            formatted_time = modified_time.isoformat()
+                    else:
+                        world_name = 'unknown'
+                        formatted_time = modified_time.isoformat()
+                    
+                    backups.append({
+                        'name': file,
+                        'world': world_name,
+                        'size': file_size,
+                        'created': formatted_time,
+                        'path': file_path
+                    })
+        
+        return jsonify({
+            'backups': sorted(backups, key=lambda x: x['created'], reverse=True)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/worlds/<world_name>/restore', methods=['POST'])
+def api_restore_world(world_name):
+    """Restore a world from backup"""
+    try:
+        import shutil
+        import zipfile
+        
+        data = request.get_json()
+        backup_file = data.get('backup_file')
+        
+        if not backup_file:
+            return jsonify({'error': 'Backup file is required'}), 400
+        
+        worlds_dir = '/data/worlds'
+        backup_dir = '/data/backups'
+        backup_path = os.path.join(backup_dir, backup_file)
+        
+        if not os.path.exists(backup_path):
+            return jsonify({'error': 'Backup file not found'}), 404
+        
+        # Remove existing world directory if it exists
+        world_path = os.path.join(worlds_dir, world_name)
+        if os.path.exists(world_path):
+            shutil.rmtree(world_path)
+        
+        # Extract backup
+        with zipfile.ZipFile(backup_path, 'r') as zip_ref:
+            zip_ref.extractall(worlds_dir)
+        
+        return jsonify({
+            'success': True,
+            'message': f'World {world_name} restored from backup {backup_file}'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/worlds/<world_name>/switch', methods=['POST'])
+def api_switch_world(world_name):
+    """Switch to a different world"""
+    try:
+        worlds_dir = '/data/worlds'
+        world_path = os.path.join(worlds_dir, world_name)
+        
+        if not os.path.exists(world_path):
+            return jsonify({'error': 'World not found'}), 404
+        
+        # Update server.properties to point to the new world
+        server_props_path = None
+        for path in ['/data/server.properties', '/config/server.properties']:
+            if os.path.exists(path):
+                server_props_path = path
+                break
+        
+        if not server_props_path:
+            return jsonify({'error': 'server.properties not found'}), 404
+        
+        # Read current server.properties
+        with open(server_props_path, 'r') as f:
+            lines = f.readlines()
+        
+        # Update or add level-name property
+        found_level_name = False
+        for i, line in enumerate(lines):
+            if line.startswith('level-name='):
+                lines[i] = f'level-name={world_name}\n'
+                found_level_name = True
+                break
+        
+        # Add level-name property if it doesn't exist
+        if not found_level_name:
+            lines.append(f'level-name={world_name}\n')
+        
+        # Write updated server.properties
+        with open(server_props_path, 'w') as f:
+            f.writelines(lines)
+        
+        return jsonify({
+            'success': True,
+            'message': f'Switched to world {world_name}. Server restart may be required.',
+            'world': world_name
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/plugins', methods=['GET'])
 def api_plugins():
     """List installed plugins"""
     try:
         plugins_dir = '/data/plugins'
+        plugins = []
         if os.path.exists(plugins_dir):
-            plugins = [f for f in os.listdir(plugins_dir) if f.endswith('.jar')]
-            return jsonify({'plugins': plugins})
-        return jsonify({'plugins': []})
+            for plugin in os.listdir(plugins_dir):
+                if plugin.endswith('.jar'):
+                    plugin_path = os.path.join(plugins_dir, plugin)
+                    file_size = os.path.getsize(plugin_path)
+                    modified_time = datetime.fromtimestamp(os.path.getmtime(plugin_path)).isoformat()
+                    plugins.append({
+                        'name': plugin,
+                        'size': file_size,
+                        'modified': modified_time,
+                        'enabled': True  # Plugin is considered enabled if file exists
+                    })
+        return jsonify({'plugins': plugins})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/plugins/upload', methods=['POST'])
+def api_upload_plugin():
+    """Upload a new plugin"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file provided'}), 400
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+        
+        if not file.filename.endswith('.jar'):
+            return jsonify({'error': 'Only .jar files are allowed'}), 400
+        
+        plugins_dir = '/data/plugins'
+        os.makedirs(plugins_dir, exist_ok=True)
+        
+        # Save the plugin
+        plugin_path = os.path.join(plugins_dir, file.filename)
+        file.save(plugin_path)
+        
+        return jsonify({
+            'success': True,
+            'message': f'Plugin {file.filename} uploaded successfully',
+            'plugin': file.filename
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/plugins/<plugin_name>', methods=['DELETE'])
+def api_remove_plugin(plugin_name):
+    """Remove a plugin"""
+    try:
+        plugins_dir = '/data/plugins'
+        plugin_path = os.path.join(plugins_dir, plugin_name)
+        
+        if not os.path.exists(plugin_path):
+            return jsonify({'error': 'Plugin not found'}), 404
+        
+        # Check if it's actually a .jar file and in the plugins directory
+        if not plugin_name.endswith('.jar') or not os.path.abspath(plugin_path).startswith(os.path.abspath(plugins_dir)):
+            return jsonify({'error': 'Invalid plugin file'}), 400
+        
+        os.remove(plugin_path)
+        
+        return jsonify({
+            'success': True,
+            'message': f'Plugin {plugin_name} removed successfully'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/plugins/search/bukkit', methods=['GET'])
+def api_search_bukkit_plugins():
+    """Search for plugins on Spiget (Bukkit/Spigot)"""
+    try:
+        query = request.args.get('q', '')
+        page = request.args.get('page', '1')
+        
+        if not query:
+            return jsonify({'plugins': []})
+        
+        # Search Spiget API
+        url = f'https://api.spiget.org/v2/search/resources/{query}'
+        params = {
+            'size': '20',
+            'page': page,
+            'fields': 'id,name,description,version,tag,external'
+        }
+        
+        response = requests.get(url, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            plugins = response.json()
+            # Filter for plugins only (not resources)
+            plugin_list = []
+            for plugin in plugins:
+                if 'external' not in plugin or plugin.get('external', False) == False:
+                    plugin_list.append({
+                        'id': plugin.get('id'),
+                        'name': plugin.get('name'),
+                        'description': plugin.get('description', '')[:200] + '...' if len(plugin.get('description', '')) > 200 else plugin.get('description', ''),
+                        'version': plugin.get('version', 'Unknown'),
+                        'tag': plugin.get('tag', ''),
+                        'source': 'spiget'
+                    })
+            return jsonify({'plugins': plugin_list})
+        else:
+            return jsonify({'plugins': []})
+    except Exception as e:
+        return jsonify({'error': str(e), 'plugins': []}), 500
+
+@app.route('/api/plugins/search/github', methods=['GET'])
+def api_search_github_plugins():
+    """Search for plugins on GitHub"""
+    try:
+        query = request.args.get('q', '')
+
+        if not query:
+            return jsonify({'plugins': []})
+
+        # Search GitHub for plugin-related repositories
+        search_query = f"{query} minecraft plugin"
+        url = 'https://api.github.com/search/repositories'
+        params = {
+            'q': search_query,
+            'sort': 'stars',
+            'order': 'desc',
+            'per_page': '20'
+        }
+
+        response = requests.get(url, params=params, timeout=10)
+
+        if response.status_code == 200:
+            data = response.json()
+            plugin_list = []
+            for repo in data.get('items', []):
+                plugin_list.append({
+                    'name': repo.get('name'),
+                    'description': repo.get('description', ''),
+                    'version': 'Latest',  # GitHub API doesn't provide version in search
+                    'download_url': repo.get('download_url'),
+                    'html_url': repo.get('html_url'),
+                    'source': 'github',
+                    'stars': repo.get('stargazers_count', 0)
+                })
+            return jsonify({'plugins': plugin_list})
+        else:
+            return jsonify({'plugins': []})
+    except Exception as e:
+        return jsonify({'error': str(e), 'plugins': []}), 500
+
+@app.route('/api/plugins/search/curseforge', methods=['GET'])
+def api_search_curseforge_plugins():
+    """Search for plugins on CurseForge"""
+    try:
+        query = request.args.get('q', '')
+        page = int(request.args.get('page', '1'))
+
+        if not query:
+            return jsonify({'plugins': []})
+
+        # CurseForge API v1 (maven repository style)
+        # Search CurseForge for plugins
+        url = 'https://api.curseforge.com/v1/mods/search'
+        headers = {
+            'Accept': 'application/json',
+            'x-api-key': os.environ.get('CURSEFORGE_API_KEY', '$2a$10$dummy12345678901234567890')  # Public API key for demo
+        }
+        params = {
+            'gameId': 432,  # Minecraft game ID
+            'classId': 5,   # Plugin category
+            'searchFilter': query,
+            'pageSize': 20,
+            'index': (page - 1) * 20,
+            'sortField': 2,  # Popularity
+            'sortOrder': 'desc'
+        }
+
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+
+        if response.status_code == 200:
+            data = response.json()
+            plugin_list = []
+
+            for mod in data.get('data', []):
+                # Get latest file for download URL
+                latest_file = None
+                if mod.get('latestFiles'):
+                    # Find the latest release file
+                    for file in mod['latestFiles']:
+                        if file.get('releaseType') == 1:  # Release (not alpha/beta)
+                            latest_file = file
+                            break
+                    if not latest_file and mod['latestFiles']:
+                        latest_file = mod['latestFiles'][0]
+
+                plugin_info = {
+                    'id': mod.get('id'),
+                    'name': mod.get('name'),
+                    'description': mod.get('summary', ''),
+                    'version': latest_file.get('displayName', 'Unknown') if latest_file else 'Unknown',
+                    'download_url': latest_file.get('downloadUrl') if latest_file else None,
+                    'source': 'curseforge',
+                    'downloads': mod.get('downloadCount', 0),
+                    'file_id': latest_file.get('id') if latest_file else None,
+                    'project_id': mod.get('id')
+                }
+                plugin_list.append(plugin_info)
+
+            return jsonify({'plugins': plugin_list})
+        else:
+            # Fallback: Try alternative CurseForge API or return empty
+            return jsonify({'plugins': [], 'note': 'CurseForge API key may be required for full functionality'})
+    except Exception as e:
+        return jsonify({'error': str(e), 'plugins': []}), 500
+
+@app.route('/api/plugins/download', methods=['POST'])
+def api_download_plugin():
+    """Download a plugin from external source"""
+    try:
+        data = request.get_json()
+        url = data.get('url')
+        filename = data.get('filename')
+        source = data.get('source')
+        
+        if not url or not filename:
+            return jsonify({'error': 'URL and filename are required'}), 400
+        
+        plugins_dir = '/data/plugins'
+        os.makedirs(plugins_dir, exist_ok=True)
+        
+        # Download the file
+        response = requests.get(url, timeout=30, stream=True)
+        response.raise_for_status()
+        
+        plugin_path = os.path.join(plugins_dir, filename)
+        with open(plugin_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        
+        return jsonify({
+            'success': True,
+            'message': f'Plugin {filename} downloaded successfully from {source}',
+            'plugin': filename
+        })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

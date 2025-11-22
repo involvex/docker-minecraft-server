@@ -229,14 +229,22 @@ function updateServerStatus() {
                 serverMotd.textContent = data.motd || 'Server is offline';
                 serverVersion.textContent = 'N/A';
                 serverVersionInfo.textContent = 'N/A';
-            } else {
-                // Unknown or error status
+            } else if (data.status === 'unknown') {
+                // Unknown or checking status
                 statusIcon.className = 'fas fa-server fa-2x text-warning';
-                statusBadge.textContent = data.status || 'Unknown';
+                statusBadge.textContent = 'Unknown';
                 statusBadge.className = 'badge bg-warning';
-                serverMotd.textContent = data.motd || data.note || 'Status unknown';
+                serverMotd.textContent = data.motd || data.note || 'Status unknown - server may not be ready';
                 serverVersion.textContent = data.version || 'Unknown';
                 serverVersionInfo.textContent = data.version || 'Unknown';
+            } else {
+                // Error status
+                statusIcon.className = 'fas fa-server fa-2x text-danger';
+                statusBadge.textContent = 'Error';
+                statusBadge.className = 'badge bg-danger';
+                serverMotd.textContent = data.motd || 'Error connecting to server';
+                serverVersion.textContent = 'Unknown';
+                serverVersionInfo.textContent = 'Unknown';
             }
             
             playerCount.textContent = data.player_count || 0;
