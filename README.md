@@ -1,21 +1,270 @@
-[![Docker Pulls](https://img.shields.io/docker/pulls/itzg/minecraft-server.svg?logo=docker)](https://hub.docker.com/r/itzg/minecraft-server/)
-[![Docker Stars](https://img.shields.io/docker/stars/itzg/minecraft-server.svg?logo=docker)](https://hub.docker.com/r/itzg/minecraft-server/)
-[![GitHub Issues](https://img.shields.io/github/issues-raw/itzg/docker-minecraft-server.svg)](https://github.com/itzg/docker-minecraft-server/issues)
-[![Discord](https://img.shields.io/discord/660567679458869252?label=Discord&logo=discord)](https://discord.gg/DXfKpjB)
-[![Build and Publish](https://github.com/itzg/docker-minecraft-server/actions/workflows/build-multiarch.yml/badge.svg)](https://github.com/itzg/docker-minecraft-server/actions/workflows/build-multiarch.yml)
-[![](https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg)](https://www.buymeacoffee.com/itzg)
-[![Documentation Status](https://readthedocs.org/projects/docker-minecraft-server/badge/?version=latest)](https://docker-minecraft-server.readthedocs.io/en/latest/?badge=latest)
+# Minecraft Server with Web Management UI
 
- [![Read the docs](docs/img/docs-banner.png)](https://docker-minecraft-server.readthedocs.io/)
+🎮 **Complete Minecraft server setup with modern web-based administration interface**
 
-There you will find things like
-- [Quick start with Docker Compose](https://docker-minecraft-server.readthedocs.io/en/latest/#using-docker-compose)
-- Running [different versions of Minecraft](https://docker-minecraft-server.readthedocs.io/en/latest/versions/minecraft/) and using [various server types](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/) for Java Edition
-- [Setting server properties via container environment variables](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/server-properties/)
-- [Managing mods and plugins with automated downloads and cleanup](https://docker-minecraft-server.readthedocs.io/en/latest/mods-and-plugins/)
-- [Using various modpack providers/platforms](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/)
-- ...and much more
+This project provides a production-ready Minecraft server with a comprehensive web management system, built using Docker and modern web technologies.
 
-There are also many examples located in [the examples directory](examples) of this repo.
+## ✨ Features
 
-This image only supports Java edition natively; however, if looking for a server that is compatible with Bedrock edition, then use [itzg/minecraft-bedrock-server](https://github.com/itzg/docker-minecraft-bedrock-server) or [refer to this section](https://docker-minecraft-server.readthedocs.io/en/latest/misc/examples/#bedrock-compatible-server) to add Bedrock compatibility to a Java edition server.
+### 🔧 **Server Management**
+- **Easy Configuration**: Edit server settings through web interface or config files
+- **Plugin Management**: Upload, install, and manage plugins seamlessly
+- **Real-time Monitoring**: Live server status, player count, and system resources
+- **Backup System**: Automated and manual backup capabilities
+
+### 🌐 **Web Interface**
+- **Modern Dashboard**: Real-time server overview with system metrics
+- **Console Access**: Execute RCON commands directly from the browser
+- **Live Logs**: Stream server logs in real-time with filtering
+- **Player Management**: Monitor online players, kick/ban functionality
+- **Configuration Editor**: Edit server.properties through the web UI
+
+### 🔒 **Security & Reliability**
+- **RCON Integration**: Secure remote command execution
+- **Environment-based Configuration**: Easy environment variable management
+- **Network Isolation**: Docker network for secure container communication
+- **Health Monitoring**: Automatic service health checks and restart policies
+
+## 🚀 Quick Start
+
+### Windows (Recommended)
+```cmd
+# Run the setup script (choose one)
+setup.bat
+# or
+.\setup.ps1
+
+# Manage the server
+manage.bat start
+# or
+.\manage.ps1 -Command start
+```
+
+### Linux/macOS
+```bash
+# Run the setup script
+./setup.sh
+
+# Manage the server
+./manage.sh start
+```
+
+## 📊 Service Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Web Browser   │◄──►│  Web UI Flask   │◄──►│   RCON Client   │
+│   (Port 8080)   │    │  (Port 8080)    │    │   (Port 8125)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌─────────────────┐
+                       │ Minecraft Server│
+                       │  (Port 25565)   │
+                       └─────────────────┘
+```
+
+## 📁 Project Structure
+
+```
+/
+├── docker-compose.yml          # Main service orchestration
+├── setup.bat                   # Windows batch setup script
+├── setup.ps1                   # Windows PowerShell setup script
+├── setup.sh                    # Linux/macOS bash setup script
+├── manage.bat                  # Windows batch management script
+├── manage.ps1                  # Windows PowerShell management script
+├── manage.sh                   # Linux/macOS bash management script
+├── SETUP_GUIDE.md             # Comprehensive documentation
+├── README.md                  # This file
+├── .env                       # Environment configuration (auto-generated)
+├── config/
+│   ├── server.properties      # Server configuration template
+│   ├── .env.example          # Environment template
+│   ├── plugins/              # Plugin JAR files directory
+│   └── plugin-configs/       # Plugin configurations
+├── webui/
+│   ├── app.py               # Flask web application
+│   ├── requirements.txt     # Python dependencies
+│   ├── Dockerfile          # Web UI container definition
+│   └── templates/          # HTML templates
+│       ├── base.html       # Base template with navigation
+│       └── dashboard.html  # Main dashboard
+└── logs/                   # Server logs mount point
+```
+
+## 🔧 Configuration
+
+### Environment Variables (.env)
+```bash
+RCON_PASSWORD=your_secure_password    # Change this!
+WEBUI_SECRET_KEY=your_secret_key      # Change this!
+SERVER_NAME=My Minecraft Server
+MAX_MEMORY=4G
+MAX_PLAYERS=20
+```
+
+### Server Properties
+```properties
+server-name=My Minecraft Server
+motd=Welcome to our server!
+max-players=20
+gamemode=survival
+difficulty=normal
+pvp=true
+enable-rcon=true
+rcon.port=8125
+rcon.password=minecraft_rcon_password
+```
+
+## 🌟 Web Interface Highlights
+
+### Dashboard
+- **Real-time Server Status**: Live monitoring with status indicators
+- **System Metrics**: CPU, memory, and disk usage visualization
+- **Quick Actions**: One-click common commands (save, weather, time)
+- **Player Overview**: Current online players with management options
+
+### Console
+- **Live Command Execution**: Send RCON commands with instant results
+- **Command History**: Track all executed commands with timestamps
+- **Real-time Output**: WebSocket-powered live log streaming
+- **Error Handling**: Clear error messages and troubleshooting
+
+### Configuration Management
+- **server.properties Editor**: Full syntax highlighting and validation
+- **Live Updates**: Changes apply immediately without restart
+- **Backup Protection**: Automatic backup before modifications
+- **Environment Integration**: Edit environment variables through UI
+
+### Plugin Management
+- **Plugin Repository**: List all installed plugins
+- **Upload Interface**: Add new plugins via web upload
+- **Status Monitoring**: Check plugin loading and error states
+- **Configuration**: Direct access to plugin configuration files
+
+## 🔍 Monitoring & Logs
+
+### Real-time Monitoring
+- **Server Status**: Online/offline with uptime tracking
+- **Player Activity**: Connection/disconnection notifications
+- **Resource Usage**: System resource monitoring
+- **Performance Metrics**: Tick rate and performance tracking
+
+### Log Management
+- **Live Streaming**: Real-time log feed through WebSocket
+- **Log Search**: Filter by date, level, player, or content
+- **Export Functionality**: Download logs for external analysis
+- **Alert System**: Notifications for critical events
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+**Server won't start:**
+```bash
+docker-compose logs minecraft
+# Check port availability and configuration
+```
+
+**Web UI not accessible:**
+```bash
+docker-compose logs minecraft-webui
+# Verify port mapping and network connectivity
+```
+
+**RCON connection failed:**
+```bash
+docker-compose exec minecraft rcon-cli -a localhost -p 8125 list
+# Check RCON configuration and password
+```
+
+### Debug Commands
+```bash
+# View all logs
+docker-compose logs -f
+
+# Check service status
+docker-compose ps
+
+# Execute commands in containers
+docker-compose exec minecraft bash
+docker-compose exec minecraft-webui bash
+
+# Test RCON connectivity
+docker-compose exec minecraft rcon-cli list
+```
+
+## 📈 Performance Optimization
+
+### Recommended Settings
+- **Memory**: 4GB minimum, 8GB recommended
+- **CPU**: 2+ cores for smooth operation
+- **Storage**: SSD recommended for world data
+- **Network**: Stable internet connection for players
+
+### Tuning Options
+```bash
+# Performance environment variables
+VIEW_DISTANCE=15
+SIMULATION_DISTANCE=15
+MAX_BUILD_HEIGHT=256
+MAX_TICK_TIME=60000
+```
+
+## 🔄 Maintenance
+
+### Regular Tasks
+1. **Daily**: Check server logs and player activity
+2. **Weekly**: Update plugins and monitor performance
+3. **Monthly**: Full backup and security review
+4. **Quarterly**: System updates and optimization
+
+### Backup Strategy
+```bash
+# Manual backup
+docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /data
+
+# Automated backup (add to crontab)
+0 2 * * * docker-compose exec minecraft /usr/bin/backup.sh
+```
+
+## 🎯 API Reference
+
+### Endpoints
+- `GET /api/status` - Server status and player count
+- `GET /api/players` - Online and historical player data
+- `GET /api/logs` - Server logs with filtering
+- `POST /api/command` - Execute RCON commands
+- `GET /api/config` - Get server configuration
+- `POST /api/config` - Update server configuration
+- `GET /api/plugins` - List installed plugins
+
+### WebSocket Events
+- `status_update` - Real-time server status changes
+- `player_update` - Player connection/disconnection
+- `command_output` - Command execution results
+- `log_data` - Live log streaming
+
+## 🤝 Contributing
+
+This project provides a complete foundation for Minecraft server management. The web UI is built with modern technologies and can be extended with additional features:
+
+- **Authentication System**: Add user accounts and permissions
+- **Advanced Monitoring**: Charts and analytics dashboard
+- **Plugin Store**: Integrated plugin marketplace
+- **Multi-server Support**: Manage multiple Minecraft servers
+- **Mobile App**: React Native or Flutter mobile interface
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🎮 Happy Mining!
+
+Your Minecraft server is now equipped with a professional-grade web management interface. Enjoy the convenience of managing your server from anywhere with a web browser!
+
+**Quick Links:**
+- 🌐 **Web Interface**: http://localhost:8080
+- 🎮 **Minecraft Server**: localhost:25565
+- 📖 **Full Documentation**: SETUP_GUIDE.md

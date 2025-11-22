@@ -1,14 +1,90 @@
 services:
-  mc:
-    image: itzg/minecraft-server
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-server
+    ports:
+      - "25565:25565"  # Minecraft server port
+      - "25575:25575"  # RCON port
+    volumes:
+      - minecraft-data:/data
+      - ./config/server.properties:/data/server.properties:rw  # Changed from ro to rw
+      - ./config/plugins:/data/plugins:ro
+      - ./logs:/data/logs
     environment:
       EULA: "true"
-    ports:
-      - "25565:25565"
-    volumes:
-      - data:/data
+      # Server Configuration
+      MAX_MEMORY: 4G
+      MAX_PLAYERS: 20
+      MOTD: "Managed by Web UI - Minecraft Server"
+      DIFFICULTY: "normal"
+      PVP: "true"
+      WHITE_LIST: "false"
+      ONLINE_MODE: "true"
+      
+      # RCON Configuration
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "${RCON_PASSWORD:-minecraft_rcon_password}"
+      RCON_PORT: 25575
+      
+      # Server Properties
+      GAMEMODE: "survival"
+      VIEW_DISTANCE: 15
+      SIMULATION_DISTANCE: 15
+      MAX_BUILD_HEIGHT: 256
+      
+      # Auto-backup settings
+      BACKUP_INTERVAL: "24h"
+      BACKUP_LOCATION: "/data/backups"
+      
     stdin_open: true
     tty: true
     restart: unless-stopped
+    networks:
+      - minecraft-network
+    healthcheck:
+      test: ["CMD", "rcon", "-a", "localhost", "-p", "25575", "-c", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  minecraft-webui:
+    build:
+      context: ./webui
+      dockerfile: Dockerfile
+    container_name: minecraft-webui
+    ports:
+      - "8080:8080"  # Web UI port
+    volumes:
+      - minecraft-data:/data
+      - ./config:/config
+      - ./webui/data:/app/data
+    environment:
+      # RCON Connection
+      RCON_HOST: "minecraft"
+      RCON_PORT: "25575"
+      RCON_PASSWORD: "${RCON_PASSWORD:-minecraft_rcon_password}"
+      
+      # Server Management
+      SERVER_NAME: "Minecraft Server"
+      SERVER_VERSION: "latest"
+      
+      # Database
+      DB_PATH: "/app/data/webui.db"
+      
+      # Security
+      SECRET_KEY: "${WEBUI_SECRET_KEY:-webui_secret_key_change_this}"
+      
+    restart: unless-stopped
+    networks:
+      - minecraft-network
+    depends_on:
+      - minecraft
+
 volumes:
-  data: {}
+  minecraft-data:
+    driver: local
+
+networks:
+  minecraft-network:
+    driver: bridge

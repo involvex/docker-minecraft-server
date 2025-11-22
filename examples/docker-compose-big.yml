@@ -11,7 +11,7 @@ services:
       VIEW_DISTANCE: 15
       LEVEL_TYPE: LARGEBIOMES
       MAX_PLAYERS: 100
-      CONSOLE: "false"
+      CONSOLE: "true"
     image: itzg/minecraft-server
     restart: always
   rcon:

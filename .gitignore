@@ -4,3 +4,10 @@
 *.iml
 /gh-md-toc
 personal-build-and-develop.*
+
+logs
+.env
+.env.example
+config/.env
+config/.env.example
+files
