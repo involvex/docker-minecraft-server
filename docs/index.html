@@ -19,6 +19,11 @@
       href="https://involvex.github.io/docker-minecraft-server/"
     />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="apple-touch-icon" sizes="32x32" href="./favicon.svg" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta
@@ -137,6 +142,20 @@
         font-weight: 500;
         transition: all 0.2s ease;
         border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-custom:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-custom:active {
+        transform: translateY(0);
       }
 
       .badge-custom {
@@ -331,7 +350,7 @@
     <section id="features" class="py-5">
       <div class="container">
         <div class="text-center mb-5">
-          <h2 class="h1 fw-bold mb-4">Powerful Features</h2>
+          <h2 class="h1 fw-bold mb-4 text-white">Powerful Features</h2>
           <p class="text-muted lead">
             Everything you need to run and manage a professional Minecraft
             server
@@ -797,20 +816,47 @@
       // Simple page view tracking
       console.log("🎮 Minecraft Server GitHub Pages loaded successfully");
 
-      // Smooth scrolling for anchor links
+      // Enhanced smooth scrolling for anchor links
       document.addEventListener("DOMContentLoaded", function () {
         // Handle all anchor links that start with #
         document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
           anchor.addEventListener("click", function (e) {
             e.preventDefault();
+            e.stopPropagation();
 
-            const target = document.querySelector(this.getAttribute("href"));
+            const targetId = this.getAttribute("href");
+            const target = document.querySelector(targetId);
+
             if (target) {
-              target.scrollIntoView({
+              // Calculate offset for fixed navbar
+              const navbarHeight =
+                document.querySelector(".navbar")?.offsetHeight || 0;
+              const targetPosition = target.offsetTop - navbarHeight - 20;
+
+              window.scrollTo({
+                top: targetPosition,
                 behavior: "smooth",
-                block: "start",
               });
+
+              // Close mobile navbar if open
+              const navbarCollapse = document.querySelector(".navbar-collapse");
+              if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+                const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                bsCollapse.hide();
+              }
             }
+          });
+        });
+
+        // Add click logging for debugging
+        document.querySelectorAll(".btn-custom").forEach((button) => {
+          button.addEventListener("click", function (e) {
+            console.log(
+              "Button clicked:",
+              this.textContent.trim(),
+              "href:",
+              this.getAttribute("href"),
+            );
           });
         });
       });
