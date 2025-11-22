@@ -217,7 +217,30 @@ def get_server_status():
 def index():
     """Main dashboard"""
     status = get_server_status()
-    return render_template('dashboard.html', status=status)
+    
+    # Get server configuration from environment and server.properties
+    config = {
+        'SERVER_NAME': os.environ.get('SERVER_NAME', 'Minecraft Server'),
+        'SERVER_VERSION': os.environ.get('SERVER_VERSION', 'latest'),
+    }
+    
+    # Try to read server name from server.properties
+    try:
+        possible_paths = ['/data/server.properties', '/config/server.properties']
+        for path in possible_paths:
+            if os.path.exists(path):
+                with open(path, 'r') as f:
+                    for line in f:
+                        if line.startswith('server-name='):
+                            config['SERVER_NAME'] = line.split('=', 1)[1].strip()
+                            break
+                        elif line.startswith('motd='):
+                            config['MOTD'] = line.split('=', 1)[1].strip()
+                break
+    except Exception as e:
+        logging.warning(f"Could not read server.properties: {e}")
+    
+    return render_template('dashboard.html', status=status, config=config)
 
 @app.route('/api/health')
 def health_check():
