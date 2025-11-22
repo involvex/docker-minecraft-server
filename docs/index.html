@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server on Docker - Web Management UI</title>
+    <meta name="description" content="Complete Minecraft server setup with modern web-based administration interface. Docker, Web UI, Plugin Management, and more.">
+    <meta name="keywords" content="minecraft, docker, server, web ui, management, plugins, java edition">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://involvex.github.io/docker-minecraft-server/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://involvex.github.io/docker-minecraft-server/">
+    <meta property="og:title" content="Minecraft Server on Docker - Web Management UI">
+    <meta property="og:description" content="Complete Minecraft server setup with modern web-based administration interface">
+    <meta property="og:image" content="https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/img/docs-banner.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://involvex.github.io/docker-minecraft-server/">
+    <meta property="twitter:title" content="Minecraft Server on Docker - Web Management UI">
+    <meta property="twitter:description" content="Complete Minecraft server setup with modern web-based administration interface">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/img/docs-banner.png">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #64748b;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.02"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.03"/><circle cx="90" cy="40" r="0.5" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .card-custom {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-custom {
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .badge-custom {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .code-snippet {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .architecture-diagram {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .nav-link-docs {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link-docs:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <i class="fas fa-cube fa-2x text-primary me-2"></i>
+                <span class="fw-bold">Minecraft Server</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#getting-started">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/involvex/docker-minecraft-server" target="_blank">
+                            <i class="fab fa-github me-1"></i>GitHub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://docker-minecraft-server.readthedocs.io/" target="_blank">
+                            <i class="fas fa-book me-1"></i>Docs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient py-5">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-6 col-md-7">
+                    <div class="hero">
+                        <h1 class="display-4 fw-bold mb-4">
+                            Minecraft Server<br>
+                            <span class="text-light">on Docker</span>
+                        </h1>
+                        <p class="lead mb-4 text-light">
+                            Complete Minecraft server setup with modern web-based administration interface.
+                            Easy deployment, plugin management, world backups, and real-time monitoring.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="#getting-started" class="btn btn-light btn-lg btn-custom">
+                                <i class="fas fa-rocket me-2"></i>Get Started
+                            </a>
+                            <a href="https://github.com/involvex/docker-minecraft-server" class="btn btn-outline-light btn-lg btn-custom" target="_blank">
+                                <i class="fab fa-github me-2"></i>View on GitHub
+                            </a>
+                        </div>
+                        <div class="mt-4">
+                            <span class="badge-custom me-2">
+                                <i class="fab fa-docker me-1"></i>Docker
+                            </span>
+                            <span class="badge-custom me-2">
+                                <i class="fas fa-globe me-1"></i>Web UI
+                            </span>
+                            <span class="badge-custom">
+                                <i class="fas fa-plug me-1"></i>Plugins
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5 text-center">
+                    <img src="https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/img/docs-banner.png"
+                         alt="Minecraft Server Dashboard"
+                         class="img-fluid rounded shadow-lg"
+                         style="max-width: 500px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h1 fw-bold mb-4">Powerful Features</h2>
+                <p class="text-muted lead">Everything you need to run and manage a professional Minecraft server</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Server Management -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-primary text-white mx-auto">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">Server Management</h4>
+                        <p class="text-muted mb-3">
+                            Easy configuration through web interface or config files. One-click start, stop, restart operations.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Environment-based configuration</li>
+                            <li>Automatic health monitoring</li>
+                            <li>Real-time status updates</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Web Dashboard -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-success text-white mx-auto">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">Web Dashboard</h4>
+                        <p class="text-muted mb-3">
+                            Modern web interface for complete server administration. Real-time monitoring and control.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Real-time server metrics</li>
+                            <li>Quick action buttons</li>
+                            <li>Dark/Light mode toggle</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Plugin Management -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-warning text-white mx-auto">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">Plugin Management</h4>
+                        <p class="text-muted mb-3">
+                            Upload, install, and manage plugins seamlessly. Search multiple repositories including Spiget.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Plugin repository browser</li>
+                            <li>One-click installation</li>
+                            <li>CurseForge & GitHub integration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- World Management -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-info text-white mx-auto">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">World Management</h4>
+                        <p class="text-muted mb-3">
+                            Switch between worlds, create backups, and restore previous versions. Complete world control.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Multiple world support</li>
+                            <li>Automated backups</li>
+                            <li>World switching</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Player Management -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-danger text-white mx-auto">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">Player Management</h4>
+                        <p class="text-muted mb-3">
+                            OP/De-OP players, ban/unban, kick players. View online players and historical data.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Player administration</li>
+                            <li>Ban list management</li>
+                            <li>Player statistics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Live Console -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom h-100 p-4">
+                        <div class="feature-icon bg-secondary text-white mx-auto">
+                            <i class="fas fa-terminal"></i>
+                        </div>
+                        <h4 class="h5 fw-bold mb-3">Live Console</h4>
+                        <p class="text-muted mb-3">
+                            Execute RCON commands with instant results. View live logs with filtering and search.
+                        </p>
+                        <ul class="small text-muted">
+                            <li>Command execution</li>
+                            <li>Live log streaming</li>
+                            <li>Command history</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h1 fw-bold mb-4">System Architecture</h2>
+                <p class="text-muted lead">Secure, containerized, production-ready</p>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="architecture-diagram">
+                        <h4 class="text-white mb-4">Container Architecture</h4>
+                        <div class="mb-3">
+                            <i class="fas fa-browser text-primary fa-2x me-3"></i>
+                            <span class="text-light">Web Browser (Port 8080)</span>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-exchange-alt text-info fa-2x me-3"></i>
+                            <span class="text-light">Flask Web UI</span>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-terminal text-warning fa-2x me-3"></i>
+                            <span class="text-light">RCON Client (Port 25575)</span>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-cube text-success fa-2x me-3"></i>
+                            <span class="text-light">Minecraft Server (Port 25565)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h4 class="fw-bold mb-3">Security & Reliability</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-shield-alt text-success fa-lg me-3"></i>
+                            <div>
+                                <strong>RCON Integration</strong><br>
+                                <span class="text-muted">Secure remote command execution with encrypted connections</span>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-lock text-primary fa-lg me-3"></i>
+                            <div>
+                                <strong>Network Isolation</strong><br>
+                                <span class="text-muted">Docker networking with proper firewall configuration</span>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-heartbeat text-danger fa-lg me-3"></i>
+                            <div>
+                                <strong>Health Monitoring</strong><br>
+                                <span class="text-muted">Automatic service health checks and restart policies</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10">
+                    <div class="card-custom p-4">
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-star text-warning fa-2x mb-2"></i>
+                                    <h3 class="h2 fw-bold text-primary mb-1">50K+</h3>
+                                    <p class="text-muted mb-0">GitHub Stars</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-download text-success fa-2x mb-2"></i>
+                                    <h3 class="h2 fw-bold text-primary mb-1">20M+</h3>
+                                    <p class="text-muted mb-0">Docker Pulls</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-users text-info fa-2x mb-2"></i>
+                                    <h3 class="h2 fw-bold text-primary mb-1">10K+</h3>
+                                    <p class="text-muted mb-0">Active Servers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section id="getting-started" class="py-5 bg-dark">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h1 fw-bold mb-4">Getting Started</h2>
+                <p class="text-muted lead">Launch your server in minutes</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- One-click Setup -->
+                    <div class="card-custom p-4 mb-4">
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-magic-wand-sparkles text-primary me-2"></i>
+                            One-Click Setup (Windows)
+                        </h4>
+
+                        <div class="mb-3">
+                            <p class="text-muted mb-3">PowerShell (Recommended):</p>
+                            <div class="code-snippet">
+winget install Docker.DockerDesktop
+<br><br>
+# Clone and setup (opens browser automatically)
+iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.ps1 | iex
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-muted mb-3">Command Prompt:</p>
+                            <div class="code-snippet">
+curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manual Setup -->
+                    <div class="card-custom p-4 mb-4">
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-wrench text-warning me-2"></i>
+                            Manual Setup
+                        </h4>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-2">1. Clone Repository</h6>
+                                <div class="code-snippet mb-3">
+git clone https://github.com/involvex/docker-minecraft-server.git<br>
+cd docker-minecraft-server
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-2">2. Run Setup</h6>
+                                <div class="code-snippet mb-3">
+# Windows
+setup.bat<br><br>
+# Linux/macOS
+./setup.sh
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-2">3. Manage Server</h6>
+                                <div class="code-snippet mb-3">
+# Show all commands
+manage.bat help<br><br>
+# Start server
+manage.bat start<br><br>
+# View logs
+manage.bat logs
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-2">4. Access Web UI</h6>
+                                <div class="code-snippet mb-3">
+🌐 Web Interface: http://localhost:8080<br>
+🎮 Minecraft Server: localhost:25565
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environment Configuration -->
+                    <div class="card-custom p-4">
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-sliders-h text-info me-2"></i>
+                            Quick Configuration (.env)
+                        </h4>
+                        <div class="code-snippet">
+# Server Configuration
+SERVER_NAME="My Amazing Server"
+MAX_MEMORY=4G
+MAX_PLAYERS=20
+DIFFICULTY=normal
+
+# Security (CHANGE THESE!)
+RCON_PASSWORD=your_secure_rcon_password
+WEBUI_SECRET_KEY=your_web_ui_secret_key
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-cube fa-2x text-primary me-3"></i>
+                        <div>
+                            <h5 class="text-white mb-0">Minecraft Server</h5>
+                            <p class="text-muted mb-0">Docker & Web Management UI</p>
+                        </div>
+                    </div>
+                    <p class="text-muted">
+                        Production-ready Minecraft server with comprehensive web-based administration.
+                        Easy deployment, plugin management, and real-time monitoring.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="https://github.com/involvex/docker-minecraft-server" class="btn btn-outline-light btn-sm" target="_blank">
+                            <i class="fab fa-github me-1"></i>GitHub
+                        </a>
+                        <a href="https://docker-minecraft-server.readthedocs.io/" class="btn btn-outline-light btn-sm" target="_blank">
+                            <i class="fas fa-book me-1"></i>Docs
+                        </a>
+                        <a href="https://hub.docker.com/r/itzg/minecraft-server" class="btn btn-outline-light btn-sm" target="_blank">
+                            <i class="fab fa-docker me-1"></i>Docker Hub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 mt-4 mt-lg-0">
+                    <h6 class="text-white mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#features" class="nav-link-docs">Features</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#getting-started" class="nav-link-docs">Getting Started</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://docker-minecraft-server.readthedocs.io/en/latest/configuration/" class="nav-link-docs" target="_blank">Configuration</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://docker-minecraft-server.readthedocs.io/en/latest/" class="nav-link-docs" target="_blank">Full Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 mt-4 mt-lg-0">
+                    <h6 class="text-white mb-3">Management</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="./manage.bat" class="nav-link-docs" target="_blank">manage.bat (Windows)</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="./manage.ps1" class="nav-link-docs" target="_blank">manage.ps1 (PowerShell)</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://docker-minecraft-server.readthedocs.io/en/latest/" class="nav-link-docs" target="_blank">API Documentation</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://github.com/involvex/docker-minecraft-server/issues" class="nav-link-docs" target="_blank">Issue Tracker</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4 border-secondary">
+
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        © 2024 involvex. Fork of itzg/docker-minecraft-server.
+                        Licensed under MIT.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        Made with <i class="fas fa-heart text-danger me-1"></i> for the Minecraft community
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Analytics (optional) -->
+    <script>
+        // Simple page view tracking
+        console.log('🎮 Minecraft Server GitHub Pages loaded successfully');
+    </script>
+</body>
+</html>

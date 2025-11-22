@@ -27,6 +27,46 @@ This project provides a production-ready Minecraft server with a comprehensive w
 - **Network Isolation**: Docker network for secure container communication
 - **Health Monitoring**: Automatic service health checks and restart policies
 
+## ⚙️ Management Commands
+
+Once your server is set up, use these commands to manage it:
+
+### Available Commands
+- `manage.bat help` - Show all available commands
+- `manage.bat start` - Start the Minecraft server
+- `manage.bat stop` - Stop the Minecraft server
+- `manage.bat restart` - Restart the Minecraft server
+- `manage.bat status` - Show server status
+- `manage.bat logs` - View live server logs
+- `manage.bat backup` - Create server data backup
+- `manage.bat rcon [command]` - Execute RCON command
+- `manage.bat update` - Update Docker images
+- `manage.bat rebuild` - Rebuild Docker images from scratch
+- `manage.bat shell` - Open server container shell
+
+### Examples
+```cmd
+# Get help (also shown if no command provided)
+manage.bat help
+
+# Start the server
+manage.bat start
+
+# View live logs
+manage.bat logs
+
+# Execute commands
+manage.bat rcon list
+manage.bat rcon save-all
+manage.bat rcon op playername
+
+# Create backup
+manage.bat backup
+
+# Update server
+manage.bat update
+```
+
 ## 🚀 Quick Start
 
 ### One-Command Setup (Windows)
@@ -54,10 +94,15 @@ setup.bat
 # or
 .\setup.ps1
 
-# Manage the server
+# Manage the server (see all commands)
+manage.bat help
 manage.bat start
+manage.bat logs
+manage.bat rcon list
 # or
+.\manage.ps1 -Command help
 .\manage.ps1 -Command start
+.\manage.ps1 -Command logs
 ```
 
 **Linux/macOS:**

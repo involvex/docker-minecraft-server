@@ -5,6 +5,10 @@ REM Common server management commands
 echo 🎮 Minecraft Server Management
 echo ==============================
 
+REM If no command provided or help requested, show help
+if "%1"=="" goto :show_help
+if "%1"=="help" goto :show_help
+
 if "%1"=="start" (
     echo 🚀 Starting Minecraft server...
     docker-compose up -d
@@ -68,29 +72,61 @@ if "%1"=="update" (
     goto :end
 )
 
+if "%1"=="rebuild" (
+    echo 🔨 Rebuilding server images...
+    docker-compose down
+    docker-compose build --no-cache
+    echo 🚀 Starting with rebuilt containers...
+    docker-compose up -d
+    echo ✅ Server rebuilt and started!
+    goto :end
+)
+
 if "%1"=="shell" (
     echo 🐚 Opening server shell...
     docker-compose exec minecraft bash
     goto :end
 )
 
+echo Error: Unknown command '%1'
+goto :show_help
+
+:show_help
 echo.
-echo Available commands:
-echo   start    - Start the server
-echo   stop     - Stop the server
-echo   restart  - Restart the server
-echo   status   - Show server status
-echo   logs     - View server logs
-echo   backup   - Create a backup
-echo   rcon     - Execute RCON command
-echo   update   - Update server images
-echo   shell    - Open server shell
+echo 📖 Available Commands:
 echo.
-echo Examples:
+echo   🍎 General Commands:
+echo   help        - Show this help message
+echo   status      - Show server status
+echo   logs        - View server logs (follow mode)
+echo.
+echo   ⚡ Server Control:
+echo   start       - Start the Minecraft server
+echo   stop        - Stop the Minecraft server
+echo   restart     - Restart the Minecraft server
+echo.
+echo   🛠️  Server Management:
+echo   backup      - Create a backup of server data
+echo   rcon        - Execute RCON command (usage: rcon [command])
+echo   shell       - Open interactive shell in server container
+echo.
+echo   🔄 Container Management:
+echo   update      - Update Docker images and recreate containers
+echo   rebuild     - Rebuild Docker images from scratch
+echo.
+echo 💡 Examples:
 echo   manage.bat start
 echo   manage.bat logs
 echo   manage.bat rcon list
+echo   manage.bat rcon save-all
 echo   manage.bat backup
+echo   manage.bat update
+echo   manage.bat help
+echo.
+echo 📂 Current directory: %CD%
+echo 🔗 Web UI: http://localhost:8080
+goto :end
 
 :end
-pause
+REM Only pause if no command was executed (to keep terminal open)
+if "%1"=="" pause
