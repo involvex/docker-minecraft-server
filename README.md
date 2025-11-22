@@ -38,7 +38,7 @@ iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/mas
 
 **Command Prompt:**
 ```cmd
-curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
+curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && .\setup-and-manage.bat
 ```
 
 ### Manual Setup
