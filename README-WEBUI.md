@@ -67,11 +67,18 @@ curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-m
 
 ### Environment Variables
 
+#### Required Variables
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `RCON_PASSWORD` | RCON password for server access | `admin` |
-| `RCON_PORT` | RCON port | `25575` |
 | `WEBUI_SECRET_KEY` | Secret key for web UI | `admin` |
+
+**Note:** CurseForge plugin search now uses the public servermods API and does not require authentication. Spiget and GitHub searches also work without API keys.
+
+#### Server Configuration Variables
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RCON_PORT` | RCON port | `25575` |
 | `SERVER_NAME` | Display name for your server | `Involvex Minecraft Server` |
 | `MAX_MEMORY` | Maximum memory allocation | `4G` |
 | `MAX_PLAYERS` | Maximum player count | `20` |
@@ -145,6 +152,12 @@ rcon.password=your_secure_password
 - This is normal if no players are online
 - Player list updates every 30 seconds
 - Check RCON connection is working
+
+### Plugin search not working
+- Check your internet connection
+- Try a different search query
+- The API may be temporarily unavailable
+- All plugin search providers (Spiget, CurseForge, GitHub) work without requiring API keys
 
 ## Management Scripts
 

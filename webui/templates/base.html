@@ -267,7 +267,13 @@
                                     <label class="btn btn-outline-primary" for="source-github">GitHub</label>
                                 </div>
                             </div>
-                            <div id="plugin-search-results"></div>
+                <div id="plugin-search-results"></div>
+                <div id="plugin-search-errors" class="mt-2" style="display: none;">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Plugin Search Error:</strong> <span id="plugin-error-message"></span>
+                        <button type="button" class="btn-close" onclick="hidePluginError()"></button>
+                    </div>
+                </div>
                         </div>
                         
                         <!-- Upload Plugin Tab -->
@@ -578,6 +584,17 @@
                 })
                 .catch(error => console.error('Error loading plugins:', error));
         }
+
+        function showPluginError(message, note) {
+            const errorDiv = document.getElementById('plugin-search-errors');
+            const messageSpan = document.getElementById('plugin-error-message');
+            messageSpan.innerHTML = `${message}${note ? `<br><small>${note}</small>` : ''}`;
+            errorDiv.style.display = 'block';
+        }
+
+        function hidePluginError() {
+            document.getElementById('plugin-search-errors').style.display = 'none';
+        }
         
         function removePlugin(pluginName) {
             if (confirm(`Remove plugin ${pluginName}?`)) {
@@ -618,10 +635,26 @@
             fetch(apiEndpoint)
                 .then(response => response.json())
                 .then(data => {
+                    // Hide any previous errors
+                    hidePluginError();
+
+                    // Check if there's an error in the response
+                    if (data.error) {
+                        showPluginError(data.error, data.note);
+                        document.getElementById('plugin-search-results').innerHTML = '';
+                        return;
+                    }
+
                     let html = '<h6>Search Results:</h6>';
                     if (data.plugins && data.plugins.length > 0) {
                         html += '<div class="row">';
                         data.plugins.forEach(plugin => {
+                            const downloadBtn = plugin.download_url ?
+                                `<button class="btn btn-sm btn-success" onclick="downloadPlugin('${plugin.name}', '${plugin.source}', '${plugin.download_url}', '${plugin.id || ''}')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>` :
+                                '<span class="text-muted small">No download available</span>';
+
                             html += `<div class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -629,10 +662,9 @@
                                         <p class="card-text">${plugin.description || 'No description available'}</p>
                                         <small class="text-muted">Version: ${plugin.version || 'Unknown'}</small><br>
                                         <small class="text-muted">Source: ${plugin.source}</small>
+                                        ${plugin.downloads ? `<br><small class="text-muted">Downloads: ${plugin.downloads.toLocaleString()}</small>` : ''}
                                         <div class="mt-2">
-                                            <button class="btn btn-sm btn-success" onclick="downloadPlugin('${plugin.name}', '${plugin.source}', '${plugin.download_url || ''}', '${plugin.id || ''}')">
-                                                <i class="fas fa-download"></i> Download
-                                            </button>
+                                            ${downloadBtn}
                                         </div>
                                     </div>
                                 </div>
@@ -646,7 +678,8 @@
                 })
                 .catch(error => {
                     console.error('Error searching plugins:', error);
-                    document.getElementById('plugin-search-results').innerHTML = '<p class="text-danger">Error searching plugins</p>';
+                    showPluginError('Network error occurred while searching plugins', 'Check your internet connection and try again.');
+                    document.getElementById('plugin-search-results').innerHTML = '';
                 });
         }
         

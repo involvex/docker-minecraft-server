@@ -732,10 +732,10 @@ def api_search_bukkit_plugins():
     try:
         query = request.args.get('q', '')
         page = request.args.get('page', '1')
-        
+
         if not query:
             return jsonify({'plugins': []})
-        
+
         # Search Spiget API
         url = f'https://api.spiget.org/v2/search/resources/{query}'
         params = {
@@ -743,9 +743,9 @@ def api_search_bukkit_plugins():
             'page': page,
             'fields': 'id,name,description,version,tag,external'
         }
-        
+
         response = requests.get(url, params=params, timeout=10)
-        
+
         if response.status_code == 200:
             plugins = response.json()
             # Filter for plugins only (not resources)
@@ -765,6 +765,99 @@ def api_search_bukkit_plugins():
             return jsonify({'plugins': []})
     except Exception as e:
         return jsonify({'error': str(e), 'plugins': []}), 500
+
+@app.route('/api/plugins/search/bukkitdev', methods=['GET'])
+def api_search_bukkitdev_plugins():
+    """Search for plugins on dev.bukkit.org"""
+    try:
+        query = request.args.get('q', '')
+
+        if not query:
+            return jsonify({'plugins': []})
+
+        # Search dev.bukkit.org (BukkitDev/Bukkit plugin repository)
+        url = 'https://dev.bukkit.org/search'
+        params = {
+            'search': query,
+            'section': 'projects'  # Focus on projects/plugins
+        }
+
+        response = requests.get(url, params=params, timeout=15)
+        response.raise_for_status()
+
+        # Parse HTML results (simple approach - extract plugin info)
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        plugins = []
+        # Find plugin listings in search results
+        project_listings = soup.find_all('div', class_='project-listing-row')
+
+        for listing in project_listings[:20]:  # Limit to 20 results
+            try:
+                # Extract plugin information
+                title_elem = listing.find('h3', class_='project-listing-header')
+                if not title_elem:
+                    continue
+
+                link_elem = title_elem.find('a')
+                if not link_elem:
+                    continue
+
+                plugin_name = link_elem.get_text().strip()
+                plugin_url = link_elem.get('href')
+
+                if not plugin_url.startswith('https://dev.bukkit.org/bukkit-plugins/'):
+                    continue  # Only include bukkit plugins
+
+                # Extract description if available
+                desc_elem = listing.find('p', class_='project-listing-summary')
+                description = desc_elem.get_text().strip() if desc_elem else 'No description available'
+
+                # Extract version info if available
+                version_elem = listing.find('div', class_='project-listing-info')
+                version = 'Latest'
+                if version_elem:
+                    version_info = version_elem.get_text().strip()
+                    # Look for version patterns
+                    import re
+                    version_match = re.search(r'(\d+\.\d+(?:\.\d+)*)', version_info)
+                    if version_match:
+                        version = version_match.group(1)
+
+                plugin_slug = plugin_url.split('/bukkit-plugins/')[-1].split('/')[0]
+
+                plugin_info = {
+                    'name': plugin_name,
+                    'description': description[:200] + '...' if len(description) > 200 else description,
+                    'version': version,
+                    'url': plugin_url,
+                    'slug': plugin_slug,
+                    'source': 'bukkitdev',
+                    'downloads': 0  # Not easily available in search results
+                }
+                plugins.append(plugin_info)
+
+            except Exception as parse_error:
+                # Skip malformed entries
+                continue
+
+        return jsonify({'plugins': plugins})
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Network error accessing dev.bukkit.org: {e}")
+        return jsonify({
+            'plugins': [],
+            'error': f'Network error: {str(e)}',
+            'note': 'Check your internet connection.'
+        })
+    except Exception as e:
+        logging.error(f"Error parsing dev.bukkit.org: {e}")
+        return jsonify({
+            'plugins': [],
+            'error': str(e),
+            'note': 'Error occurred while searching bukkit.org.'
+        })
 
 @app.route('/api/plugins/search/github', methods=['GET'])
 def api_search_github_plugins():
@@ -808,68 +901,74 @@ def api_search_github_plugins():
 
 @app.route('/api/plugins/search/curseforge', methods=['GET'])
 def api_search_curseforge_plugins():
-    """Search for plugins on CurseForge"""
+    """Search for plugins on CurseForge (simplified API - no auth required)"""
     try:
         query = request.args.get('q', '')
-        page = int(request.args.get('page', '1'))
 
         if not query:
             return jsonify({'plugins': []})
 
-        # CurseForge API v1 (maven repository style)
-        # Search CurseForge for plugins
-        url = 'https://api.curseforge.com/v1/mods/search'
-        headers = {
-            'Accept': 'application/json',
-            'x-api-key': os.environ.get('CURSEFORGE_API_KEY', '$2a$10$dummy12345678901234567890')  # Public API key for demo
-        }
+        # Use the simplified CurseForge servermods API (no authentication required)
+        url = f'https://api.curseforge.com/servermods/projects'
         params = {
-            'gameId': 432,  # Minecraft game ID
-            'classId': 5,   # Plugin category
-            'searchFilter': query,
-            'pageSize': 20,
-            'index': (page - 1) * 20,
-            'sortField': 2,  # Popularity
-            'sortOrder': 'desc'
+            'search': query
         }
 
-        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response = requests.get(url, params=params, timeout=10)
 
         if response.status_code == 200:
             data = response.json()
             plugin_list = []
 
-            for mod in data.get('data', []):
-                # Get latest file for download URL
-                latest_file = None
-                if mod.get('latestFiles'):
-                    # Find the latest release file
-                    for file in mod['latestFiles']:
-                        if file.get('releaseType') == 1:  # Release (not alpha/beta)
-                            latest_file = file
-                            break
-                    if not latest_file and mod['latestFiles']:
-                        latest_file = mod['latestFiles'][0]
+            for mod in data:
+                # The simplified API returns basic project info
+                mod_id = mod.get('id')
+                mod_slug = mod.get('slug')
+                mod_name = mod.get('name')
+                mod_stage = mod.get('stage', 'unknown')
 
-                plugin_info = {
-                    'id': mod.get('id'),
-                    'name': mod.get('name'),
-                    'description': mod.get('summary', ''),
-                    'version': latest_file.get('displayName', 'Unknown') if latest_file else 'Unknown',
-                    'download_url': latest_file.get('downloadUrl') if latest_file else None,
-                    'source': 'curseforge',
-                    'downloads': mod.get('downloadCount', 0),
-                    'file_id': latest_file.get('id') if latest_file else None,
-                    'project_id': mod.get('id')
-                }
-                plugin_list.append(plugin_info)
+                # Only include projects that are in release stage
+                if mod_stage.lower() in ['release', 'beta', 'alpha']:
+                    plugin_info = {
+                        'id': mod_id,
+                        'name': mod_name,
+                        'description': f'Stage: {mod_stage}',
+                        'version': 'Latest Release',
+                        'download_url': f'https://www.curseforge.com/api/v1/mods/{mod_id}/files/latest',
+                        'source': 'curseforge',
+                        'downloads': 0,  # This API doesn't provide download counts
+                        'file_id': None,
+                        'project_id': mod_id,
+                        'slug': mod_slug,
+                        'stage': mod_stage,
+                        'url': f'https://www.curseforge.com/minecraft/bukkit-plugins/{mod_slug}'
+                    }
+                    plugin_list.append(plugin_info)
 
             return jsonify({'plugins': plugin_list})
+
         else:
-            # Fallback: Try alternative CurseForge API or return empty
-            return jsonify({'plugins': [], 'note': 'CurseForge API key may be required for full functionality'})
+            logging.error(f"CurseForge servermods API error: {response.status_code} - {response.text}")
+            return jsonify({
+                'plugins': [],
+                'error': f'CurseForge API returned status {response.status_code}',
+                'note': 'The CurseForge servermods API may be temporarily unavailable.'
+            })
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Network error accessing CurseForge servermods API: {e}")
+        return jsonify({
+            'plugins': [],
+            'error': f'Network error: {str(e)}',
+            'note': 'Check your internet connection.'
+        })
     except Exception as e:
-        return jsonify({'error': str(e), 'plugins': []}), 500
+        logging.error(f"Error in CurseForge search: {e}")
+        return jsonify({
+            'plugins': [],
+            'error': str(e),
+            'note': 'Internal error occurred while searching CurseForge.'
+        })
 
 @app.route('/api/plugins/download', methods=['POST'])
 def api_download_plugin():
