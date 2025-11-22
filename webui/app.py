@@ -316,27 +316,93 @@ def api_logs():
         logging.error(f"Error getting logs: {e}")
         return jsonify([])
 
+@app.route('/api/debug/files')
+def debug_files():
+    """Debug endpoint to see what files are available"""
+    try:
+        import os
+        debug_info = {
+            'cwd': os.getcwd(),
+            'data_exists': os.path.exists('/data'),
+            'config_exists': os.path.exists('/config'),
+            'data_contents': [],
+            'config_contents': [],
+            'data_root_files': []
+        }
+        
+        if os.path.exists('/data'):
+            try:
+                debug_info['data_contents'] = os.listdir('/data')
+                # Check for server.properties specifically
+                sp_path = '/data/server.properties'
+                debug_info['server_properties_exists'] = os.path.exists(sp_path)
+                if os.path.exists(sp_path):
+                    debug_info['server_properties_size'] = os.path.getsize(sp_path)
+                    debug_info['server_properties_readable'] = os.access(sp_path, os.R_OK)
+            except Exception as e:
+                debug_info['data_error'] = str(e)
+        
+        if os.path.exists('/config'):
+            try:
+                debug_info['config_contents'] = os.listdir('/config')
+            except Exception as e:
+                debug_info['config_error'] = str(e)
+        
+        # Check current directory
+        try:
+            debug_info['data_root_files'] = os.listdir('.')
+        except Exception as e:
+            debug_info['root_error'] = str(e)
+            
+        return jsonify(debug_info)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/config', methods=['GET', 'POST'])
 def api_config():
     """Manage server configuration"""
-    config_file = '/data/server.properties'
+    # Try multiple possible paths for server.properties
+    possible_paths = [
+        '/data/server.properties',
+        '/config/server.properties',
+        './server.properties'
+    ]
+    
+    config_file = None
+    for path in possible_paths:
+        if os.path.exists(path):
+            config_file = path
+            break
     
     if request.method == 'GET':
         try:
-            # Check if file exists
-            if not os.path.exists(config_file):
-                logging.warning(f"Config file not found: {config_file}")
-                return jsonify({'error': 'Configuration file not found', 'path': config_file}), 404
+            if not config_file:
+                # List what's in /data to help debug
+                data_contents = []
+                if os.path.exists('/data'):
+                    data_contents = os.listdir('/data')
+                
+                logging.warning(f"Config file not found. Checked: {possible_paths}")
+                logging.warning(f"/data contents: {data_contents}")
+                
+                return jsonify({
+                    'error': 'Configuration file not found',
+                    'checked_paths': possible_paths,
+                    'data_dir_contents': data_contents
+                }), 404
             
             with open(config_file, 'r') as f:
                 config = f.read()
-            return jsonify({'config': config})
+            return jsonify({'config': config, 'path': config_file})
         except Exception as e:
             logging.error(f"Error reading config: {e}")
             return jsonify({'error': str(e)}), 500
     
     elif request.method == 'POST':
         try:
+            if not config_file:
+                return jsonify({'error': 'Configuration file not found'}), 404
+                
             data = request.get_json()
             config_content = data.get('config', '')
             

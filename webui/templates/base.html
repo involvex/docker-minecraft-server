@@ -9,7 +9,51 @@
     <style>
         body {
             background-color: #f8f9fa;
+            transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        body.dark-mode .card {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .navbar {
+            background-color: #000 !important;
+        }
+        body.dark-mode .sidebar {
+            background-color: #1a1a1a;
+        }
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modal-header {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .list-group-item {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .form-control {
+            background-color: #1a1a1a;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .btn-outline-secondary {
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .btn-outline-secondary:hover {
+            background-color: #444;
+            color: #fff;
+        }
+        
         .navbar-brand {
             font-weight: bold;
         }
@@ -38,6 +82,7 @@
         .card {
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             border: 1px solid rgba(0, 0, 0, 0.125);
+            transition: background-color 0.3s, border-color 0.3s;
         }
         .sidebar {
             background-color: #343a40;
@@ -52,6 +97,11 @@
         .sidebar .nav-link.active {
             background-color: #007bff;
         }
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -62,6 +112,11 @@
                 <i class="fas fa-cube"></i> Minecraft Server Admin
             </a>
             <div class="navbar-nav ms-auto">
+                <div class="nav-item me-3">
+                    <span class="theme-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </span>
+                </div>
                 <div class="nav-item">
                     <span class="nav-link">
                         <i class="fas fa-circle status-indicator" id="server-status-indicator"></i>
@@ -230,6 +285,27 @@
         // Global variables
         let currentStatus = {status: 'checking', player_count: 0, online_players: []};
         
+        // Dark mode functionality
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        
+        // Load dark mode preference on page load
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-icon').className = 'fas fa-sun';
+        }
+        
         // Socket event handlers
         socket.on('connect', function() {
             console.log('Connected to server');
@@ -341,9 +417,20 @@
                 .then(data => {
                     if (data.config) {
                         document.getElementById('config-editor').value = data.config;
+                    } else if (data.error) {
+                        const errorMsg = `Error: ${data.error}\n\n`;
+                        const debugInfo = data.checked_paths ? 
+                            `Checked paths:\n${data.checked_paths.join('\n')}\n\n` +
+                            `/data directory contents:\n${(data.data_dir_contents || []).join('\n')}` : '';
+                        document.getElementById('config-editor').value = errorMsg + debugInfo;
+                        document.getElementById('config-editor').style.color = '#dc3545';
                     }
                 })
-                .catch(error => console.error('Error loading config:', error));
+                .catch(error => {
+                    console.error('Error loading config:', error);
+                    document.getElementById('config-editor').value = `Error loading configuration: ${error}`;
+                    document.getElementById('config-editor').style.color = '#dc3545';
+                });
         }
         
         function saveConfig() {

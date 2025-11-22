@@ -16,8 +16,10 @@ This project provides a production-ready Minecraft server with a comprehensive w
 - **Modern Dashboard**: Real-time server overview with system metrics
 - **Console Access**: Execute RCON commands directly from the browser
 - **Live Logs**: Stream server logs in real-time with filtering
-- **Player Management**: Monitor online players, kick/ban functionality
+- **Player Management**: OP, De-OP, Ban, Unban, and Kick players
+- **Ban List**: View and manage banned players
 - **Configuration Editor**: Edit server.properties through the web UI
+- **Dark Mode**: Toggle between light and dark themes (preference saved)
 
 ### 🔒 **Security & Reliability**
 - **RCON Integration**: Secure remote command execution
@@ -27,9 +29,27 @@ This project provides a production-ready Minecraft server with a comprehensive w
 
 ## 🚀 Quick Start
 
-### Windows (Recommended)
+### One-Command Setup (Windows)
+
+**PowerShell:**
+```powershell
+iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.ps1 | iex
+```
+
+**Command Prompt:**
 ```cmd
-# Run the setup script (choose one)
+curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
+```
+
+### Manual Setup
+
+**Windows:**
+```cmd
+# Clone the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+
+# Run the setup script
 setup.bat
 # or
 .\setup.ps1
@@ -40,8 +60,12 @@ manage.bat start
 .\manage.ps1 -Command start
 ```
 
-### Linux/macOS
+**Linux/macOS:**
 ```bash
+# Clone the repository
+git clone https://github.com/involvex/docker-minecraft-server.git
+cd docker-minecraft-server
+
 # Run the setup script
 ./setup.sh
 
@@ -54,7 +78,7 @@ manage.bat start
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Web Browser   │◄──►│  Web UI Flask   │◄──►│   RCON Client   │
-│   (Port 8080)   │    │  (Port 8080)    │    │   (Port 8125)   │
+│   (Port 8080)   │    │  (Port 8080)    │    │  (Port 25575)   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                                 │
                                 ▼
@@ -113,8 +137,8 @@ gamemode=survival
 difficulty=normal
 pvp=true
 enable-rcon=true
-rcon.port=8125
-rcon.password=minecraft_rcon_password
+rcon.port=25575
+rcon.password=your_secure_password
 ```
 
 ## 🌟 Web Interface Highlights
@@ -175,7 +199,7 @@ docker-compose logs minecraft-webui
 
 **RCON connection failed:**
 ```bash
-docker-compose exec minecraft rcon-cli -a localhost -p 8125 list
+docker-compose exec minecraft rcon-cli -a localhost -p 25575 list
 # Check RCON configuration and password
 ```
 

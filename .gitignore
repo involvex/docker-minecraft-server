@@ -11,3 +11,4 @@ logs
 config/.env
 config/.env.example
 files
+backups
