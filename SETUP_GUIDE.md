@@ -287,12 +287,15 @@ REM PowerShell usage
 
 ```bash
 # Make scripts executable
-chmod +x setup.sh manage.sh
+chmod +x setup.sh
 ./setup.sh
-./manage.sh start
-./manage.sh logs
-./manage.sh backup
-./manage.sh rcon "list players"
+
+# Manage the server using docker-compose commands
+docker-compose up -d                    # Start the server
+docker-compose logs -f                  # View logs
+docker-compose exec minecraft rcon-cli "list players"  # Execute RCON commands
+docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /data  # Create backup
+docker-compose down                     # Stop the server
 ```
 
 ## 🔒 Security

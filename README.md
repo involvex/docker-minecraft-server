@@ -9,7 +9,7 @@
 ### 🐛 **Critical Fixes in v2.1.0**
 
 - ✅ **FIXED**: WebUI constant restarting issue (containers now run stably)
-- ✅ **FIXED**: PowerShell encoding problems with Unicode characters  
+- ✅ **FIXED**: PowerShell encoding problems with Unicode characters
 - ✅ **FIXED**: manage.bat script output suppression
 - ✅ **CLEANED**: Removed 5 duplicate management scripts
 - ✅ **UPDATED**: All documentation to reflect current file structure
@@ -17,7 +17,7 @@
 ### 🚀 **What's New**
 
 - **Simplified Management**: Streamlined batch scripts with clean ASCII output
-- **Better Documentation**: Updated all setup guides with correct file references  
+- **Better Documentation**: Updated all setup guides with correct file references
 - **Enhanced Stability**: Improved health checks and service dependencies
 - **Cross-Platform**: Works reliably in both PowerShell and Command Prompt
 
@@ -96,20 +96,23 @@ manage.bat update
 ### 🚀 One-Command Setup (Windows)
 
 **PowerShell (Recommended):**
+
 ```powershell
 # Download and run setup automatically
 iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1 | iex
 ```
 
 **Command Prompt:**
+
 ```cmd
-# Download and run setup automatically  
+# Download and run setup automatically
 curl -o setup.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat && setup.bat && manage.bat start
 ```
 
 ### 📦 Manual Setup
 
 **PowerShell:**
+
 ```powershell
 # Clone and setup the repository
 git clone https://github.com/involvex/docker-minecraft-server.git
@@ -118,6 +121,7 @@ cd docker-minecraft-server
 ```
 
 **Command Prompt:**
+
 ```cmd
 REM Clone the repository
 git clone https://github.com/involvex/docker-minecraft-server.git
@@ -166,7 +170,10 @@ cd docker-minecraft-server
 ./setup.sh
 
 # Manage the server
-./manage.sh start
+docker-compose up -d        # Start the server
+docker-compose logs -f      # View logs
+docker-compose down         # Stop the server
+docker-compose ps           # Check status
 ```
 
 ## 📊 Service Architecture

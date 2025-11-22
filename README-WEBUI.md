@@ -31,14 +31,16 @@ A modern, feature-rich web interface for managing your Minecraft server with RCO
 ### 🚀 One-Command Setup (Windows)
 
 **PowerShell (Recommended):**
+
 ```powershell
 # Download and run setup automatically
 iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1 | iex
 ```
 
 **Command Prompt:**
+
 ```cmd
-# Download and run setup automatically  
+# Download and run setup automatically
 curl -o setup.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat && setup.bat && manage.bat start
 ```
 
