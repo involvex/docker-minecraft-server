@@ -776,13 +776,34 @@ def api_search_bukkitdev_plugins():
             return jsonify({'plugins': []})
 
         # Search dev.bukkit.org (BukkitDev/Bukkit plugin repository)
+        # Note: bukkit.org search works with just the 'search' parameter
         url = 'https://dev.bukkit.org/search'
         params = {
-            'search': query,
-            'section': 'projects'  # Focus on projects/plugins
+            'search': query
+            # Remove 'section' parameter as it's causing encoding issues
         }
 
-        response = requests.get(url, params=params, timeout=15)
+        # Add comprehensive headers to look like a regular browser request
+        # bukkit.org may have CloudFlare protection, so use better headers
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Cache-Control': 'max-age=0',
+            'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"'
+        }
+
+        response = requests.get(url, params=params, headers=headers, timeout=15)
         response.raise_for_status()
 
         # Parse HTML results (simple approach - extract plugin info)
@@ -848,15 +869,15 @@ def api_search_bukkitdev_plugins():
         logging.error(f"Network error accessing dev.bukkit.org: {e}")
         return jsonify({
             'plugins': [],
-            'error': f'Network error: {str(e)}',
-            'note': 'Check your internet connection.'
+            'error': 'dev.bukkit.org is blocking automated requests',
+            'note': 'Try using CurseForge or GitHub search instead. bukkit.org may require browser access.'
         })
     except Exception as e:
         logging.error(f"Error parsing dev.bukkit.org: {e}")
         return jsonify({
             'plugins': [],
-            'error': str(e),
-            'note': 'Error occurred while searching bukkit.org.'
+            'error': 'Unable to search bukkit.org',
+            'note': 'Use Spiget, CurseForge, or GitHub instead for better plugin discovery.'
         })
 
 @app.route('/api/plugins/search/github', methods=['GET'])

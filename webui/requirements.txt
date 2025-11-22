@@ -7,3 +7,4 @@ Jinja2==3.1.2
 python-engineio==4.7.1
 eventlet==0.33.3
 psutil==5.9.6
+beautifulsoup4==4.12.2
