@@ -93,10 +93,23 @@ manage.bat update
 
 ## 🚀 Quick Start
 
-### One-Command Setup (Windows)
+### 🚀 One-Command Setup (Windows)
+
+**PowerShell (Recommended):**
+```powershell
+# Download and run setup automatically
+iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1 | iex
+```
+
+**Command Prompt:**
+```cmd
+# Download and run setup automatically  
+curl -o setup.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat && setup.bat && manage.bat start
+```
+
+### 📦 Manual Setup
 
 **PowerShell:**
-
 ```powershell
 # Clone and setup the repository
 git clone https://github.com/involvex/docker-minecraft-server.git
@@ -105,7 +118,6 @@ cd docker-minecraft-server
 ```
 
 **Command Prompt:**
-
 ```cmd
 REM Clone the repository
 git clone https://github.com/involvex/docker-minecraft-server.git

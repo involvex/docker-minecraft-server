@@ -28,29 +28,18 @@ A modern, feature-rich web interface for managing your Minecraft server with RCO
 
 ## Quick Start
 
-### One-Command Setup (Windows)
+### 🚀 One-Command Setup (Windows)
 
-**PowerShell:**
-
+**PowerShell (Recommended):**
 ```powershell
-# Clone and setup the repository
-git clone https://github.com/involvex/docker-minecraft-server.git
-cd docker-minecraft-server
-.\setup.ps1
+# Download and run setup automatically
+iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.ps1 | iex
 ```
 
 **Command Prompt:**
-
 ```cmd
-REM Clone the repository
-git clone https://github.com/involvex/docker-minecraft-server.git
-cd docker-minecraft-server
-
-REM Run setup
-setup.bat
-
-REM Start the server
-manage.bat start
+# Download and run setup automatically  
+curl -o setup.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup.bat && setup.bat && manage.bat start
 ```
 
 ### Manual Setup
