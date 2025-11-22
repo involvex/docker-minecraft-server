@@ -208,6 +208,11 @@
         color: var(--primary-color);
       }
 
+      /* Enable smooth scrolling for anchor links */
+      html {
+        scroll-behavior: smooth;
+      }
+
       @media (max-width: 768px) {
         .hero h1 {
           font-size: 2rem;
@@ -244,6 +249,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#getting-started">Getting Started</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#support">Support</a>
             </li>
             <li class="nav-item">
               <a
@@ -351,7 +359,7 @@
       <div class="container">
         <div class="text-center mb-5">
           <h2 class="h1 fw-bold mb-4 text-white">Powerful Features</h2>
-          <p class="text-muted lead">
+          <p class="lead" style="color: #e2e8f0;">
             Everything you need to run and manage a professional Minecraft
             server
           </p>
@@ -364,12 +372,12 @@
               <div class="feature-icon bg-primary text-white mx-auto">
                 <i class="fas fa-server"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">Server Management</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">Server Management</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 Easy configuration through web interface or config files.
                 One-click start, stop, restart operations.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Environment-based configuration</li>
                 <li>Automatic health monitoring</li>
                 <li>Real-time status updates</li>
@@ -383,12 +391,12 @@
               <div class="feature-icon bg-success text-white mx-auto">
                 <i class="fas fa-tachometer-alt"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">Web Dashboard</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">Web Dashboard</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 Modern web interface for complete server administration.
                 Real-time monitoring and control.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Real-time server metrics</li>
                 <li>Quick action buttons</li>
                 <li>Dark/Light mode toggle</li>
@@ -402,12 +410,12 @@
               <div class="feature-icon bg-warning text-white mx-auto">
                 <i class="fas fa-puzzle-piece"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">Plugin Management</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">Plugin Management</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 Upload, install, and manage plugins seamlessly. Search multiple
                 repositories including Spiget.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Plugin repository browser</li>
                 <li>One-click installation</li>
                 <li>CurseForge & GitHub integration</li>
@@ -421,12 +429,12 @@
               <div class="feature-icon bg-info text-white mx-auto">
                 <i class="fas fa-globe"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">World Management</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">World Management</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 Switch between worlds, create backups, and restore previous
                 versions. Complete world control.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Multiple world support</li>
                 <li>Automated backups</li>
                 <li>World switching</li>
@@ -440,12 +448,12 @@
               <div class="feature-icon bg-danger text-white mx-auto">
                 <i class="fas fa-users"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">Player Management</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">Player Management</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 OP/De-OP players, ban/unban, kick players. View online players
                 and historical data.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Player administration</li>
                 <li>Ban list management</li>
                 <li>Player statistics</li>
@@ -459,12 +467,12 @@
               <div class="feature-icon bg-secondary text-white mx-auto">
                 <i class="fas fa-terminal"></i>
               </div>
-              <h4 class="h5 fw-bold mb-3">Live Console</h4>
-              <p class="text-muted mb-3">
+              <h4 class="h5 fw-bold mb-3 text-white">Live Console</h4>
+              <p class="mb-3" style="color: #e2e8f0;">
                 Execute RCON commands with instant results. View live logs with
                 filtering and search.
               </p>
-              <ul class="small text-muted">
+              <ul class="small" style="color: #e2e8f0;">
                 <li>Command execution</li>
                 <li>Live log streaming</li>
                 <li>Command history</li>
@@ -511,8 +519,8 @@
               <li class="mb-3">
                 <i class="fas fa-shield-alt text-success fa-lg me-3"></i>
                 <div>
-                  <strong>RCON Integration</strong><br />
-                  <span class="text-muted"
+                  <strong class="text-white">RCON Integration</strong><br />
+                  <span style="color: #e2e8f0;"
                     >Secure remote command execution with encrypted
                     connections</span
                   >
@@ -521,8 +529,8 @@
               <li class="mb-3">
                 <i class="fas fa-lock text-primary fa-lg me-3"></i>
                 <div>
-                  <strong>Network Isolation</strong><br />
-                  <span class="text-muted"
+                  <strong class="text-white">Network Isolation</strong><br />
+                  <span style="color: #e2e8f0;"
                     >Docker networking with proper firewall configuration</span
                   >
                 </div>
@@ -530,8 +538,8 @@
               <li class="mb-3">
                 <i class="fas fa-heartbeat text-danger fa-lg me-3"></i>
                 <div>
-                  <strong>Health Monitoring</strong><br />
-                  <span class="text-muted"
+                  <strong class="text-white">Health Monitoring</strong><br />
+                  <span style="color: #e2e8f0;"
                     >Automatic service health checks and restart policies</span
                   >
                 </div>
@@ -553,21 +561,21 @@
                   <div class="stat-card">
                     <i class="fas fa-star text-warning fa-2x mb-2"></i>
                     <h3 class="h2 fw-bold text-primary mb-1">50K+</h3>
-                    <p class="text-muted mb-0">GitHub Stars</p>
+                    <p style="color: #e2e8f0;" class="mb-0">GitHub Stars</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4">
                   <div class="stat-card">
                     <i class="fas fa-download text-success fa-2x mb-2"></i>
                     <h3 class="h2 fw-bold text-primary mb-1">20M+</h3>
-                    <p class="text-muted mb-0">Docker Pulls</p>
+                    <p style="color: #e2e8f0;" class="mb-0">Docker Pulls</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4">
                   <div class="stat-card">
                     <i class="fas fa-users text-info fa-2x mb-2"></i>
                     <h3 class="h2 fw-bold text-primary mb-1">10K+</h3>
-                    <p class="text-muted mb-0">Active Servers</p>
+                    <p style="color: #e2e8f0;" class="mb-0">Active Servers</p>
                   </div>
                 </div>
               </div>
@@ -581,7 +589,7 @@
     <section id="getting-started" class="py-5 bg-dark">
       <div class="container">
         <div class="text-center mb-5">
-          <h2 class="h1 fw-bold mb-4">Getting Started</h2>
+          <h2 class="h1 fw-bold mb-4 text-white">Getting Started</h2>
           <p class="text-muted lead">Launch your server in minutes</p>
         </div>
 
@@ -686,10 +694,10 @@
               <i class="fas fa-cube fa-2x text-primary me-3"></i>
               <div>
                 <h5 class="text-white mb-0">Minecraft Server</h5>
-                <p class="text-muted mb-0">Docker & Web Management UI</p>
+                <p class="mb-0" style="color: #e2e8f0;">Docker & Web Management UI</p>
               </div>
             </div>
-            <p class="text-muted">
+            <p style="color: #e2e8f0;">
               Production-ready Minecraft server with comprehensive web-based
               administration. Easy deployment, plugin management, and real-time
               monitoring.
@@ -793,13 +801,13 @@
 
         <div class="row align-items-center">
           <div class="col-md-6">
-            <p class="text-muted mb-0">
+            <p class="mb-0" style="color: #e2e8f0;">
               © 2024 involvex. Fork of itzg/docker-minecraft-server. Licensed
               under MIT.
             </p>
           </div>
           <div class="col-md-6 text-md-end">
-            <p class="text-muted mb-0">
+            <p class="mb-0" style="color: #e2e8f0;">
               Made with <i class="fas fa-heart text-danger me-1"></i> for the
               Minecraft community
             </p>
@@ -815,51 +823,6 @@
     <script>
       // Simple page view tracking
       console.log("🎮 Minecraft Server GitHub Pages loaded successfully");
-
-      // Enhanced smooth scrolling for anchor links
-      document.addEventListener("DOMContentLoaded", function () {
-        // Handle all anchor links that start with #
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const targetId = this.getAttribute("href");
-            const target = document.querySelector(targetId);
-
-            if (target) {
-              // Calculate offset for fixed navbar
-              const navbarHeight =
-                document.querySelector(".navbar")?.offsetHeight || 0;
-              const targetPosition = target.offsetTop - navbarHeight - 20;
-
-              window.scrollTo({
-                top: targetPosition,
-                behavior: "smooth",
-              });
-
-              // Close mobile navbar if open
-              const navbarCollapse = document.querySelector(".navbar-collapse");
-              if (navbarCollapse && navbarCollapse.classList.contains("show")) {
-                const bsCollapse = new bootstrap.Collapse(navbarCollapse);
-                bsCollapse.hide();
-              }
-            }
-          });
-        });
-
-        // Add click logging for debugging
-        document.querySelectorAll(".btn-custom").forEach((button) => {
-          button.addEventListener("click", function (e) {
-            console.log(
-              "Button clicked:",
-              this.textContent.trim(),
-              "href:",
-              this.getAttribute("href"),
-            );
-          });
-        });
-      });
     </script>
   </body>
 </html>
