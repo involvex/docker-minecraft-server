@@ -1,452 +1,530 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard - Minecraft Server Web UI{% endblock %}
-
-{% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshStatus()">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
-        </div>
+{% extends "base.html" %} {% block title %}Dashboard - Minecraft Server Web UI{%
+endblock %} {% block content %}
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h2"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        onclick="refreshStatus()"
+      >
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
     </div>
+  </div>
 </div>
 
 <!-- Server Status Cards -->
 <div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-2">
-                    <i class="fas fa-server fa-2x" id="server-status-icon"></i>
-                </div>
-                <h5 class="card-title">Server Status</h5>
-                <p class="card-text">
-                    <span class="badge bg-success" id="server-status-badge">Checking...</span>
-                </p>
-            </div>
+  <div class="col-md-3 mb-3">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="mb-2">
+          <i class="fas fa-server fa-2x" id="server-status-icon"></i>
         </div>
+        <h5 class="card-title">Server Status</h5>
+        <p class="card-text">
+          <span class="badge bg-success" id="server-status-badge"
+            >Checking...</span
+          >
+        </p>
+      </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-2">
-                    <i class="fas fa-users fa-2x text-primary"></i>
-                </div>
-                <h5 class="card-title">Players Online</h5>
-                <p class="card-text">
-                    <span class="h4" id="player-count">0</span> / <span id="max-players">20</span>
-                </p>
-            </div>
+  </div>
+
+  <div class="col-md-3 mb-3">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="mb-2">
+          <i class="fas fa-users fa-2x text-primary"></i>
         </div>
+        <h5 class="card-title">Players Online</h5>
+        <p class="card-text">
+          <span class="h4" id="player-count">0</span> /
+          <span id="max-players">20</span>
+        </p>
+      </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-2">
-                    <i class="fas fa-cog fa-2x text-info"></i>
-                </div>
-                <h5 class="card-title">Uptime</h5>
-                <p class="card-text">
-                    <span id="uptime">Calculating...</span>
-                </p>
-            </div>
+  </div>
+
+  <div class="col-md-3 mb-3">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="mb-2">
+          <i class="fas fa-cog fa-2x text-info"></i>
         </div>
+        <h5 class="card-title">Uptime</h5>
+        <p class="card-text">
+          <span id="uptime">Calculating...</span>
+        </p>
+      </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-2">
-                    <i class="fas fa-hdd fa-2x text-warning"></i>
-                </div>
-                <h5 class="card-title">Memory Usage</h5>
-                <p class="card-text">
-                    <span id="memory-usage">Loading...</span>
-                </p>
-            </div>
+  </div>
+
+  <div class="col-md-3 mb-3">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="mb-2">
+          <i class="fas fa-hdd fa-2x text-warning"></i>
         </div>
+        <h5 class="card-title">Memory Usage</h5>
+        <p class="card-text">
+          <span id="memory-usage">Loading...</span>
+        </p>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Quick Actions -->
 <div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
-            </div>
-            <div class="card-body">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" onclick="showConsole()">
-                        <i class="fas fa-terminal"></i> Open Console
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="sendQuickCommand('list')">
-                        <i class="fas fa-users"></i> List Players
-                    </button>
-                    <button type="button" class="btn btn-info" onclick="sendQuickCommand('time query day')">
-                        <i class="fas fa-clock"></i> Check Time
-                    </button>
-                    <button type="button" class="btn btn-warning" onclick="sendQuickCommand('weather clear')">
-                        <i class="fas fa-sun"></i> Clear Weather
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="sendQuickCommand('save-all')">
-                        <i class="fas fa-save"></i> Save World
-                    </button>
-                </div>
-            </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary" onclick="showConsole()">
+            <i class="fas fa-terminal"></i> Open Console
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            onclick="sendQuickCommand('list')"
+          >
+            <i class="fas fa-users"></i> List Players
+          </button>
+          <button
+            type="button"
+            class="btn btn-info"
+            onclick="sendQuickCommand('time query day')"
+          >
+            <i class="fas fa-clock"></i> Check Time
+          </button>
+          <button
+            type="button"
+            class="btn btn-warning"
+            onclick="sendQuickCommand('weather clear')"
+          >
+            <i class="fas fa-sun"></i> Clear Weather
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="sendQuickCommand('save-all')"
+          >
+            <i class="fas fa-save"></i> Save World
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Online Players -->
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-user-friends"></i> Online Players</h5>
-            </div>
-            <div class="card-body">
-                <div id="online-players-list">
-                    <p class="text-muted">Loading player list...</p>
-                </div>
-            </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-user-friends"></i> Online Players</h5>
+      </div>
+      <div class="card-body">
+        <div id="online-players-list">
+          <p class="text-muted">Loading player list...</p>
         </div>
+      </div>
     </div>
-    
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-chart-line"></i> System Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <strong>CPU Usage:</strong><br>
-                        <span id="cpu-usage">Loading...</span>
-                    </div>
-                    <div class="col-6">
-                        <strong>Disk Usage:</strong><br>
-                        <span id="disk-usage">Loading...</span>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-6">
-                        <strong>Container ID:</strong><br>
-                        <code id="container-id">{{ request.host }}</code>
-                    </div>
-                    <div class="col-6">
-                        <strong>Version:</strong><br>
-                        <span id="server-version">Loading...</span>
-                    </div>
-                </div>
-            </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="fas fa-chart-line"></i> System Information
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <strong>CPU Usage:</strong><br />
+            <span id="cpu-usage">Loading...</span>
+          </div>
+          <div class="col-6">
+            <strong>Disk Usage:</strong><br />
+            <span id="disk-usage">Loading...</span>
+          </div>
         </div>
+        <hr />
+        <div class="row">
+          <div class="col-6">
+            <strong>Container ID:</strong><br />
+            <code id="container-id">{{ request.host }}</code>
+          </div>
+          <div class="col-6">
+            <strong>Version:</strong><br />
+            <span id="server-version">Loading...</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Server Information -->
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Server Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <strong>Server Name:</strong> <span id="server-name">{{ config.SERVER_NAME | default('Minecraft Server') }}</span><br>
-                        <strong>MOTD:</strong> <span id="server-motd">Loading...</span><br>
-                        <strong>Version:</strong> <span id="server-version-info">Loading...</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Last Update:</strong> <span id="last-update">Never</span><br>
-                        <strong>Next Backup:</strong> <span id="next-backup">Not scheduled</span><br>
-                        <strong>Configuration:</strong> <button class="btn btn-sm btn-outline-primary" onclick="showConfig()">Manage</button>
-                    </div>
-                </div>
-            </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="fas fa-info-circle"></i> Server Information
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Server Name:</strong>
+            <span id="server-name"
+              >{{ config.SERVER_NAME | default('Minecraft Server') }}</span
+            ><br />
+            <strong>MOTD:</strong> <span id="server-motd">Loading...</span
+            ><br />
+            <strong>Version:</strong>
+            <span id="server-version-info">Loading...</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Last Update:</strong> <span id="last-update">Never</span
+            ><br />
+            <strong>Next Backup:</strong>
+            <span id="next-backup">Not scheduled</span><br />
+            <strong>Configuration:</strong>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="showConfig()"
+            >
+              Manage
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Console Toggle Button -->
 <div class="row mt-3">
-    <div class="col-12">
-        <div class="text-center">
-            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#console-section" aria-expanded="false" aria-controls="console-section" id="console-toggle">
-                <i class="fas fa-terminal"></i> <span id="console-toggle-text">Show Console</span>
-                <i class="fas fa-chevron-down" id="console-toggle-icon"></i>
-            </button>
-        </div>
+  <div class="col-12">
+    <div class="text-center">
+      <button
+        class="btn btn-outline-primary"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#console-section"
+        aria-expanded="false"
+        aria-controls="console-section"
+        id="console-toggle"
+      >
+        <i class="fas fa-terminal"></i>
+        <span id="console-toggle-text">Show Console</span>
+        <i class="fas fa-chevron-down" id="console-toggle-icon"></i>
+      </button>
     </div>
+  </div>
 </div>
 
 <!-- Collapsible Console Section -->
 <div class="collapse mt-3" id="console-section">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <!-- Console Header -->
-                    <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                        <h5 class="mb-0"><i class="fas fa-terminal"></i> Server Console</h5>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="clearConsole()">
-                                <i class="fas fa-trash"></i> Clear
-                            </button>
-                            <button class="btn btn-sm btn-outline-info" onclick="refreshLogs()">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Console Display Area -->
-                    <div class="log-container-dashboard" id="dashboard-console-output" style="height: 200px; max-height: 30vh;">
-                        <div id="console-loading" class="text-center text-muted p-3">
-                            <i class="fas fa-spinner fa-spin"></i> Loading logs...
-                        </div>
-                    </div>
-
-                    <!-- Command Input Area -->
-                    <div class="p-3 border-top bg-light">
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="text" class="form-control command-input-dashboard" id="dashboard-command-input" placeholder="Enter command... (e.g., list, save-all, op player)">
-                            <button class="btn btn-primary" onclick="sendDashboardCommand()">
-                                <i class="fas fa-paper-plane"></i> Send
-                            </button>
-                        </div>
-                        <div class="form-text">
-                            <small>Quick commands: <code>list</code>, <code>save-all</code>, <code>time set day</code>, <code>weather clear</code>, <code>op <player></code>, <code>deop <player></code></small>
-                        </div>
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body p-0">
+          <!-- Console Header -->
+          <div
+            class="d-flex justify-content-between align-items-center p-3 border-bottom"
+          >
+            <h5 class="mb-0"><i class="fas fa-terminal"></i> Server Console</h5>
+            <div class="btn-group" role="group">
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                onclick="clearConsole()"
+              >
+                <i class="fas fa-trash"></i> Clear
+              </button>
+              <button
+                class="btn btn-sm btn-outline-info"
+                onclick="refreshLogs()"
+              >
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
             </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+          </div>
 
-{% block extra_js %}
+          <!-- Console Display Area -->
+          <div
+            class="log-container-dashboard"
+            id="dashboard-console-output"
+            style="height: 200px; max-height: 30vh"
+          >
+            <div id="console-loading" class="text-center text-muted p-3">
+              <i class="fas fa-spinner fa-spin"></i> Loading logs...
+            </div>
+          </div>
+
+          <!-- Command Input Area -->
+          <div class="p-3 border-top bg-light">
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input
+                type="text"
+                class="form-control command-input-dashboard"
+                id="dashboard-command-input"
+                placeholder="Enter command... (e.g., list, save-all, op &#60;player&#62;)"
+              />
+              <button class="btn btn-primary" onclick="sendDashboardCommand()">
+                <i class="fas fa-paper-plane"></i> Send
+              </button>
+            </div>
+            <div class="form-text">
+              <small
+                >Quick commands: <code>list</code>, <code>save-all</code>,
+                <code>time set day</code>, <code>weather clear</code>,
+                <code>op &#60;player&#62;</code>,
+                <code>deop &#60;player&#62;</code></small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
 <script>
-// Global dashboard data
-let dashboardData = {
+  // Global dashboard data
+  let dashboardData = {
     startTime: new Date(),
     stats: {
-        cpuUsage: 0,
-        memoryUsage: 0,
-        diskUsage: 0
-    }
-};
+      cpuUsage: 0,
+      memoryUsage: 0,
+      diskUsage: 0,
+    },
+  };
 
-// Update dashboard every 30 seconds (reduced from 10 to minimize RCON connections)
-setInterval(updateDashboard, 30000);
+  // Update dashboard every 30 seconds (reduced from 10 to minimize RCON connections)
+  setInterval(updateDashboard, 30000);
 
-// Initialize dashboard
-updateDashboard();
+  // Initialize dashboard
+  updateDashboard();
 
-// Functions
-function updateDashboard() {
+  // Functions
+  function updateDashboard() {
     updateServerStatus();
     updateSystemInfo();
     updateOnlinePlayers();
-}
+  }
 
-function updateServerStatus() {
-    fetch('/api/status')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Server status:', data); // Debug logging
-            
-            // Update status indicator
-            const statusIcon = document.getElementById('server-status-icon');
-            const statusBadge = document.getElementById('server-status-badge');
-            const playerCount = document.getElementById('player-count');
-            const serverMotd = document.getElementById('server-motd');
-            const serverVersion = document.getElementById('server-version');
-            const serverVersionInfo = document.getElementById('server-version-info');
-            
-            if (data.status === 'online') {
-                statusIcon.className = 'fas fa-server fa-2x text-success';
-                statusBadge.textContent = 'Online';
-                statusBadge.className = 'badge bg-success';
-                serverMotd.textContent = data.motd || 'Minecraft Server';
-                serverVersion.textContent = data.version || 'Unknown';
-                serverVersionInfo.textContent = data.version || 'Unknown';
-            } else if (data.status === 'offline') {
-                statusIcon.className = 'fas fa-server fa-2x text-danger';
-                statusBadge.textContent = 'Offline';
-                statusBadge.className = 'badge bg-danger';
-                serverMotd.textContent = data.motd || 'Server is offline';
-                serverVersion.textContent = 'N/A';
-                serverVersionInfo.textContent = 'N/A';
-            } else if (data.status === 'unknown') {
-                // Unknown or checking status
-                statusIcon.className = 'fas fa-server fa-2x text-warning';
-                statusBadge.textContent = 'Unknown';
-                statusBadge.className = 'badge bg-warning';
-                serverMotd.textContent = data.motd || data.note || 'Status unknown - server may not be ready';
-                serverVersion.textContent = data.version || 'Unknown';
-                serverVersionInfo.textContent = data.version || 'Unknown';
-            } else {
-                // Error status
-                statusIcon.className = 'fas fa-server fa-2x text-danger';
-                statusBadge.textContent = 'Error';
-                statusBadge.className = 'badge bg-danger';
-                serverMotd.textContent = data.motd || 'Error connecting to server';
-                serverVersion.textContent = 'Unknown';
-                serverVersionInfo.textContent = 'Unknown';
-            }
-            
-            playerCount.textContent = data.player_count || 0;
-            
-            // Update last update time
-            document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
-        })
-        .catch(error => {
-            console.error('Error updating server status:', error);
-            const statusBadge = document.getElementById('server-status-badge');
-            statusBadge.textContent = 'Error';
-            statusBadge.className = 'badge bg-warning';
-        });
-}
+  function updateServerStatus() {
+    fetch("/api/status")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Server status:", data); // Debug logging
 
-function updateSystemInfo() {
+        // Update status indicator
+        const statusIcon = document.getElementById("server-status-icon");
+        const statusBadge = document.getElementById("server-status-badge");
+        const playerCount = document.getElementById("player-count");
+        const serverMotd = document.getElementById("server-motd");
+        const serverVersion = document.getElementById("server-version");
+        const serverVersionInfo = document.getElementById(
+          "server-version-info",
+        );
+
+        if (data.status === "online") {
+          statusIcon.className = "fas fa-server fa-2x text-success";
+          statusBadge.textContent = "Online";
+          statusBadge.className = "badge bg-success";
+          serverMotd.textContent = data.motd || "Minecraft Server";
+          serverVersion.textContent = data.version || "Unknown";
+          serverVersionInfo.textContent = data.version || "Unknown";
+        } else if (data.status === "offline") {
+          statusIcon.className = "fas fa-server fa-2x text-danger";
+          statusBadge.textContent = "Offline";
+          statusBadge.className = "badge bg-danger";
+          serverMotd.textContent = data.motd || "Server is offline";
+          serverVersion.textContent = "N/A";
+          serverVersionInfo.textContent = "N/A";
+        } else if (data.status === "unknown") {
+          // Unknown or checking status
+          statusIcon.className = "fas fa-server fa-2x text-warning";
+          statusBadge.textContent = "Unknown";
+          statusBadge.className = "badge bg-warning";
+          serverMotd.textContent =
+            data.motd ||
+            data.note ||
+            "Status unknown - server may not be ready";
+          serverVersion.textContent = data.version || "Unknown";
+          serverVersionInfo.textContent = data.version || "Unknown";
+        } else {
+          // Error status
+          statusIcon.className = "fas fa-server fa-2x text-danger";
+          statusBadge.textContent = "Error";
+          statusBadge.className = "badge bg-danger";
+          serverMotd.textContent = data.motd || "Error connecting to server";
+          serverVersion.textContent = "Unknown";
+          serverVersionInfo.textContent = "Unknown";
+        }
+
+        playerCount.textContent = data.player_count || 0;
+
+        // Update last update time
+        document.getElementById("last-update").textContent =
+          new Date().toLocaleTimeString();
+      })
+      .catch((error) => {
+        console.error("Error updating server status:", error);
+        const statusBadge = document.getElementById("server-status-badge");
+        statusBadge.textContent = "Error";
+        statusBadge.className = "badge bg-warning";
+      });
+  }
+
+  function updateSystemInfo() {
     // Simulate system info (in real implementation, this would come from server stats)
     const cpuUsage = Math.floor(Math.random() * 100);
     const memoryUsage = Math.floor(Math.random() * 100);
     const diskUsage = Math.floor(Math.random() * 100);
-    
-    document.getElementById('cpu-usage').textContent = cpuUsage + '%';
-    document.getElementById('memory-usage').textContent = memoryUsage + '%';
-    document.getElementById('disk-usage').textContent = diskUsage + '%';
-    
+
+    document.getElementById("cpu-usage").textContent = cpuUsage + "%";
+    document.getElementById("memory-usage").textContent = memoryUsage + "%";
+    document.getElementById("disk-usage").textContent = diskUsage + "%";
+
     // Calculate uptime
     const uptime = new Date() - dashboardData.startTime;
     const hours = Math.floor(uptime / (1000 * 60 * 60));
     const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
-    document.getElementById('uptime').textContent = `${hours}h ${minutes}m`;
-}
+    document.getElementById("uptime").textContent = `${hours}h ${minutes}m`;
+  }
 
-function updateOnlinePlayers() {
-    fetch('/api/players')
-        .then(response => response.json())
-        .then(data => {
-            const playerList = document.getElementById('online-players-list');
-            
-            if (data.online && data.online.length > 0) {
-                let html = '<ul class="list-unstyled">';
-                data.online.forEach(player => {
-                    html += `<li><i class="fas fa-user text-success"></i> ${player}</li>`;
-                });
-                html += '</ul>';
-                playerList.innerHTML = html;
-            } else {
-                playerList.innerHTML = '<p class="text-muted">No players online</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error updating players:', error);
-            document.getElementById('online-players-list').innerHTML = 
-                '<p class="text-danger">Error loading players</p>';
-        });
-}
+  function updateOnlinePlayers() {
+    fetch("/api/players")
+      .then((response) => response.json())
+      .then((data) => {
+        const playerList = document.getElementById("online-players-list");
 
-function sendQuickCommand(command) {
+        if (data.online && data.online.length > 0) {
+          let html = '<ul class="list-unstyled">';
+          data.online.forEach((player) => {
+            html += `<li><i class="fas fa-user text-success"></i> ${player}</li>`;
+          });
+          html += "</ul>";
+          playerList.innerHTML = html;
+        } else {
+          playerList.innerHTML = '<p class="text-muted">No players online</p>';
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating players:", error);
+        document.getElementById("online-players-list").innerHTML =
+          '<p class="text-danger">Error loading players</p>';
+      });
+  }
+
+  function sendQuickCommand(command) {
     // Add the command to console if it's open, otherwise execute directly
-    if (bootstrap.Modal.getInstance(document.getElementById('consoleModal')) || 
-        document.getElementById('consoleModal').classList.contains('show')) {
-        document.getElementById('command-input').value = command;
-        sendCommand();
+    if (
+      bootstrap.Modal.getInstance(document.getElementById("consoleModal")) ||
+      document.getElementById("consoleModal").classList.contains("show")
+    ) {
+      document.getElementById("command-input").value = command;
+      sendCommand();
     } else {
-        fetch('/api/command', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({command: command})
+      fetch("/api/command", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ command: command }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            console.log(`Command executed: ${command}`);
+          } else {
+            alert(`Error executing command: ${data.result}`);
+          }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log(`Command executed: ${command}`);
-            } else {
-                alert(`Error executing command: ${data.result}`);
-            }
-        })
-        .catch(error => {
-            console.error('Error executing command:', error);
+        .catch((error) => {
+          console.error("Error executing command:", error);
         });
     }
-}
+  }
 
-function refreshStatus() {
+  function refreshStatus() {
     updateDashboard();
 
     // Show feedback
-    const btn = event.target.closest('button');
-    const icon = btn.querySelector('i');
-    icon.className = 'fas fa-spinner fa-spin';
+    const btn = event.target.closest("button");
+    const icon = btn.querySelector("i");
+    icon.className = "fas fa-spinner fa-spin";
 
     setTimeout(() => {
-        icon.className = 'fas fa-sync-alt';
+      icon.className = "fas fa-sync-alt";
     }, 1000);
-}
+  }
 
-// Dashboard Console Functions
-let logsLoaded = false;
+  // Dashboard Console Functions
+  let logsLoaded = false;
 
-function loadDashboardLogs() {
+  function loadDashboardLogs() {
     if (logsLoaded) return; // Prevent multiple loads
 
-    fetch('/api/logs')
-        .then(response => response.json())
-        .then(data => {
-            displayDashboardLogs(data);
-            logsLoaded = true;
-        })
-        .catch(error => {
-            console.error('Error loading dashboard logs:', error);
-            document.getElementById('console-loading').innerHTML =
-                '<div class="text-center text-danger p-3"><i class="fas fa-exclamation-triangle"></i> Error loading logs</div>';
-        });
-}
+    fetch("/api/logs")
+      .then((response) => response.json())
+      .then((data) => {
+        displayDashboardLogs(data);
+        logsLoaded = true;
+      })
+      .catch((error) => {
+        console.error("Error loading dashboard logs:", error);
+        document.getElementById("console-loading").innerHTML =
+          '<div class="text-center text-danger p-3"><i class="fas fa-exclamation-triangle"></i> Error loading logs</div>';
+      });
+  }
 
-function displayDashboardLogs(logs) {
-    const output = document.getElementById('dashboard-console-output');
-    const loadingDiv = document.getElementById('console-loading');
-    loadingDiv.style.display = 'none';
+  function displayDashboardLogs(logs) {
+    const output = document.getElementById("dashboard-console-output");
+    const loadingDiv = document.getElementById("console-loading");
+    loadingDiv.style.display = "none";
 
-    output.innerHTML = '';
+    output.innerHTML = "";
     if (logs && logs.length > 0) {
-        let html = '';
-        logs.slice(-50).forEach(log => { // Show last 50 logs
-            const timestamp = new Date(log.timestamp).toLocaleTimeString();
-            html += `<div class="log-entry text-muted small">
+      let html = "";
+      logs.slice(-50).forEach((log) => {
+        // Show last 50 logs
+        const timestamp = new Date(log.timestamp).toLocaleTimeString();
+        html += `<div class="log-entry text-muted small">
                 <span class="text-info">[${timestamp}]</span>
                 <span class="text-warning">[${log.level}]</span>
                 ${log.message}
             </div>`;
-        });
-        output.innerHTML = html;
-        output.scrollTop = output.scrollHeight;
+      });
+      output.innerHTML = html;
+      output.scrollTop = output.scrollHeight;
     } else {
-        output.innerHTML = '<div class="text-center text-muted p-3">No logs available</div>';
+      output.innerHTML =
+        '<div class="text-center text-muted p-3">No logs available</div>';
     }
-}
+  }
 
-function sendDashboardCommand() {
-    const input = document.getElementById('dashboard-command-input');
+  function sendDashboardCommand() {
+    const input = document.getElementById("dashboard-command-input");
     const command = input.value.trim();
     if (!command) return;
 
-    const output = document.getElementById('dashboard-console-output');
+    const output = document.getElementById("dashboard-console-output");
 
     // Add command to console
     const timestamp = new Date().toLocaleTimeString();
@@ -457,82 +535,88 @@ function sendDashboardCommand() {
     output.innerHTML += commandHtml;
 
     // Execute command
-    fetch('/api/command', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({command: command})
+    fetch("/api/command", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ command: command }),
     })
-    .then(response => response.json())
-    .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const resultHtml = `<div class="log-entry small text-light">
-            ${data.result || 'Command executed'}
+            ${data.result || "Command executed"}
         </div>`;
         output.innerHTML += resultHtml;
         output.scrollTop = output.scrollHeight;
-        input.value = '';
-    })
-    .catch(error => {
+        input.value = "";
+      })
+      .catch((error) => {
         const errorHtml = `<div class="log-entry small text-danger">
             Error: ${error}
         </div>`;
         output.innerHTML += errorHtml;
         output.scrollTop = output.scrollHeight;
-    });
-}
+      });
+  }
 
-function clearConsole() {
-    const output = document.getElementById('dashboard-console-output');
-    output.innerHTML = '<div class="text-center text-muted p-3">Console cleared</div>';
-}
+  function clearConsole() {
+    const output = document.getElementById("dashboard-console-output");
+    output.innerHTML =
+      '<div class="text-center text-muted p-3">Console cleared</div>';
+  }
 
-function refreshLogs() {
+  function refreshLogs() {
     logsLoaded = false; // Reset flag to allow reload
-    document.getElementById('console-loading').style.display = 'block';
-    document.getElementById('console-loading').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading logs...';
+    document.getElementById("console-loading").style.display = "block";
+    document.getElementById("console-loading").innerHTML =
+      '<i class="fas fa-spinner fa-spin"></i> Loading logs...';
     loadDashboardLogs();
-}
+  }
 
-// Handle console toggle visibility changes
-document.getElementById('console-toggle').addEventListener('click', function() {
-    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-    const textSpan = document.getElementById('console-toggle-text');
-    const icon = document.getElementById('console-toggle-icon');
+  // Handle console toggle visibility changes
+  document
+    .getElementById("console-toggle")
+    .addEventListener("click", function () {
+      const isExpanded = this.getAttribute("aria-expanded") === "true";
+      const textSpan = document.getElementById("console-toggle-text");
+      const icon = document.getElementById("console-toggle-icon");
 
-    if (isExpanded) {
-        textSpan.textContent = 'Show Console';
-        icon.className = 'fas fa-chevron-down';
-    } else {
-        textSpan.textContent = 'Hide Console';
-        icon.className = 'fas fa-chevron-up';
+      if (isExpanded) {
+        textSpan.textContent = "Show Console";
+        icon.className = "fas fa-chevron-down";
+      } else {
+        textSpan.textContent = "Hide Console";
+        icon.className = "fas fa-chevron-up";
         // Load logs when console is shown
         if (!logsLoaded) {
-            loadDashboardLogs();
+          loadDashboardLogs();
         }
-    }
-});
-
-// Handle Enter key in dashboard command input
-document.getElementById('dashboard-command-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        sendDashboardCommand();
-    }
-});
-
-// Auto-scroll to bottom when new logs are added
-const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-        if (mutation.type === 'childList') {
-            const output = document.getElementById('dashboard-console-output');
-            output.scrollTop = output.scrollHeight;
-        }
+      }
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
-    const output = document.getElementById('dashboard-console-output');
+  // Handle Enter key in dashboard command input
+  document
+    .getElementById("dashboard-command-input")
+    .addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendDashboardCommand();
+      }
+    });
+
+  // Auto-scroll to bottom when new logs are added
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.type === "childList") {
+        const output = document.getElementById("dashboard-console-output");
+        output.scrollTop = output.scrollHeight;
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const output = document.getElementById("dashboard-console-output");
     observer.observe(output, { childList: true });
-});
+  });
 </script>
 {% endblock %}

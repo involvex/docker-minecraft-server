@@ -6,7 +6,7 @@ By far the easiest way to work with mod and plugins, especially large numbers of
 
 The following are some supported modpack platforms:
 
-- [Modrinth](../types-and-platforms/mod-platforms/modrinth-modpacks.md) 
+- [Modrinth](../types-and-platforms/mod-platforms/modrinth-modpacks.md)
 - [CurseForge](../types-and-platforms/mod-platforms/auto-curseforge.md)
 - [Feed the Beast](../types-and-platforms/mod-platforms/ftb.md)
 
@@ -35,7 +35,7 @@ There are optional volume paths that can be attached to supply content to be cop
 
 By default, the [environment variable processing](../configuration/interpolating.md) is performed on synchronized files that match the expected suffixes in `REPLACE_ENV_SUFFIXES` (by default "yml,yaml,txt,cfg,conf,properties,hjson,json,tml,toml") and are not excluded by `REPLACE_ENV_VARIABLES_EXCLUDES` and `REPLACE_ENV_VARIABLES_EXCLUDE_PATHS`. This processing can be disabled by setting `REPLACE_ENV_DURING_SYNC` to `false`.
 
-If you want old mods/plugins to be removed before the content is brought over from those attach points, then add `-e REMOVE_OLD_MODS=TRUE`. You can fine tune the removal process by specifying the `REMOVE_OLD_MODS_INCLUDE` and `REMOVE_OLD_MODS_EXCLUDE` variables, which are comma separated lists of file glob patterns. If a directory is excluded, then it and all of its contents are excluded. By default, only jars are removed. 
+If you want old mods/plugins to be removed before the content is brought over from those attach points, then add `-e REMOVE_OLD_MODS=TRUE`. You can fine tune the removal process by specifying the `REMOVE_OLD_MODS_INCLUDE` and `REMOVE_OLD_MODS_EXCLUDE` variables, which are comma separated lists of file glob patterns. If a directory is excluded, then it and all of its contents are excluded. By default, only jars are removed.
 
 You can also specify the `REMOVE_OLD_MODS_DEPTH` (default is 16) variable to only delete files up to a certain level.
 
@@ -48,7 +48,7 @@ These paths work well if you want to have a common set of modules in a separate 
     `COPY_PLUGINS_SRC`, `COPY_MODS_SRC`, `COPY_CONFIG_SRC` can each be set to a comma or newline delimited list of container directories to reference.
 
     For example, in a compose file:
-    
+
     ```yaml
         environment:
           # ...EULA, etc
@@ -74,11 +74,11 @@ The format uses a `<` separator between the destination path and the source URL/
 !!! example
 
     With `docker run`
-    
+
     ```
     -e APPLY_EXTRA_FILES=destination<source_url[,destination2<source_url2,...]
     ```
-    
+
     With a compose file:
     ```yaml
     environment:
@@ -100,9 +100,9 @@ docker run -d -e MODPACK=http://www.example.com/mods/modpack.zip ...
 ```
 
 !!! note
-    The referenced URL/file must be a zip file with one or more jar files at the
-    top level of the zip archive. Make sure the jars are compatible with the
-    particular `TYPE` of server you are running.
+The referenced URL/file must be a zip file with one or more jar files at the
+top level of the zip archive. Make sure the jars are compatible with the
+particular `TYPE` of server you are running.
 
 ## Generic pack files
 
@@ -127,15 +127,17 @@ The most time-consuming portion of the generic pack update is generating and com
 To disable specific mods, which can be useful for conflicts between multiple generic packs, you can use the `GENERIC_PACKS_DISABLE_MODS` variable to specify mods to disable.
 
 Disabling mods with docker run:
+
 ```shell
 docker run -d -e GENERIC_PACKS_DISABLE_MODS="mod1.jar mod2.jar" ...
 ```
 
 Disabling mods within docker compose files:
+
 ```yaml
-      GENERIC_PACKS_DISABLE_MODS: |
-        mod1.jar
-        mod2.jar
+GENERIC_PACKS_DISABLE_MODS: |
+  mod1.jar
+  mod2.jar
 ```
 
 ## Mods/plugins list
@@ -151,10 +153,11 @@ docker run -d -e MODS=https://www.example.com/mods/mod1.jar,/plugins/common,/plu
 ```
 
 The newline delimiting allows for compose file usage like:
+
 ```yaml
-      PLUGINS: |
-        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
-        https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+PLUGINS: |
+  https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
+  https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
 ```
 
 !!! note "Auto-removal"
@@ -165,7 +168,7 @@ The newline delimiting allows for compose file usage like:
 
     To temporarily disable processing of the `MODS` or `PLUGINS` list, then comment out the `MODS` or `PLUGINS` environment variable.
 
-## Mod/Plugin URL Listing File 
+## Mod/Plugin URL Listing File
 
 As an alternative to `MODS`/`PLUGINS`, the variable `MODS_FILE` or `PLUGINS_FILE` can be set with the container path or URL of a text file listing a mod/plugin URLs on each line. For example, the following
 
@@ -198,6 +201,6 @@ To use this option pass the environment variable `REMOVE_OLD_MODS=TRUE`, such as
 docker run -d -e REMOVE_OLD_MODS=TRUE -e MODPACK=http://www.example.com/mods/modpack.zip ...
 ```
 
-!!! danger 
+!!! danger
 
     All content of the `mods` or `plugins` directory will be deleted before unpacking new content from the MODPACK or MODS.

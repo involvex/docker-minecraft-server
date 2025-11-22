@@ -5,8 +5,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 25565
-    nodePort: 30000
+    - port: 25565
+      nodePort: 30000
   selector:
     app: mc-vanilla
 ---
@@ -24,31 +24,33 @@ spec:
         app: mc-vanilla
     spec:
       containers:
-      - image: itzg/minecraft-server
-        name: mc-vanilla
-        env:
-          # Use secret in real usage
-        - name: EULA
-          value: "true"
-        ports:
-        - containerPort: 25565
-          name: main
-        readinessProbe:
-          exec:
-            command: [ "/usr/local/bin/mc-monitor", "status", "--host", "localhost" ]
-          # Give it i + p * f seconds to be ready, so 120 seconds
-          initialDelaySeconds: 20
-          periodSeconds: 5
-          failureThreshold: 20
-        # Monitor ongoing liveness
-        livenessProbe:
-          exec:
-            command: ["/usr/local/bin/mc-monitor", "status", "--host", "localhost"]
-          initialDelaySeconds: 120
-          periodSeconds: 60
-        volumeMounts:
-        - name: mc-data
-          mountPath: /data
+        - image: itzg/minecraft-server
+          name: mc-vanilla
+          env:
+            # Use secret in real usage
+            - name: EULA
+              value: "true"
+          ports:
+            - containerPort: 25565
+              name: main
+          readinessProbe:
+            exec:
+              command:
+                ["/usr/local/bin/mc-monitor", "status", "--host", "localhost"]
+            # Give it i + p * f seconds to be ready, so 120 seconds
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            failureThreshold: 20
+          # Monitor ongoing liveness
+          livenessProbe:
+            exec:
+              command:
+                ["/usr/local/bin/mc-monitor", "status", "--host", "localhost"]
+            initialDelaySeconds: 120
+            periodSeconds: 60
+          volumeMounts:
+            - name: mc-data
+              mountPath: /data
       volumes:
-      - name: mc-data
-        emptyDir: {}
+        - name: mc-data
+          emptyDir: {}

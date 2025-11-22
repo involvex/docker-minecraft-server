@@ -16,7 +16,7 @@ services:
       CF_API_KEY: ${CF_API_KEY}
       CF_PAGE_URL: https://www.curseforge.com/minecraft/modpacks/ftb-evolution
       # This modpack includes an override client-side only mod that will prevent the server from starting.
-      # For more information on override exclusions see: 
+      # For more information on override exclusions see:
       # https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/#excluding-overrides-files
       CF_OVERRIDES_EXCLUSIONS: mods/rgp_client*.jar
       MEMORY: 6G

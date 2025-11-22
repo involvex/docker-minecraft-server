@@ -1,5 +1,3 @@
-
-
 ### Magma
 
 A [Magma](https://magmafoundation.org/) server, which is a combination of Forge and PaperMC, can be used with
@@ -13,6 +11,7 @@ A [Magma](https://magmafoundation.org/) server, which is a combination of Forge 
     There are limited base versions supported, so you will also need to  set `VERSION`, such as "1.12.2", "1.16.5", etc.
 
 ### Magma Maintained
+
 A [Magma Maintained](https://github.com/magmamaintained/) server, which is a alternative project of Magma, can be used with
 
     -e TYPE=MAGMA_MAINTAINED
@@ -29,7 +28,7 @@ A [Ketting](https://github.com/kettingpowered/Ketting-1-20-x) server, which is a
 
     -e TYPE=KETTING
 
-There are limited base versions supported, so you will also need to  set `VERSION`, such as "1.20.1" or later.
+There are limited base versions supported, so you will also need to set `VERSION`, such as "1.20.1" or later.
 
 `FORGE_VERSION` and `KETTING_VERSION` may be specified; however, they will be defaulted by the [Ketting launcher](https://github.com/kettingpowered/kettinglauncher) otherwise.
 Available Ketting Versions may be found at [https://reposilite.c0d3m4513r.com/#/Ketting-Server-Releases/org/kettingpowered/server/forge](https://reposilite.c0d3m4513r.com/#/Ketting-Server-Releases/org/kettingpowered/server/forge).

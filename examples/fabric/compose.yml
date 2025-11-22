@@ -4,9 +4,9 @@ services:
     environment:
       EULA: "true"
       TYPE: FABRIC
-#      VERSION: 1.21.4
-#      FABRIC_INSTALLER_VERSION: 1.0.1
-#      FABRIC_LOADER_VERSION: 0.16.10
+      #      VERSION: 1.21.4
+      #      FABRIC_INSTALLER_VERSION: 1.0.1
+      #      FABRIC_LOADER_VERSION: 0.16.10
       # Since Fabric server type only includes the loader, most times
       # the fabric-api is required for other mods to function
       MODRINTH_PROJECTS: |

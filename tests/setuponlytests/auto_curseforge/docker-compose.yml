@@ -10,4 +10,3 @@ services:
       DEBUG: true
     volumes:
       - ./data:/data
-

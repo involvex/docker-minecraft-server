@@ -24,7 +24,7 @@ A tool that is bundled with this image that provides health checks and metrics r
 
 ### [mc-image-helper](https://github.com/itzg/mc-image-helper)
 
-A tool that is bundled with this image to provide complex, re-usable preparation operations. 
+A tool that is bundled with this image to provide complex, re-usable preparation operations.
 
 ### [itzg/rcon](https://github.com/itzg/docker-rcon-web-admin)
 

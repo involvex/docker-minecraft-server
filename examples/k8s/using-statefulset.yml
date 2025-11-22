@@ -29,10 +29,10 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mc-monitor 
-                - status 
-                - --host 
-                - localhost 
+                - mc-monitor
+                - status
+                - --host
+                - localhost
                 - --port
                 - "25565"
             initialDelaySeconds: 30

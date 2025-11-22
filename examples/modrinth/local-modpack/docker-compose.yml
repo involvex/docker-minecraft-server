@@ -8,7 +8,7 @@ services:
       # modpacks directory next to this compose file.
       MODRINTH_MODPACK: /modpacks/Cobblemon Modpack [Fabric] 1.4.1.mrpack
     ports:
-      -  "25565:25565"
+      - "25565:25565"
     volumes:
       - mc-data:/data
       - ./modpacks:/modpacks:ro

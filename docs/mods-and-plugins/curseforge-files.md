@@ -2,7 +2,7 @@
 
 Mods and plugins can be auto-downloaded and upgraded from CurseForge by setting `CURSEFORGE_FILES` to a comma or space delimited list of [project-file references](#project-file-references). References removed from the declaration are automatically cleaned up and setting `CURSEFORGE_FILES` to an empty string removes all previously managed project-files.
 
-A specific file can be omitted from each reference to allow for auto-selecting the newest version of the selected mod/plugin. The resolved `VERSION` and `TYPE` will be taken into consideration for selecting the appropriate file. 
+A specific file can be omitted from each reference to allow for auto-selecting the newest version of the selected mod/plugin. The resolved `VERSION` and `TYPE` will be taken into consideration for selecting the appropriate file.
 
 !!! warning "CurseForge API key usage"
 
@@ -12,7 +12,7 @@ A specific file can be omitted from each reference to allow for auto-selecting t
 
 !!! tip
 
-    Individual project files typically represent a version of the mod/plugin, but CurseForge refers to these items broadly as "files" rather than "versions". 
+    Individual project files typically represent a version of the mod/plugin, but CurseForge refers to these items broadly as "files" rather than "versions".
 
 The following formats are supported in the list of project-file references:
 
@@ -27,15 +27,15 @@ The following formats are supported in the list of project-file references:
 !!! info "More about listing files"
 
     Each line in the listing file is processed as one of the references above; however, blank lines and comments that start with `#` are ignored.
-    
+
     Make sure to place the listing file in a mounted directory/volume or declare an appropriate mount for it.
-    
+
     For example, `CURSEFORGE_FILES` can be set to "@/extras/cf-mods.txt", assuming "/extras" has been added to `volumes` section, where the container file `/extras/cf-mods.txt` contains
-    
+
     ```text
     # This comment is ignored
     jei:10.2.1.1005
-    
+
     # This and previous blank line are ignore
     geckolib
     aquaculture
@@ -45,7 +45,7 @@ The following formats are supported in the list of project-file references:
 !!! tip "Multi-line values in Docker Compose"
 
     Making use of the space delimited option, compose file declarations can be organized nicely with a [multi-line string](https://yaml-multiline.info/), such as
-    
+
     ```yaml
           CURSEFORGE_FILES: |
             geckolib

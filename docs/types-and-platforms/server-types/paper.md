@@ -1,37 +1,37 @@
 A [PaperMC server](https://papermc.io/) can be automatically downloaded, upgraded, and run by setting the environment variable TYPE to "PAPER".
 
-By default, the container will find and download the latest build for the `VERSION` chosen. If `VERSION` is not specified, then the latest Minecraft version released by PaperMC is selected. Along with a specific `VERSION`, a specific Paper build can be selected by setting the environment variable `PAPER_BUILD`. 
+By default, the container will find and download the latest build for the `VERSION` chosen. If `VERSION` is not specified, then the latest Minecraft version released by PaperMC is selected. Along with a specific `VERSION`, a specific Paper build can be selected by setting the environment variable `PAPER_BUILD`.
 
 To allow for the selection of experimental builds, set `PAPER_CHANNEL` to "experimental", otherwise only release/default channel builds are selected.
 
 !!! example
 
     Using `docker run` command line
-    
+
     ```shell
-    docker run ... -e TYPE=PAPER ... 
-    
-    docker run ... -e TYPE=PAPER -e VERSION=1.20.6 ... 
-    
-    docker run ... -e TYPE=PAPER -e VERSION=1.20.6 -e PAPER_BUILD=140 ... 
-    
-    docker run ... -e TYPE=PAPER -e PAPER_CHANNEL=experimental ... 
+    docker run ... -e TYPE=PAPER ...
+
+    docker run ... -e TYPE=PAPER -e VERSION=1.20.6 ...
+
+    docker run ... -e TYPE=PAPER -e VERSION=1.20.6 -e PAPER_BUILD=140 ...
+
+    docker run ... -e TYPE=PAPER -e PAPER_CHANNEL=experimental ...
     ```
-    
+
     Using a compose file:
-    
+
     ```yaml
     environment:
       TYPE: PAPER
     ```
-    
+
     ```yaml
     environment:
       TYPE: PAPER
       VERSION: 1.20.6
       PAPER_BUILD: 140
     ```
-    
+
     ```yaml
     environment:
       TYPE: PAPER
@@ -41,7 +41,7 @@ To allow for the selection of experimental builds, set `PAPER_CHANNEL` to "exper
 !!! tip
 
     If you see the following error, it likely means you need to set the env var `PAPER_CHANNEL` to "experimental"
-    
+
     ```
     No build found for version 1.21 with channel 'default'
     ```
@@ -65,6 +65,7 @@ A [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) server, which is "a 
     The `VERSION` variable is used to select branch latest, 1.18, or 1.17. Use PUFFERFISH_BUILD to really select the SERVER VERSION number.
 
 Extra variables:
+
 - `PUFFERFISH_BUILD=lastSuccessfulBuild` : set a specific Pufferfish build to use. Example: selecting build 47 => 1.18.1, or build 50 => 1.18.2 etc
 - `FORCE_REDOWNLOAD=false` : set to true to force the located server jar to be re-downloaded
 - `USE_FLARE_FLAGS=false` : set to true to add appropriate flags for the built-in [Flare](https://blog.airplane.gg/flare) profiler
@@ -80,6 +81,7 @@ A [Purpur](https://purpurmc.org/) server, which is "a drop-in replacement for Pa
     The `VERSION` variable is used to lookup a build of Purpur to download
 
 Extra variables:
+
 - `PURPUR_BUILD=LATEST` : set a specific Purpur build to use
 - `FORCE_REDOWNLOAD=false` : set to true to force the located server jar to be re-downloaded
 - `USE_FLARE_FLAGS=false` : set to true to add appropriate flags for the built-in [Flare](https://blog.airplane.gg/flare) profiler
@@ -95,8 +97,8 @@ To use a Leaf server, set the environment variable `TYPE` to `"LEAF"`.
 
 !!! note
 
-    The `VERSION` variable is used to select the Minecraft version to run.  
-    To specify a particular Leaf build, use `LEAF_BUILD`.  
+    The `VERSION` variable is used to select the Minecraft version to run.
+    To specify a particular Leaf build, use `LEAF_BUILD`.
 
 By default the latest build will be used; however, a specific build number can be selected by setting `LEAF_BUILD`, such as
 
@@ -111,7 +113,7 @@ By default, the container will run the latest experimental build of [Folia serve
 !!! example
 
     Using `docker run`
-    
+
     ```shell
     docker run -d --pull=always \
         -v /path/on/host:/data -e TYPE=FOLIA \
@@ -125,7 +127,7 @@ If you have attached a host directory to the `/data` volume, then you can instal
 [You can also auto-download plugins using `SPIGET_RESOURCES`.](../../mods-and-plugins/spiget.md)
 
 !!! note
-    The Folia type inherits from the Paper type. Paper's variables will override the Folia ones.
+The Folia type inherits from the Paper type. Paper's variables will override the Folia ones.
 
 ## Extra config
 

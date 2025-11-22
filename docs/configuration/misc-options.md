@@ -46,8 +46,8 @@ To allow time for players to finish what they're doing during a graceful server 
 
 !!! warning "Increase stop grace period"
 
-    The Docker stop grace period must be increased to a value longer than the announce delay. The value to use that is longer than announce delay will vary based upon the amount of time it takes for final world data saving. If the container exits with exit code 137, then that indicates a longer grace period is needed. 
-    
+    The Docker stop grace period must be increased to a value longer than the announce delay. The value to use that is longer than announce delay will vary based upon the amount of time it takes for final world data saving. If the container exits with exit code 137, then that indicates a longer grace period is needed.
+
     The grace period can be increased using [the -t option on `docker compose down`](https://docs.docker.com/compose/reference/down/) or set the [stop_grace_period](https://docs.docker.com/compose/compose-file/05-services/#stop_grace_period) in the compose file.
 
 The `STOP_SERVER_ANNOUNCE_DELAY` can be bypassed by sending a `SIGUSR1` signal to the `mc-server-runner` process.
@@ -126,14 +126,14 @@ Be sure to also increase the shutdown timeout described [here for docker compose
 
 ## Setup only
 
-If you are using a host-attached data directory, then you can have the image setup the Minecraft server files and stop prior to launching the server process by setting `SETUP_ONLY` to `true`. 
-    
+If you are using a host-attached data directory, then you can have the image setup the Minecraft server files and stop prior to launching the server process by setting `SETUP_ONLY` to `true`.
+
 ## Enable Flare Flags
-    
+
 To enable the JVM flags required to fully support the [Flare profiling suite](https://blog.airplane.gg/flare), set the following variable:
-    
+
     -e USE_FLARE_FLAGS=true
-    
+
 Flare is built-in to Pufferfish/Purpur, and is available in [plugin form](https://github.com/TECHNOVE/FlarePlugin) for other server types.
 
 ## Enable support for optimized SIMD operations
@@ -162,8 +162,8 @@ environment:
 
 The files will be downloaded to `/data/` relative paths, so `plugins/WorldEdit` will be saved as `/data/plugins/WorldEdit/config.yml`.
 
-!!! note 
-    The downloaded files can be further processed using [environment variable replacement](interpolating.md) or [patch definitions](interpolating.md#patching-existing-files)
+!!! note
+The downloaded files can be further processed using [environment variable replacement](interpolating.md) or [patch definitions](interpolating.md#patching-existing-files)
 
 ## Enable timestamps in init logs
 

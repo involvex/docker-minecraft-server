@@ -15,4 +15,3 @@ services:
 secrets:
   cf_api_key:
     file: cf_api_key.secret
-

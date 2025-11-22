@@ -7,12 +7,14 @@ This project provides a production-ready Minecraft server with a comprehensive w
 ## ✨ Features
 
 ### 🔧 **Server Management**
+
 - **Easy Configuration**: Edit server settings through web interface or config files
 - **Plugin Management**: Upload, install, and manage plugins seamlessly
 - **Real-time Monitoring**: Live server status, player count, and system resources
 - **Backup System**: Automated and manual backup capabilities
 
 ### 🌐 **Web Interface**
+
 - **Modern Dashboard**: Real-time server overview with system metrics
 - **Console Access**: Execute RCON commands directly from the browser
 - **Live Logs**: Stream server logs in real-time with filtering
@@ -22,6 +24,7 @@ This project provides a production-ready Minecraft server with a comprehensive w
 - **Dark Mode**: Toggle between light and dark themes (preference saved)
 
 ### 🔒 **Security & Reliability**
+
 - **RCON Integration**: Secure remote command execution
 - **Environment-based Configuration**: Easy environment variable management
 - **Network Isolation**: Docker network for secure container communication
@@ -32,6 +35,7 @@ This project provides a production-ready Minecraft server with a comprehensive w
 Once your server is set up, use these commands to manage it:
 
 ### Available Commands
+
 - `manage.bat help` - Show all available commands
 - `manage.bat start` - Start the Minecraft server
 - `manage.bat stop` - Stop the Minecraft server
@@ -45,6 +49,7 @@ Once your server is set up, use these commands to manage it:
 - `manage.bat shell` - Open server container shell
 
 ### Examples
+
 ```cmd
 # Get help (also shown if no command provided)
 manage.bat help
@@ -72,11 +77,13 @@ manage.bat update
 ### One-Command Setup (Windows)
 
 **PowerShell:**
+
 ```powershell
 iwr -useb https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.ps1 | iex
 ```
 
 **Command Prompt:**
+
 ```cmd
 curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-minecraft-server/master/setup-and-manage.bat && setup-and-manage.bat
 ```
@@ -84,6 +91,7 @@ curl -o setup-and-manage.bat https://raw.githubusercontent.com/involvex/docker-m
 ### Manual Setup
 
 **Windows:**
+
 ```cmd
 # Clone the repository
 git clone https://github.com/involvex/docker-minecraft-server.git
@@ -106,6 +114,7 @@ manage.bat rcon list
 ```
 
 **Linux/macOS:**
+
 ```bash
 # Clone the repository
 git clone https://github.com/involvex/docker-minecraft-server.git
@@ -165,6 +174,7 @@ cd docker-minecraft-server
 ## 🔧 Configuration
 
 ### Environment Variables (.env)
+
 ```bash
 RCON_PASSWORD=your_secure_password    # Change this!
 WEBUI_SECRET_KEY=your_secret_key      # Change this!
@@ -174,6 +184,7 @@ MAX_PLAYERS=20
 ```
 
 ### Server Properties
+
 ```properties
 server-name=My Minecraft Server
 motd=Welcome to our server!
@@ -189,24 +200,28 @@ rcon.password=your_secure_password
 ## 🌟 Web Interface Highlights
 
 ### Dashboard
+
 - **Real-time Server Status**: Live monitoring with status indicators
 - **System Metrics**: CPU, memory, and disk usage visualization
 - **Quick Actions**: One-click common commands (save, weather, time)
 - **Player Overview**: Current online players with management options
 
 ### Console
+
 - **Live Command Execution**: Send RCON commands with instant results
 - **Command History**: Track all executed commands with timestamps
 - **Real-time Output**: WebSocket-powered live log streaming
 - **Error Handling**: Clear error messages and troubleshooting
 
 ### Configuration Management
+
 - **server.properties Editor**: Full syntax highlighting and validation
 - **Live Updates**: Changes apply immediately without restart
 - **Backup Protection**: Automatic backup before modifications
 - **Environment Integration**: Edit environment variables through UI
 
 ### Plugin Management
+
 - **Plugin Repository**: List all installed plugins
 - **Upload Interface**: Add new plugins via web upload
 - **Status Monitoring**: Check plugin loading and error states
@@ -215,12 +230,14 @@ rcon.password=your_secure_password
 ## 🔍 Monitoring & Logs
 
 ### Real-time Monitoring
+
 - **Server Status**: Online/offline with uptime tracking
 - **Player Activity**: Connection/disconnection notifications
 - **Resource Usage**: System resource monitoring
 - **Performance Metrics**: Tick rate and performance tracking
 
 ### Log Management
+
 - **Live Streaming**: Real-time log feed through WebSocket
 - **Log Search**: Filter by date, level, player, or content
 - **Export Functionality**: Download logs for external analysis
@@ -231,24 +248,28 @@ rcon.password=your_secure_password
 ### Common Issues
 
 **Server won't start:**
+
 ```bash
 docker-compose logs minecraft
 # Check port availability and configuration
 ```
 
 **Web UI not accessible:**
+
 ```bash
 docker-compose logs minecraft-webui
 # Verify port mapping and network connectivity
 ```
 
 **RCON connection failed:**
+
 ```bash
 docker-compose exec minecraft rcon-cli -a localhost -p 25575 list
 # Check RCON configuration and password
 ```
 
 ### Debug Commands
+
 ```bash
 # View all logs
 docker-compose logs -f
@@ -267,12 +288,14 @@ docker-compose exec minecraft rcon-cli list
 ## 📈 Performance Optimization
 
 ### Recommended Settings
+
 - **Memory**: 4GB minimum, 8GB recommended
 - **CPU**: 2+ cores for smooth operation
 - **Storage**: SSD recommended for world data
 - **Network**: Stable internet connection for players
 
 ### Tuning Options
+
 ```bash
 # Performance environment variables
 VIEW_DISTANCE=15
@@ -284,12 +307,14 @@ MAX_TICK_TIME=60000
 ## 🔄 Maintenance
 
 ### Regular Tasks
+
 1. **Daily**: Check server logs and player activity
 2. **Weekly**: Update plugins and monitor performance
 3. **Monthly**: Full backup and security review
 4. **Quarterly**: System updates and optimization
 
 ### Backup Strategy
+
 ```bash
 # Manual backup
 docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /data
@@ -301,6 +326,7 @@ docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /d
 ## 🎯 API Reference
 
 ### Endpoints
+
 - `GET /api/status` - Server status and player count
 - `GET /api/players` - Online and historical player data
 - `GET /api/logs` - Server logs with filtering
@@ -310,6 +336,7 @@ docker-compose exec minecraft tar -czf /backups/backup-$(date +%Y%m%d).tar.gz /d
 - `GET /api/plugins` - List installed plugins
 
 ### WebSocket Events
+
 - `status_update` - Real-time server status changes
 - `player_update` - Player connection/disconnection
 - `command_output` - Command execution results
@@ -334,6 +361,7 @@ This project is open source and available under the MIT License.
 Your Minecraft server is now equipped with a professional-grade web management interface. Enjoy the convenience of managing your server from anywhere with a web browser!
 
 **Quick Links:**
+
 - 🌐 **Web Interface**: http://localhost:8080
 - 🎮 **Minecraft Server**: localhost:25565
 - 📖 **Full Documentation**: SETUP_GUIDE.md

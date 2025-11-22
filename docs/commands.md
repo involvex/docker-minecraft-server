@@ -21,7 +21,7 @@ _The `-i` is not needed in this case._
 
 ## When RCON is disabled
 
-If rcon is disabled you can send commands by passing them as arguments to the packaged `mc-send-to-console` script after setting the env var `CREATE_CONSOLE_IN_PIPE` to "true". For example, a player can be op'ed in the container `mc` with: 
+If rcon is disabled you can send commands by passing them as arguments to the packaged `mc-send-to-console` script after setting the env var `CREATE_CONSOLE_IN_PIPE` to "true". For example, a player can be op'ed in the container `mc` with:
 
 ```shell
 docker exec --user 1000 mc mc-send-to-console op player
@@ -53,11 +53,13 @@ In order to attach and interact with the Minecraft server make sure to enable TT
 With that you can attach and interact at any time using the following, replacing the `{...}` placeholders.
 
 ...when container is created with `docker run`
+
 ```
 docker attach {container name or ID}
 ```
 
 ...or when declared using a compose file
+
 ```
 docker compose attach {service name}
 ```
@@ -66,4 +68,4 @@ and then Control-p Control-q to **detach**.
 
 !!! info "RCON is required for fully interactive, color console"
 
-    RCON must be enabled, which is the default, in order to use a fully interactive console with auto-completion and colorized log output. 
+    RCON must be enabled, which is the default, in order to use a fully interactive console with auto-completion and colorized log output.

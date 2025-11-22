@@ -1,4 +1,3 @@
-
 ## SpongeVanilla
 
 Enable SpongeVanilla server mode by adding a `-e TYPE=SPONGEVANILLA` to your command-line.
@@ -8,7 +7,7 @@ If you want to run a specific version, you can add `-e SPONGEVERSION=1.11.2-6.1.
 
 Beware that current [Sponge](https://www.spongepowered.org) `STABLE` versions for Minecraft 1.12 require using [the Java 8 tag](../../versions/java.md):
 
-``` shell
+```shell
 docker run -d --pull=always -v /path/on/host:/data -e TYPE=SPONGEVANILLA \
     -p 25565:25565 -e EULA=TRUE --name mc itzg/minecraft-server:java8-multiarch
 ```
@@ -16,7 +15,7 @@ docker run -d --pull=always -v /path/on/host:/data -e TYPE=SPONGEVANILLA \
 You can also choose to use the `EXPERIMENTAL` branch.
 Just change it with `SPONGEBRANCH`, such as:
 
-``` shell
+```shell
 $ docker run -d --pull=always -v /path/on/host:/data ... \
     -e TYPE=SPONGEVANILLA -e SPONGEBRANCH=EXPERIMENTAL ...
 ```
@@ -37,7 +36,7 @@ Configuration options with defaults:
 
 !!! note
 
-    Instead of using format codes in the MOTD, Limbo requires [JSON chat content](https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition). If a plain string is provided, which is the default, then it gets converted into the required JSON structure. 
+    Instead of using format codes in the MOTD, Limbo requires [JSON chat content](https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition). If a plain string is provided, which is the default, then it gets converted into the required JSON structure.
 
 ## NanoLimbo
 

@@ -2,8 +2,8 @@
 
 Adding a new server `TYPE` can vary due to the complexity of obtaining and configuring each type; however, the addition of any server type includes at least the following steps:
 
-1. Copy an existing "start-deploy*" script, such as [start-deployFabric](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-deployFabric) and rename it accordingly making sure to retain the "start-deploy" prefix
-2. Modify the type-specific behavior between the "start-utils" preamble and the hand-off to `start-setupWorld` at the end of the script 
+1. Copy an existing "start-deploy\*" script, such as [start-deployFabric](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-deployFabric) and rename it accordingly making sure to retain the "start-deploy" prefix
+2. Modify the type-specific behavior between the "start-utils" preamble and the hand-off to `start-setupWorld` at the end of the script
 3. Develop and test the changes using the [iterative process described below](#iterative-script-development)
 4. Add a case-entry to the `case "${TYPE^^}"` in [start-configuration](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-configuration)
 5. Add a section to the [docs](https://github.com/itzg/docker-minecraft-server/tree/master/docs). It is recommended to copy-modify an existing section to retain a similar wording and level of detail
@@ -16,6 +16,7 @@ Individual scripts can be iteratively developed, debugged, and tested using the 
 First, build a baseline of the image to include the packages needed by existing or new scripts:
 
 PowerShell: (Example of building and testing ForgeAPI)
+
 ```powershell
 $env:FOLDER_TO_TEST="forgeapimods_projectids"
 $env:IMAGE_TO_TEST="mc-dev"
@@ -27,6 +28,7 @@ popd
 ```
 
 PowerShell: Building different images of Java for testing
+
 ```powershell
 $env:BASE_IMAGE='eclipse-temurin:8u312-b07-jre'
 $env:IMAGE_TO_TEST="mc-dev"
@@ -34,6 +36,7 @@ docker build --build-arg BASE_IMAGE=$env:BASE_IMAGE -t $env:IMAGE_TO_TEST .
 ```
 
 Bash: (Example of building and testing ForgeAPI)
+
 ```bash
 export FOLDER_TO_TEST="forgeapimods_file"
 export IMAGE_TO_TEST="mc-dev"
@@ -110,7 +113,7 @@ goreleaser release --snapshot --clean
 
 Clone [itzg/github-releases-proxy](https://github.com/itzg/github-releases-proxy) and run it according to the instructions shown there.
 
-In the Docker build, configure the following 
+In the Docker build, configure the following
 
 ```shell
 --build-arg GITHUB_BASEURL=http://host.docker.internal:8080 \

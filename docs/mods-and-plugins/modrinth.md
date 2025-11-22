@@ -4,7 +4,7 @@
 
 ## Usage
 
-To use this feature, set the environment variable `MODRINTH_PROJECTS` to a comma or newline separated list of projects.  
+To use this feature, set the environment variable `MODRINTH_PROJECTS` to a comma or newline separated list of projects.
 
 Each project entry can be any of the following combinations where a colon (`:`) is used to separate the different parts:
 
@@ -24,8 +24,8 @@ Where:
 - **Version** is the version ID (such as "Oa9ZDzZq") or number (such as "2.21.2"). When omitted, the latest release version will be selected. Using version ID will override Minecraft and loader compatibility checks.
 - **Release Type** is `release`, `beta`, or `alpha` indicating the latest version to select.
 - **Prefix** is `datapack`, `fabric`, `forge`, or `paper`
-    - The `datapack` prefix is optional when running a vanilla server
-    - The `fabric`, `forge`, and `paper` prefixes allow for installing mods/plugins that differ from server's `TYPE`. Using [Sinytra Connector](https://modrinth.com/mod/connector) is an example of this, where Fabric mods can be loaded into a NeoForge server.
+  - The `datapack` prefix is optional when running a vanilla server
+  - The `fabric`, `forge`, and `paper` prefixes allow for installing mods/plugins that differ from server's `TYPE`. Using [Sinytra Connector](https://modrinth.com/mod/connector) is an example of this, where Fabric mods can be loaded into a NeoForge server.
 - **Listing file** is a container path to a file containing a list of projects
 
 !!! tip "Project ID"
@@ -47,9 +47,9 @@ Where:
     ![Version ID](../img/modrinth-version-id.drawio.png)
 
 ### Examples
-            
+
 | Description                     | Example projects entry                                |
-|---------------------------------|-------------------------------------------------------|
+| ------------------------------- | ----------------------------------------------------- |
 | Select latest version           | `fabric-api`                                          |
 | Select specific version         | `fabric-api:bQZpGIz0`<br/>`fabric-api:0.119.2+1.21.4` |
 | Select latest beta version      | `fabric-api:beta`                                     |
@@ -64,15 +64,15 @@ Where:
 !!! info "More about listing files"
 
     Each line in the listing file is processed as one of the references above; however, blank lines and comments that start with `#` are ignored.
-    
+
     Make sure to place the listing file in a mounted directory/volume or declare an appropriate mount for it.
-    
+
     For example, `MODRINTH_PROJECTS` can be set to "@/extras/modrinth-mods.txt", assuming "/extras" has been added to `volumes` section, where the container file `/extras/modrinth-mods.txt` contains
-    
+
     ```text
     # This comment is ignored
     fabric-api
-    
+
     # This and previous blank line are ignore
     cloth-config
     datapack:terralith
@@ -93,7 +93,7 @@ When the environment variable `VERSION_FROM_MODRINTH_PROJECTS` is set to "true" 
 !!! example
 
     Given the environment variables
-    
+
     ```yaml
         MODRINTH_PROJECTS: |
           viaversion
@@ -102,7 +102,7 @@ When the environment variable `VERSION_FROM_MODRINTH_PROJECTS` is set to "true" 
           discordsrv
         VERSION_FROM_MODRINTH_PROJECTS: true
     ```
-    
+
     Let's say all are supported on Minecraft up to 1.21.8 except griefprevention, which is only supported up to 1.21.7. In that case, `VERSION` will be automatically set to 1.21.7.
 
 ## Extra options
@@ -115,4 +115,3 @@ When the environment variable `VERSION_FROM_MODRINTH_PROJECTS` is set to "true" 
 
 `MODRINTH_LOADER`
 : When using a custom server, set this to specify which loader type will be requested during lookups
-

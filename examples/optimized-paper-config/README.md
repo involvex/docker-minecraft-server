@@ -57,4 +57,3 @@ Feel free to explore and use the configurations in this repo to enhance your Min
 ## Contribution
 
 If you'd like to improve or suggest changes to these configurations, feel free to submit a pull request in this [repository](https://github.com/Alpha018/paper-config-optimized). We welcome contributions from the community!
-

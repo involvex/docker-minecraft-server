@@ -17,6 +17,7 @@ Enable the Autostop functionality by setting:
 ```
 
 The following environment variables define the behavior of auto-stopping:
+
 - `AUTOSTOP_TIMEOUT_EST`, default `3600` (seconds)
   describes the time between the last client disconnect and the stopping of the server (read as timeout established)
 - `AUTOSTOP_TIMEOUT_INIT`, default `1800` (seconds)
@@ -29,4 +30,5 @@ The following environment variables define the behavior of auto-stopping:
 > To troubleshoot, add `DEBUG_AUTOSTOP=true` to see additional output
 
 ## Proxy Support
+
 If you make use of PROXY Protocol, i.e. through something like HAProxy or Fly.io, you will need to enable it in your variety of server's configuration, and then set the `USES_PROXY_PROTOCOL` envar to `true`. This lets Autostop monitor the server, where it otherwise wouldn't

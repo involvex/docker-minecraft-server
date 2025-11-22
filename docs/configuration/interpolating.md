@@ -11,9 +11,9 @@ For those cases there is the option to replace defined variables inside your con
 
 When the environment variable `REPLACE_ENV_IN_PLACE` is set to `true` (the default), the startup script will go through all files inside the container's `/data` path and replace variables that match the container's environment variables. Variables can instead (or in addition to) be replaced in files sync'ed from `/plugins`, `/mods`, and `/config` by setting `REPLACE_ENV_DURING_SYNC` to `true` (defaults to `false`).
 
-Variables that you want to replace need to be declared inside curly brackets and prefixed with a dollar sign, such as  `${CFG_YOUR_VARIABLE}`, which is same as many scripting languages.
+Variables that you want to replace need to be declared inside curly brackets and prefixed with a dollar sign, such as `${CFG_YOUR_VARIABLE}`, which is same as many scripting languages.
 
-You can also change `REPLACE_ENV_VARIABLE_PREFIX`, which defaults to "CFG_", to limit which environment variables are allowed to be used. For example, with "CFG_" as the prefix, the variable `${CFG_DB_HOST}` would be substituted, but not `${DB_HOST}`. The prefix can be set to an empty string to allow for matching any variable name.
+You can also change `REPLACE_ENV_VARIABLE_PREFIX`, which defaults to "CFG*", to limit which environment variables are allowed to be used. For example, with "CFG*" as the prefix, the variable `${CFG_DB_HOST}` would be substituted, but not `${DB_HOST}`. The prefix can be set to an empty string to allow for matching any variable name.
 
 If you want to use a file's content for value, such as when using secrets mounted as files, declare the placeholder named like normal in the file and declare an environment variable named the same but with the suffix `_FILE`.
 
@@ -25,6 +25,7 @@ password = ${CFG_DB_PASSWORD}
 ```
 
 ...a secret declared in the compose file with:
+
 ```yaml
 secrets:
   db_password:
@@ -32,9 +33,10 @@ secrets:
 ```
 
 ...and finally the environment variable would be named with a `_FILE` suffix and point to the mounted secret:
+
 ```yaml
-    environment:
-      CFG_DB_PASSWORD_FILE: /run/secrets/db_password
+environment:
+  CFG_DB_PASSWORD_FILE: /run/secrets/db_password
 ```
 
 Variables will be replaced in files with the following extensions:
@@ -44,6 +46,7 @@ Specific files can be excluded by listing their name (without path) in the varia
 
 Paths can be excluded by listing them in the variable `REPLACE_ENV_VARIABLES_EXCLUDE_PATHS`. Path
 excludes are recursive. Here is an example:
+
 ```
 REPLACE_ENV_VARIABLES_EXCLUDE_PATHS="/data/plugins/Essentials/userdata /data/plugins/MyPlugin"
 ```
@@ -95,9 +98,9 @@ secrets:
 
 ## Patching existing files
 
-JSON path based patches can be applied to one or more existing files by setting the variable `PATCH_DEFINITIONS` to the path of a directory that contains one or more [patch definition json files](https://github.com/itzg/mc-image-helper#patchdefinition) or a [patch set json file](https://github.com/itzg/mc-image-helper#patchset). 
+JSON path based patches can be applied to one or more existing files by setting the variable `PATCH_DEFINITIONS` to the path of a directory that contains one or more [patch definition json files](https://github.com/itzg/mc-image-helper#patchdefinition) or a [patch set json file](https://github.com/itzg/mc-image-helper#patchset).
 
-The `file` and `value` fields of the patch definitions may contain `${...}` variable placeholders. The allowed environment variables in placeholders can be restricted by setting `REPLACE_ENV_VARIABLE_PREFIX`, which defaults to "CFG_".
+The `file` and `value` fields of the patch definitions may contain `${...}` variable placeholders. The allowed environment variables in placeholders can be restricted by setting `REPLACE_ENV_VARIABLE_PREFIX`, which defaults to "CFG\_".
 
 The following example shows a patch-set file where various fields in the `paper.yaml` configuration file can be modified and added:
 
@@ -134,6 +137,7 @@ The following example shows a patch-set file where various fields in the `paper.
 ```
 
 Supports the file formats:
+
 - JSON
 - JSON5
 - Yaml

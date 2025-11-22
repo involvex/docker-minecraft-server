@@ -13,7 +13,7 @@ A [Forge server](http://www.minecraftforge.net/) can be automatically downloaded
     ```shell
     docker run -e TYPE=FORGE ...
     ```
-    
+
     or in a compose file
     ```yaml
         environment:
@@ -22,13 +22,12 @@ A [Forge server](http://www.minecraftforge.net/) can be automatically downloaded
 
 The overall version is specified by `VERSION`, [as described in the section above](../../versions/minecraft.md) and provides the same benefits of upgrading as new versions are released. By default, the recommended version of Forge for that Minecraft version will be selected. The latest version can be selected instead by setting the environment variable `FORGE_VERSION` to "latest". You can also choose a specific Forge version by setting `FORGE_VERSION` with that version, such as "14.23.5.2854".
 
-
 !!! example
 
     ```shell
     docker run -e TYPE=FORGE -e VERSION=1.12.2 -e FORGE_VERSION=14.23.5.2854 ...
     ```
-    
+
     or in a compose file
     ```yaml
         environment:
@@ -61,7 +60,7 @@ Support for [NeoForge](https://neoforged.net/) is also provided. A NeoForge serv
     ```shell
     docker run -e TYPE=NEOFORGE -e VERSION=1.20.1 -e NEOFORGE_VERSION=47.1.79 ...
     ```
-    
+
     or in a compose file
     ```yaml
         environment:
@@ -81,10 +80,10 @@ Support for [NeoForge](https://neoforged.net/) is also provided. A NeoForge serv
 !!! example
 
     In docker compose `environment`
-    
+
     ```yaml
       TYPE: FORGE
       FORGE_INSTALLER_URL: https://github.com/CleanroomMC/Cleanroom/releases/download/0.2.4-alpha/cleanroom-0.2.4-alpha-installer.jar
     ```
-    
+
     [Full example](https://github.com/itzg/docker-minecraft-server/tree/master/examples/cleanroom)

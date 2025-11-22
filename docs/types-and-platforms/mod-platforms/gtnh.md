@@ -1,8 +1,8 @@
 # Auto-setup GTNH server
 
-[GT New Horizons (GTNH)](https://www.gtnewhorizons.com/) is a Minecraft 1.7.10 modpack maintained and supported by dedicated community members! With over 10 years in development, GTNH offers a carefully balanced and immersive experience to challenge players as they climb through the 15 tiers of technology. The ultimate goal of GTNH is to build the Stargate, an interdimensional teleporter and the symbol for absolute prestige, aptitude, and determination. 
+[GT New Horizons (GTNH)](https://www.gtnewhorizons.com/) is a Minecraft 1.7.10 modpack maintained and supported by dedicated community members! With over 10 years in development, GTNH offers a carefully balanced and immersive experience to challenge players as they climb through the 15 tiers of technology. The ultimate goal of GTNH is to build the Stargate, an interdimensional teleporter and the symbol for absolute prestige, aptitude, and determination.
 
-As GTNH is a complex modpack with some specifics it has its own `TYPE` to simplify the deployment and update process. To use it set the environment variable `TYPE` to "GTNH". 
+As GTNH is a complex modpack with some specifics it has its own `TYPE` to simplify the deployment and update process. To use it set the environment variable `TYPE` to "GTNH".
 
 Configuration options with defaults:
 
@@ -20,10 +20,10 @@ As GTNH is a Minecraft 1.7.10 modpack, when using it your minecraft version is s
 
 **Recommended Minimum:**
 
-  - 2-4 cpu cores
-  - 6GB of RAM +0.5GB per extra player (early game)
-  - 6GB of RAM +1GB per extra player (~UV tier+)
-  - 20GB+ storage. HDD is feasible, SSD is preferred
+- 2-4 cpu cores
+- 6GB of RAM +0.5GB per extra player (early game)
+- 6GB of RAM +1GB per extra player (~UV tier+)
+- 20GB+ storage. HDD is feasible, SSD is preferred
 
 For more details regarding the server setup consult the [modpack wiki](https://wiki.gtnewhorizons.com/wiki/Server_Setup).
 
@@ -35,7 +35,7 @@ For optimal performance choose java25 with GTNH 2.8.0 and later.
 
 ## Config backups
 
-During version upgrade, the server will replace all config files to make sure all new features are setup as intended. The old config files are stored in a backup folder in the data directory, for you to use as reference for manual reapplication of your changed settings. Set the environment variable `GTNH_DELETE_BACKUPS` to true to delete all backup folders at startup. 
+During version upgrade, the server will replace all config files to make sure all new features are setup as intended. The old config files are stored in a backup folder in the data directory, for you to use as reference for manual reapplication of your changed settings. Set the environment variable `GTNH_DELETE_BACKUPS` to true to delete all backup folders at startup.
 
 ## server.properties defaults
 
@@ -49,6 +49,6 @@ To deliver the intended GTNH by default, when running a GTNH server, the followi
 
 ## Java args
 
-With java 17+ the server starts with `-Dfml.readTimeout=180 @java9args.txt -jar lwjgl3ify-forgePatches.jar`. 
+With java 17+ the server starts with `-Dfml.readTimeout=180 @java9args.txt -jar lwjgl3ify-forgePatches.jar`.
 
 With java 8 the server stars with `-XX:+UseStringDeduplication -XX:+UseCompressedOops -XX:+UseCodeCacheFlushing -Dfml.readTimeout=180 -jar forge-1.7.10-10.13.4.1614-1.7.10-universal.jar`

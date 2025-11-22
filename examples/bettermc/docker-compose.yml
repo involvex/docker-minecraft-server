@@ -10,7 +10,7 @@ services:
       # Refer to https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/#api-key
       CF_API_KEY: ${CF_API_KEY}
       CF_SLUG: better-mc-fabric-bmc1
-#      CF_FILENAME_MATCHER: v18.5
+      #      CF_FILENAME_MATCHER: v18.5
       MEMORY: 4G
     volumes:
       - mc:/data

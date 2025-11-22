@@ -6,7 +6,7 @@ services:
       MOTD: |
         A §l§cMinecraft§r server
         line two
-# or
-#      MOTD: "line one\nline two"
+    # or
+    #      MOTD: "line one\nline two"
     ports:
       - "25565:25565"

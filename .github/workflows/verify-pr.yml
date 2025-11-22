@@ -1,7 +1,7 @@
 name: Verify PR
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     types: [assigned, opened, synchronize, labeled]
     paths-ignore:
       - "*.md"
@@ -24,7 +24,7 @@ jobs:
           - java17
           - java8
         include:
-        # JAVA 21:
+          # JAVA 21:
           - variant: java21
             baseImage: eclipse-temurin:21-jre
             platforms: linux/amd64,linux/arm64
@@ -33,7 +33,7 @@ jobs:
             baseImage: eclipse-temurin:21-jre-alpine
             platforms: linux/amd64,linux/arm64
             mcVersion: latest
-        # JAVA 17:
+          # JAVA 17:
           - variant: java17
             # jammy doesn't work until minecraft updates to https://github.com/netty/netty/issues/12343
             baseImage: eclipse-temurin:17-jre-focal
@@ -44,7 +44,7 @@ jobs:
             platforms: linux/amd64
             mcVersion: 1.12.2
             # Pin version for Java 8
-#            mcHelperVersion: 1.42.1
+    #            mcHelperVersion: 1.42.1
     env:
       IMAGE_TO_TEST: ${{ github.repository_owner }}/minecraft-server:test-${{ matrix.variant }}-${{ github.run_id }}
     runs-on: ubuntu-22.04

@@ -1,4 +1,3 @@
-
 ## Downloadable world
 
 Instead of mounting the `/data` volume, you can instead specify the URL of a ZIP or compressed TAR file containing an archived world. It will be searched for a file `level.dat` and the containing subdirectory moved to the directory named by `$LEVEL`. This means that most of the archived Minecraft worlds downloadable from the Internet will already be in the correct format.
@@ -28,27 +27,30 @@ The following diagram shows how this option can be used in a compose deployment 
 ![](../img/world-copy-compose-project.drawio.png)
 
 ## Overwrite world on start
+
 The world will only be downloaded or copied if it doesn't exist already. Set `FORCE_WORLD_COPY=TRUE` to force overwrite the world on every server start.
 
 ## Custom worlds directory path
+
 To set a custom worlds directory for the Multiverse plugin on a baremetal server, you'd pass the `--world-dir` argument after the jar file.
 In order to accomplish the same in a containerized server, set the `EXTRA_ARGS` environment variable in your command line or docker compose yaml to the same argument string. For example:
 
 ```
 docker run -d -e EXTRA_ARGS='--world-dir ./worlds/'
 ```
+
 `--world-container`, `-W`, and `--universe` are aliases to `--world-dir` and can also be used.
 
 ## Datapacks
 
 Datapacks can be installed in a similar manner to mods/plugins. There are many environment variables which function in the same way they do for [mods](../mods-and-plugins/index.md):
 
-* `DATAPACKS`: comma-separated list of zip file URL, zip file in container, or directory in container
-* `DATAPACKS_FILE`: a text file within the container where each line is a zip file URL, zip file in container, or directory in container
-* `REMOVE_OLD_DATAPACKS`: if "true" the datapacks directory is removed of everything matching `REMOVE_OLD_DATAPACKS_INCLUDE`, but excluding `REMOVE_OLD_DATAPACKS_EXCLUDE` no deeper than `REMOVE_OLD_DATAPACKS_DEPTH`
-* `REMOVE_OLD_DATAPACKS_DEPTH`: default is 16
-* `REMOVE_OLD_DATAPACKS_INCLUDE`: default is `*.zip`
-* `REMOVE_OLD_DATAPACKS_EXCLUDE`: default is empty
+- `DATAPACKS`: comma-separated list of zip file URL, zip file in container, or directory in container
+- `DATAPACKS_FILE`: a text file within the container where each line is a zip file URL, zip file in container, or directory in container
+- `REMOVE_OLD_DATAPACKS`: if "true" the datapacks directory is removed of everything matching `REMOVE_OLD_DATAPACKS_INCLUDE`, but excluding `REMOVE_OLD_DATAPACKS_EXCLUDE` no deeper than `REMOVE_OLD_DATAPACKS_DEPTH`
+- `REMOVE_OLD_DATAPACKS_DEPTH`: default is 16
+- `REMOVE_OLD_DATAPACKS_INCLUDE`: default is `*.zip`
+- `REMOVE_OLD_DATAPACKS_EXCLUDE`: default is empty
 
 Datapacks will be placed in `/data/$LEVEL/datapacks`
 
@@ -76,7 +78,7 @@ Example of expected VanillaTweaks share codes:
 
     ResourcePacks, DataPacks, and CraftingTweaks all have separate sharecodes
 
-``` yaml
+```yaml
 VANILLATWEAKS_SHARECODE: MGr52E,tF1zL2,LnEDwT
 ```
 
@@ -86,46 +88,45 @@ VANILLATWEAKS_SHARECODE: MGr52E,tF1zL2,LnEDwT
 
 Example of expected VanillaTweaks files:
 
-``` yaml
+```yaml
 VANILLATWEAKS_FILE: /config/vt-datapacks.json,/config/vt-craftingtweaks.json,/config/vt-resourcepacks.json
 ```
 
-``` json title="DataPacks json"
+```json title="DataPacks json"
 {
   "type": "datapacks",
   "version": "1.21",
   "packs": {
-    "gameplay changes": [
-      "graves",
-      "multiplayer sleep",
-      "armored elytra"
-    ],
+    "gameplay changes": ["graves", "multiplayer sleep", "armored elytra"],
     "teleport commands": ["tpa"]
   }
 }
 ```
 
-``` json title="ResourcePacks json"
+```json title="ResourcePacks json"
 {
-    "type": "resourcepacks",
-    "version": "1.21",
-    "packs": {
-        "aesthetic": ["CherryPicking", "BlackNetherBricks", "AlternateBlockDestruction"]
-    }
+  "type": "resourcepacks",
+  "version": "1.21",
+  "packs": {
+    "aesthetic": [
+      "CherryPicking",
+      "BlackNetherBricks",
+      "AlternateBlockDestruction"
+    ]
+  }
 }
 ```
 
-
-``` json title="CraftingTweaks Json"
+```json title="CraftingTweaks Json"
 {
-    "type": "craftingtweaks",
-    "version": "1.21",
-    "packs": {
-        "quality of life": [
-            "dropper to dispenser",
-            "double slabs",
-            "back to blocks"
-        ]
-    }
+  "type": "craftingtweaks",
+  "version": "1.21",
+  "packs": {
+    "quality of life": [
+      "dropper to dispenser",
+      "double slabs",
+      "back to blocks"
+    ]
+  }
 }
 ```

@@ -87,7 +87,7 @@ Modrinth mrpack/zip files may include an `overrides` subdirectory that contains 
 Ant-style paths can include the following globbing/wildcard symbols:
 
 | Symbol | Behavior                                                |
-|--------|---------------------------------------------------------|
+| ------ | ------------------------------------------------------- |
 | `*`    | Matches zero, one, or many characters except a slash    |
 | `**`   | Matches zero, one, or many characters including slashes |
 | `?`    | Matches one character                                   |
@@ -95,16 +95,15 @@ Ant-style paths can include the following globbing/wildcard symbols:
 !!! example
 
     The following compose `environment` entries show how to exclude Iris and Sodium mods from the overrides
-    
+
     ```yaml
       MODRINTH_OVERRIDES_EXCLUSIONS: mods/NekosEnchantedBooks-*.jar,mods/citresewn-*.jar
     ```
-    
+
     or using newline delimiter, which improves maintainability
-    
+
     ```yaml
       MODRINTH_OVERRIDES_EXCLUSIONS: |
         mods/NekosEnchantedBooks-*.jar
         mods/citresewn-*.jar
     ```
-

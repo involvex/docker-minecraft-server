@@ -13,4 +13,3 @@ services:
     environment:
       EULA: "TRUE"
       VERSION: ${MINECRAFT_VERSION:-LATEST}
-

@@ -16,7 +16,6 @@ theme:
     - navigation.indexes
   locale: en
   palette:
-
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:

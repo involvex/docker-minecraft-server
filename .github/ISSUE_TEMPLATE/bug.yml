@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug.
-        
+
         Please double check some things first:
         1. Do you just have a question about something? If so, asking in the [Q&A Discussions](https://github.com/itzg/docker-minecraft-server/discussions/categories/q-a) or asking on [the Discord server](https://discord.gg/DXfKpjB) would be best.
         2. Did you **re-pull the newest image** and confirmed the issue after that? Run `docker pull <image>` or if using a compose file, it's as easy as running `docker compose pull`. If using Kubernetes, add `imagePullPolicy: Always` to the container. 

@@ -1,4 +1,3 @@
-
 !!! warning
 
     The variables listed on this page are manually documented and may be out-of-date or inaccurate.
@@ -6,6 +5,7 @@
     All other documentation pages are actively maintained, so please use the search box above to find the desired topic.
 
 ### General options
+
 <table>
     <thead>
         <tr>
@@ -53,77 +53,78 @@
 alternatively, you can mount: <code>/etc/localtime:/etc/localtime:ro
 
 /etc/timezone:/etc/timezone:ro</code>
-            </td>
-            <td><code>UTC</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>ENABLE_ROLLING_LOGS</code></td>
-            <td>By default the vanilla log file will grow without limit. The logger can be reconfigured to use a rolling log files strategy by setting this to <code>true</code></td>
-            <td><code>false</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>ENABLE_JMX</code></td>
-            <td>To enable remote JMX, such as for profiling with VisualVM or JMC, add the environment variable ENABLE_JMX=true</td>
-            <td><code>false</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>JMX_HOST</code></td>
-            <td>If JMX is enabled, set JMX_HOST to the IP/host running the Docker container, and add a port forwarding of TCP port 7091</td>
-            <td><code></code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>USE_AIKAR_FLAGS</code></td>
-            <td><a href="https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/">Aikar has done some research</a> into finding the optimal JVM flags for GC tuning, which becomes more important as more users are connected concurrently</td>
-            <td><code>false</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>USE_MEOWICE_FLAGS</code></td>
-            <td><a href="https://github.com/MeowIce/meowice-flags?tab=readme-ov-file#why-would-i-have-to-switch-">MeowIce has created an updated set of JVM flags</a> based on Aikar's flags but with support for optimizations for Java 17 and above</td>
-            <td><code>false</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>USE_MEOWICE_GRAALVM_FLAGS</code></td>
-            <td>enables MeowIce's flags for GraalVM if USE_MEOWICE_GRAALVM_FLAGS is TRUE</td>
-            <td><code>true</code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>JVM_OPTS</code></td>
-            <td>General JVM options can be passed to the Minecraft Server invocation by passing a <code>JVM_OPTS</code> environment variable. The JVM requires -XX options to precede -X options, so those can be declared in <code>JVM_XX_OPTS</code>. Both variables are space-delimited, raw JVM arguments</td>
-            <td><code></code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>JVM_XX_OPTS</code></td>
-            <td>General JVM options can be passed to the Minecraft Server invocation by passing a <code>JVM_OPTS</code> environment variable. The JVM requires -XX options to precede -X options, so those can be declared in <code>JVM_XX_OPTS</code>. Both variables are space-delimited, raw JVM arguments</td>
-            <td><code></code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>JVM_DD_OPTS</code></td>
-            <td>As a shorthand for passing several system properties as -D arguments, you can instead pass a comma separated list of name=value or name:value pairs with JVM_DD_OPTS. (The colon syntax is provided for management platforms like Plesk that don't allow = inside a value.)</td>
-            <td><code></code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>EXTRA_ARGS</code></td>
-            <td>Arguments that would usually be passed to the jar file (those which are written after the filename)</td>
-            <td><code></code></td>
-            <td>⬜️</td>
-        </tr>
-        <tr>
-            <td><code>LOG_TIMESTAMP </code></td>
-            <td>To include the timestamp with each log set to <code>true</code></td>
-            <td><code>false</code></td>
-            <td>⬜️</td>
-        </tr>
-    </tbody>
+</td>
+<td><code>UTC</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>ENABLE_ROLLING_LOGS</code></td>
+<td>By default the vanilla log file will grow without limit. The logger can be reconfigured to use a rolling log files strategy by setting this to <code>true</code></td>
+<td><code>false</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>ENABLE_JMX</code></td>
+<td>To enable remote JMX, such as for profiling with VisualVM or JMC, add the environment variable ENABLE_JMX=true</td>
+<td><code>false</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>JMX_HOST</code></td>
+<td>If JMX is enabled, set JMX_HOST to the IP/host running the Docker container, and add a port forwarding of TCP port 7091</td>
+<td><code></code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>USE_AIKAR_FLAGS</code></td>
+<td><a href="https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/">Aikar has done some research</a> into finding the optimal JVM flags for GC tuning, which becomes more important as more users are connected concurrently</td>
+<td><code>false</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>USE_MEOWICE_FLAGS</code></td>
+<td><a href="https://github.com/MeowIce/meowice-flags?tab=readme-ov-file#why-would-i-have-to-switch-">MeowIce has created an updated set of JVM flags</a> based on Aikar's flags but with support for optimizations for Java 17 and above</td>
+<td><code>false</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>USE_MEOWICE_GRAALVM_FLAGS</code></td>
+<td>enables MeowIce's flags for GraalVM if USE_MEOWICE_GRAALVM_FLAGS is TRUE</td>
+<td><code>true</code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>JVM_OPTS</code></td>
+<td>General JVM options can be passed to the Minecraft Server invocation by passing a <code>JVM_OPTS</code> environment variable. The JVM requires -XX options to precede -X options, so those can be declared in <code>JVM_XX_OPTS</code>. Both variables are space-delimited, raw JVM arguments</td>
+<td><code></code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>JVM_XX_OPTS</code></td>
+<td>General JVM options can be passed to the Minecraft Server invocation by passing a <code>JVM_OPTS</code> environment variable. The JVM requires -XX options to precede -X options, so those can be declared in <code>JVM_XX_OPTS</code>. Both variables are space-delimited, raw JVM arguments</td>
+<td><code></code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>JVM_DD_OPTS</code></td>
+<td>As a shorthand for passing several system properties as -D arguments, you can instead pass a comma separated list of name=value or name:value pairs with JVM_DD_OPTS. (The colon syntax is provided for management platforms like Plesk that don't allow = inside a value.)</td>
+<td><code></code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>EXTRA_ARGS</code></td>
+<td>Arguments that would usually be passed to the jar file (those which are written after the filename)</td>
+<td><code></code></td>
+<td>⬜️</td>
+</tr>
+<tr>
+<td><code>LOG_TIMESTAMP </code></td>
+<td>To include the timestamp with each log set to <code>true</code></td>
+<td><code>false</code></td>
+<td>⬜️</td>
+</tr>
+</tbody>
+
 </table>
 
 ### Server
@@ -668,8 +669,6 @@ alternatively, you can mount: <code>/etc/localtime:/etc/localtime:ro
     </tbody>
 </table>
 
-
-
 ### Auto-Stop
 
 !!! note
@@ -718,7 +717,6 @@ alternatively, you can mount: <code>/etc/localtime:/etc/localtime:ro
         </tr>
     </tbody>
 </table>
-
 
 ### CurseForge
 

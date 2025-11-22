@@ -13,7 +13,7 @@
 # And that it is not in use by anything else.
 networks:
   minecraft-network:
-    driver: bridge    
+    driver: bridge
     ipam:
       config:
         - subnet: 172.18.0.0/16

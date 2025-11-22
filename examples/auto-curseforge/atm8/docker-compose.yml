@@ -12,7 +12,7 @@ services:
       # Refer to https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/#api-key
       CF_API_KEY: ${CF_API_KEY}
       CF_PAGE_URL: https://www.curseforge.com/minecraft/modpacks/all-the-mods-8
-#      CF_FILENAME_MATCHER: "1.1.0"
+      #      CF_FILENAME_MATCHER: "1.1.0"
       MEMORY: 4G
     volumes:
       - mc-data:/data

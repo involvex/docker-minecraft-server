@@ -44,7 +44,7 @@ You can build spigot from source by setting the environment variable `BUILD_FROM
     -e VERSION=b1.7.3 -e TYPE=CANYON
 
 !!! important
-    Only `VERSION=b1.7.3` is supported. Since that version pre-dates the health check mechanism used by this image, that will need to be disabled by setting `DISABLE_HEALTHCHECK=true`.
+Only `VERSION=b1.7.3` is supported. Since that version pre-dates the health check mechanism used by this image, that will need to be disabled by setting `DISABLE_HEALTHCHECK=true`.
 
 Canyon is on a temporary hiatus, so by default the final build from GitHub will be used; however, a specific build number can be selected in some instances by setting `CANYON_BUILD`, such as
 
@@ -58,7 +58,7 @@ Canyon is on a temporary hiatus, so by default the final build from GitHub will 
     -e VERSION=b1.7.3 -e TYPE=CANYON
 
 !!! important
-    Only `VERSION=b1.7.3` is supported. Since that version pre-dates the health check mechanism used by this image, that will need to be disabled by setting `DISABLE_HEALTHCHECK=true`.
+Only `VERSION=b1.7.3` is supported. Since that version pre-dates the health check mechanism used by this image, that will need to be disabled by setting `DISABLE_HEALTHCHECK=true`.
 
 ### Uberbukkit
 

@@ -1,826 +1,1102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Minecraft Server Web UI{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            background-color: #f8f9fa;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-        }
-        body.dark-mode .card {
-            background-color: #2d2d2d;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-        body.dark-mode .navbar {
-            background-color: #000 !important;
-        }
-        body.dark-mode .sidebar {
-            background-color: #1a1a1a;
-        }
-        body.dark-mode .modal-content {
-            background-color: #2d2d2d;
-            color: #e0e0e0;
-        }
-        body.dark-mode .modal-header {
-            border-bottom-color: #444;
-        }
-        body.dark-mode .list-group-item {
-            background-color: #2d2d2d;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-        body.dark-mode .form-control {
-            background-color: #1a1a1a;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-        body.dark-mode .btn-outline-secondary {
-            color: #e0e0e0;
-            border-color: #444;
-        }
-        body.dark-mode .btn-outline-secondary:hover {
-            background-color: #444;
-            color: #fff;
-        }
+      body {
+        background-color: #f8f9fa;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+      }
 
-        /* Dashboard Console Styles */
-        .log-container-dashboard {
-            background-color: #1e1e1e;
-            color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-        .log-entry {
-            margin-bottom: 2px;
-        }
-        .command-input-dashboard {
-            background-color: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 5px;
-        }
-        .command-input-dashboard:focus {
-            background-color: #2d2d2d;
-            color: #fff;
-            border-color: #007bff;
-        }
-        
-        .navbar-brand {
-            font-weight: bold;
-        }
-        .status-online {
-            color: #28a745;
-        }
-        .status-offline {
-            color: #dc3545;
-        }
-        .log-container {
-            height: 400px;
-            overflow-y: auto;
-            background-color: #1e1e1e;
-            color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-        .command-input {
-            background-color: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 5px;
-        }
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .sidebar {
-            background-color: #343a40;
-            min-height: calc(100vh - 56px);
-        }
-        .sidebar .nav-link {
-            color: #fff;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #007bff;
-        }
-        .theme-toggle {
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 0.5rem;
-        }
+      /* Dark mode styles */
+      body.dark-mode {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+      }
+      body.dark-mode .card {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+      }
+      body.dark-mode .navbar {
+        background-color: #000 !important;
+      }
+      body.dark-mode .sidebar {
+        background-color: #1a1a1a;
+      }
+      body.dark-mode .modal-content {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+      }
+      body.dark-mode .modal-header {
+        border-bottom-color: #444;
+      }
+      body.dark-mode .list-group-item {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+      }
+      body.dark-mode .form-control {
+        background-color: #1a1a1a;
+        border-color: #444;
+        color: #e0e0e0;
+      }
+      body.dark-mode .btn-outline-secondary {
+        color: #e0e0e0;
+        border-color: #444;
+      }
+      body.dark-mode .btn-outline-secondary:hover {
+        background-color: #444;
+        color: #fff;
+      }
+
+      /* Dashboard Console Styles */
+      .log-container-dashboard {
+        background-color: #1e1e1e;
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-y: auto;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+      }
+      .log-entry {
+        margin-bottom: 2px;
+      }
+      .command-input-dashboard {
+        background-color: #2d2d2d;
+        border: 1px solid #444;
+        color: #fff;
+        border-radius: 5px;
+      }
+      .command-input-dashboard:focus {
+        background-color: #2d2d2d;
+        color: #fff;
+        border-color: #007bff;
+      }
+
+      .navbar-brand {
+        font-weight: bold;
+      }
+      .status-online {
+        color: #28a745;
+      }
+      .status-offline {
+        color: #dc3545;
+      }
+      .log-container {
+        height: 400px;
+        overflow-y: auto;
+        background-color: #1e1e1e;
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+      }
+      .command-input {
+        background-color: #2d2d2d;
+        border: 1px solid #444;
+        color: #fff;
+        border-radius: 5px;
+      }
+      .card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        transition:
+          background-color 0.3s,
+          border-color 0.3s;
+      }
+      .sidebar {
+        background-color: #343a40;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar .nav-link {
+        color: #fff;
+      }
+      .sidebar .nav-link:hover {
+        background-color: #495057;
+      }
+      .sidebar .nav-link.active {
+        background-color: #007bff;
+      }
+      .theme-toggle {
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+      }
     </style>
     {% block extra_css %}{% endblock %}
-</head>
-<body>
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fas fa-cube"></i> Minecraft Server Admin
-            </a>
-            <div class="navbar-nav ms-auto">
-                <div class="nav-item me-3">
-                    <button class="btn btn-outline-light btn-sm" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="border: none; background: transparent;">
-                        <i class="fas fa-moon" id="theme-icon"></i>
-                        <span id="theme-text" class="ms-1 d-none d-md-inline">Dark</span>
-                    </button>
-                </div>
-                <div class="nav-item">
-                    <span class="nav-link">
-                        <i class="fas fa-circle status-indicator" id="server-status-indicator"></i>
-                        <span id="server-status-text">Loading...</span>
-                    </span>
-                </div>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+          <i class="fas fa-cube"></i> Minecraft Server Admin
+        </a>
+        <div class="navbar-nav ms-auto">
+          <div class="nav-item me-3">
+            <button
+              class="btn btn-outline-light btn-sm"
+              onclick="toggleDarkMode()"
+              title="Toggle Dark Mode"
+              style="border: none; background: transparent"
+            >
+              <i class="fas fa-moon" id="theme-icon"></i>
+              <span id="theme-text" class="ms-1 d-none d-md-inline">Dark</span>
+            </button>
+          </div>
+          <div class="nav-item">
+            <span class="nav-link">
+              <i
+                class="fas fa-circle status-indicator"
+                id="server-status-indicator"
+              ></i>
+              <span id="server-status-text">Loading...</span>
+            </span>
+          </div>
         </div>
+      </div>
     </nav>
 
     <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
-                                <i class="fas fa-tachometer-alt"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'console' in request.endpoint %}active{% endif %}" href="#" onclick="showConsole()">
-                                <i class="fas fa-terminal"></i> Console
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'config' in request.endpoint %}active{% endif %}" href="#" onclick="showConfig()">
-                                <i class="fas fa-cog"></i> Configuration
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'plugins' in request.endpoint %}active{% endif %}" href="#" onclick="showPlugins()">
-                                <i class="fas fa-puzzle-piece"></i> Plugins
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'players' in request.endpoint %}active{% endif %}" href="#" onclick="showPlayers()">
-                                <i class="fas fa-users"></i> Players
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'banlist' in request.endpoint %}active{% endif %}" href="#" onclick="showBanlist()">
-                                <i class="fas fa-ban"></i> Ban List
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'worlds' in request.endpoint %}active{% endif %}" href="#" onclick="showWorlds()">
-                                <i class="fas fa-globe"></i> World Manager
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'logs' in request.endpoint %}active{% endif %}" href="#" onclick="showLogs()">
-                                <i class="fas fa-list-alt"></i> Logs
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+      <div class="row">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if request.endpoint == 'index' %}active{% endif %}"
+                  href="{{ url_for('index') }}"
+                >
+                  <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'console' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showConsole()"
+                >
+                  <i class="fas fa-terminal"></i> Console
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'config' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showConfig()"
+                >
+                  <i class="fas fa-cog"></i> Configuration
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'plugins' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showPlugins()"
+                >
+                  <i class="fas fa-puzzle-piece"></i> Plugins
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'players' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showPlayers()"
+                >
+                  <i class="fas fa-users"></i> Players
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'banlist' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showBanlist()"
+                >
+                  <i class="fas fa-ban"></i> Ban List
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'worlds' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showWorlds()"
+                >
+                  <i class="fas fa-globe"></i> World Manager
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if 'logs' in request.endpoint %}active{% endif %}"
+                  href="#"
+                  onclick="showLogs()"
+                >
+                  <i class="fas fa-list-alt"></i> Logs
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                {% block content %}{% endblock %}
-            </main>
-        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
     </div>
 
     <!-- Console Modal -->
     <div class="modal fade" id="consoleModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-terminal"></i> Server Console</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="log-container" id="console-output"></div>
-                    <div class="input-group mt-3">
-                        <span class="input-group-text">$</span>
-                        <input type="text" class="form-control command-input" id="command-input" placeholder="Enter command...">
-                        <button class="btn btn-primary" onclick="sendCommand()">Send</button>
-                    </div>
-                </div>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-terminal"></i> Server Console
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="log-container" id="console-output"></div>
+            <div class="input-group mt-3">
+              <span class="input-group-text">$</span>
+              <input
+                type="text"
+                class="form-control command-input"
+                id="command-input"
+                placeholder="Enter command..."
+              />
+              <button class="btn btn-primary" onclick="sendCommand()">
+                Send
+              </button>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Config Modal -->
     <div class="modal fade" id="configModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-cog"></i> Server Configuration</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <textarea title="textarea" class="form-control" id="config-editor" rows="20"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
-                </div>
-            </div>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-cog"></i> Server Configuration
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <textarea
+              title="textarea"
+              class="form-control"
+              id="config-editor"
+              rows="20"
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="saveConfig()"
+            >
+              Save Configuration
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Plugins Modal -->
     <div class="modal fade" id="pluginsModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-puzzle-piece"></i> Plugin Management</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-puzzle-piece"></i> Plugin Management
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Plugin Tabs -->
+            <ul class="nav nav-tabs" id="pluginsTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="installed-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#installed"
+                  type="button"
+                  role="tab"
+                >
+                  Installed
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="download-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#download"
+                  type="button"
+                  role="tab"
+                >
+                  Download
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="upload-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#upload"
+                  type="button"
+                  role="tab"
+                >
+                  Upload
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content mt-3" id="pluginsTabsContent">
+              <!-- Installed Plugins Tab -->
+              <div
+                class="tab-pane fade show active"
+                id="installed"
+                role="tabpanel"
+              >
+                <div id="plugins-list"></div>
+              </div>
+
+              <!-- Download Plugins Tab -->
+              <div class="tab-pane fade" id="download" role="tabpanel">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="plugin-search"
+                      placeholder="Search for plugins..."
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      onclick="searchPlugins()"
+                    >
+                      Search
+                    </button>
+                  </div>
+                  <div class="btn-group mt-2" role="group">
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="plugin-source"
+                      id="source-spiget"
+                      checked
+                    />
+                    <label class="btn btn-outline-primary" for="source-spiget"
+                      >Spiget (Spigot)</label
+                    >
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="plugin-source"
+                      id="source-bukkitdev"
+                    />
+                    <label
+                      class="btn btn-outline-primary"
+                      for="source-bukkitdev"
+                      >Bukkit.org</label
+                    >
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="plugin-source"
+                      id="source-curseforge"
+                    />
+                    <label
+                      class="btn btn-outline-primary"
+                      for="source-curseforge"
+                      >CurseForge</label
+                    >
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="plugin-source"
+                      id="source-github"
+                    />
+                    <label class="btn btn-outline-primary" for="source-github"
+                      >GitHub</label
+                    >
+                  </div>
                 </div>
-                <div class="modal-body">
-                    <!-- Plugin Tabs -->
-                    <ul class="nav nav-tabs" id="pluginsTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="installed-tab" data-bs-toggle="tab" data-bs-target="#installed" type="button" role="tab">Installed</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab">Download</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab">Upload</button>
-                        </li>
-                    </ul>
-                    
-                    <div class="tab-content mt-3" id="pluginsTabsContent">
-                        <!-- Installed Plugins Tab -->
-                        <div class="tab-pane fade show active" id="installed" role="tabpanel">
-                            <div id="plugins-list"></div>
-                        </div>
-                        
-                        <!-- Download Plugins Tab -->
-                        <div class="tab-pane fade" id="download" role="tabpanel">
-                            <div class="mb-3">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="plugin-search" placeholder="Search for plugins...">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="searchPlugins()">Search</button>
-                                </div>
-                                <div class="btn-group mt-2" role="group">
-                                    <input type="radio" class="btn-check" name="plugin-source" id="source-spiget" checked>
-                                    <label class="btn btn-outline-primary" for="source-spiget">Spiget (Spigot)</label>
-
-                                    <input type="radio" class="btn-check" name="plugin-source" id="source-bukkitdev">
-                                    <label class="btn btn-outline-primary" for="source-bukkitdev">Bukkit.org</label>
-
-                                    <input type="radio" class="btn-check" name="plugin-source" id="source-curseforge">
-                                    <label class="btn btn-outline-primary" for="source-curseforge">CurseForge</label>
-
-                                    <input type="radio" class="btn-check" name="plugin-source" id="source-github">
-                                    <label class="btn btn-outline-primary" for="source-github">GitHub</label>
-                                </div>
-                            </div>
                 <div id="plugin-search-results"></div>
-                <div id="plugin-search-errors" class="mt-2" style="display: none;">
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>Plugin Search Error:</strong> <span id="plugin-error-message"></span>
-                        <button type="button" class="btn-close" onclick="hidePluginError()"></button>
-                    </div>
+                <div
+                  id="plugin-search-errors"
+                  class="mt-2"
+                  style="display: none"
+                >
+                  <div
+                    class="alert alert-warning alert-dismissible fade show"
+                    role="alert"
+                  >
+                    <strong>Plugin Search Error:</strong>
+                    <span id="plugin-error-message"></span>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      onclick="hidePluginError()"
+                    ></button>
+                  </div>
                 </div>
-                        </div>
-                        
-                        <!-- Upload Plugin Tab -->
-                        <div class="tab-pane fade" id="upload" role="tabpanel">
-                            <div class="text-center">
-                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                <p>Upload a plugin JAR file</p>
-                                <form id="upload-plugin-form">
-                                    <div class="mb-3">
-                                        <input title="file" type="file" class="form-control" id="plugin-file" accept=".jar" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-upload"></i> Upload Plugin
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+              </div>
+
+              <!-- Upload Plugin Tab -->
+              <div class="tab-pane fade" id="upload" role="tabpanel">
+                <div class="text-center">
+                  <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                  <p>Upload a plugin JAR file</p>
+                  <form id="upload-plugin-form">
+                    <div class="mb-3">
+                      <input
+                        title="file"
+                        type="file"
+                        class="form-control"
+                        id="plugin-file"
+                        accept=".jar"
+                        required
+                      />
                     </div>
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-upload"></i> Upload Plugin
+                    </button>
+                  </form>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- World Manager Modal -->
     <div class="modal fade" id="worldsModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-globe"></i> World Manager</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- World Tabs -->
-                    <ul class="nav nav-tabs" id="worldsTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="worlds-tab" data-bs-toggle="tab" data-bs-target="#worlds-list" type="button" role="tab">Available Worlds</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="backups-tab" data-bs-toggle="tab" data-bs-target="#backups-list" type="button" role="tab">Backups</button>
-                        </li>
-                    </ul>
-                    
-                    <div class="tab-content mt-3" id="worldsTabsContent">
-                        <!-- Worlds List Tab -->
-                        <div class="tab-pane fade show active" id="worlds-list" role="tabpanel">
-                            <div id="worlds-list-content"></div>
-                        </div>
-                        
-                        <!-- Backups Tab -->
-                        <div class="tab-pane fade" id="backups-list" role="tabpanel">
-                            <div id="backups-list-content"></div>
-                        </div>
-                    </div>
-                </div>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-globe"></i> World Manager
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- World Tabs -->
+            <ul class="nav nav-tabs" id="worldsTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="worlds-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#worlds-list"
+                  type="button"
+                  role="tab"
+                >
+                  Available Worlds
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="backups-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#backups-list"
+                  type="button"
+                  role="tab"
+                >
+                  Backups
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content mt-3" id="worldsTabsContent">
+              <!-- Worlds List Tab -->
+              <div
+                class="tab-pane fade show active"
+                id="worlds-list"
+                role="tabpanel"
+              >
+                <div id="worlds-list-content"></div>
+              </div>
+
+              <!-- Backups Tab -->
+              <div class="tab-pane fade" id="backups-list" role="tabpanel">
+                <div id="backups-list-content"></div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Players Modal -->
     <div class="modal fade" id="playersModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-users"></i> Player Management</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="players-list"></div>
-                </div>
-            </div>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-users"></i> Player Management
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="players-list"></div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Banlist Modal -->
     <div class="modal fade" id="banlistModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-ban"></i> Ban List</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="banlist-content"></div>
-                </div>
-            </div>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-ban"></i> Ban List</h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="banlist-content"></div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Logs Modal -->
     <div class="modal fade" id="logsModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-list-alt"></i> Server Logs</h5>
-                    <button title="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="log-container" id="logs-output"></div>
-                </div>
-            </div>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-list-alt"></i> Server Logs
+            </h5>
+            <button
+              title="button"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="log-container" id="logs-output"></div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        // Initialize Socket.IO
-        const socket = io();
-        
-        // Global variables
-        let currentStatus = {status: 'checking', player_count: 0, online_players: []};
-        
-        // Dark mode functionality
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
+      // Initialize Socket.IO
+      const socket = io();
 
-            if (isDark) {
-                icon.className = 'fas fa-sun';
-                text.textContent = 'Light';
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                icon.className = 'fas fa-moon';
-                text.textContent = 'Dark';
-                localStorage.setItem('darkMode', 'disabled');
-            }
+      // Global variables
+      let currentStatus = {
+        status: "checking",
+        player_count: 0,
+        online_players: [],
+      };
+
+      // Dark mode functionality
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        const icon = document.getElementById("theme-icon");
+        const text = document.getElementById("theme-text");
+
+        if (isDark) {
+          icon.className = "fas fa-sun";
+          text.textContent = "Light";
+          localStorage.setItem("darkMode", "enabled");
+        } else {
+          icon.className = "fas fa-moon";
+          text.textContent = "Dark";
+          localStorage.setItem("darkMode", "disabled");
         }
-        
-        // Load dark mode preference on page load
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('theme-icon').className = 'fas fa-sun';
-            document.getElementById('theme-text').textContent = 'Light';
+      }
+
+      // Load dark mode preference on page load
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("theme-icon").className = "fas fa-sun";
+        document.getElementById("theme-text").textContent = "Light";
+      }
+
+      // Socket event handlers
+      socket.on("connect", function () {
+        console.log("Connected to server");
+        socket.emit("request_logs");
+      });
+
+      socket.on("status_update", function (data) {
+        updateStatus(data);
+      });
+
+      socket.on("player_update", function (data) {
+        console.log("Player update:", data);
+      });
+
+      socket.on("command_output", function (data) {
+        addToConsole(
+          `${data.timestamp} - $ ${data.command}\\n${data.result}\\n`,
+        );
+      });
+
+      socket.on("log_data", function (data) {
+        displayLogs(data);
+      });
+
+      socket.on("error", function (data) {
+        console.error("Socket error:", data);
+      });
+
+      // Functions
+      function updateStatus(status) {
+        currentStatus = status;
+        const indicator = document.getElementById("server-status-indicator");
+        const text = document.getElementById("server-status-text");
+
+        if (status.status === "online") {
+          indicator.className = "fas fa-circle status-online";
+          text.textContent = `Online (${status.player_count}/${status.max_players || 20} players)`;
+        } else {
+          indicator.className = "fas fa-circle status-offline";
+          text.textContent = "Offline";
         }
-        
-        // Socket event handlers
-        socket.on('connect', function() {
-            console.log('Connected to server');
-            socket.emit('request_logs');
-        });
-        
-        socket.on('status_update', function(data) {
-            updateStatus(data);
-        });
-        
-        socket.on('player_update', function(data) {
-            console.log('Player update:', data);
-        });
-        
-        socket.on('command_output', function(data) {
-            addToConsole(`${data.timestamp} - $ ${data.command}\\n${data.result}\\n`);
-        });
-        
-        socket.on('log_data', function(data) {
-            displayLogs(data);
-        });
-        
-        socket.on('error', function(data) {
-            console.error('Socket error:', data);
-        });
-        
-        // Functions
-        function updateStatus(status) {
-            currentStatus = status;
-            const indicator = document.getElementById('server-status-indicator');
-            const text = document.getElementById('server-status-text');
-            
-            if (status.status === 'online') {
-                indicator.className = 'fas fa-circle status-online';
-                text.textContent = `Online (${status.player_count}/${status.max_players || 20} players)`;
-            } else {
-                indicator.className = 'fas fa-circle status-offline';
-                text.textContent = 'Offline';
-            }
-        }
-        
-        function showConsole() {
-            const modal = new bootstrap.Modal(document.getElementById('consoleModal'));
-            modal.show();
-            document.getElementById('command-input').focus();
-        }
-        
-        function showConfig() {
-            const modal = new bootstrap.Modal(document.getElementById('configModal'));
-            modal.show();
-            loadConfig();
-        }
-        
-        function showPlugins() {
-            const modal = new bootstrap.Modal(document.getElementById('pluginsModal'));
-            modal.show();
-            loadPlugins();
-        }
-        
-        function showPlayers() {
-            const modal = new bootstrap.Modal(document.getElementById('playersModal'));
-            modal.show();
-            loadPlayers();
-        }
-        
-        function showBanlist() {
-            const modal = new bootstrap.Modal(document.getElementById('banlistModal'));
-            modal.show();
-            loadBanlist();
-        }
-        
-        function showLogs() {
-            const modal = new bootstrap.Modal(document.getElementById('logsModal'));
-            modal.show();
-            loadLogs();
-        }
-        
-        function showWorlds() {
-            const modal = new bootstrap.Modal(document.getElementById('worldsModal'));
-            modal.show();
-            loadWorlds();
-        }
-        
-        function sendCommand() {
-            const input = document.getElementById('command-input');
-            const command = input.value.trim();
-            if (command) {
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({command: command})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    addToConsole(`$ ${command}\\n${data.result}\\n`);
-                    input.value = '';
-                })
-                .catch(error => {
-                    addToConsole(`Error: ${error}\\n`);
-                });
-            }
-        }
-        
-        function addToConsole(text) {
-            const output = document.getElementById('console-output');
-            output.innerHTML += text + '\\n';
-            output.scrollTop = output.scrollHeight;
-        }
-        
-        function loadConfig() {
-            fetch('/api/config')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.config) {
-                        document.getElementById('config-editor').value = data.config;
-                    } else if (data.error) {
-                        const errorMsg = `Error: ${data.error}\n\n`;
-                        const debugInfo = data.checked_paths ? 
-                            `Checked paths:\n${data.checked_paths.join('\n')}\n\n` +
-                            `/data directory contents:\n${(data.data_dir_contents || []).join('\n')}` : '';
-                        document.getElementById('config-editor').value = errorMsg + debugInfo;
-                        document.getElementById('config-editor').style.color = '#dc3545';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading config:', error);
-                    document.getElementById('config-editor').value = `Error loading configuration: ${error}`;
-                    document.getElementById('config-editor').style.color = '#dc3545';
-                });
-        }
-        
-        function saveConfig() {
-            const config = document.getElementById('config-editor').value;
-            fetch('/api/config', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({config: config})
+      }
+
+      function showConsole() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("consoleModal"),
+        );
+        modal.show();
+        document.getElementById("command-input").focus();
+      }
+
+      function showConfig() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("configModal"),
+        );
+        modal.show();
+        loadConfig();
+      }
+
+      function showPlugins() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("pluginsModal"),
+        );
+        modal.show();
+        loadPlugins();
+      }
+
+      function showPlayers() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("playersModal"),
+        );
+        modal.show();
+        loadPlayers();
+      }
+
+      function showBanlist() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("banlistModal"),
+        );
+        modal.show();
+        loadBanlist();
+      }
+
+      function showLogs() {
+        const modal = new bootstrap.Modal(document.getElementById("logsModal"));
+        modal.show();
+        loadLogs();
+      }
+
+      function showWorlds() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("worldsModal"),
+        );
+        modal.show();
+        loadWorlds();
+      }
+
+      function sendCommand() {
+        const input = document.getElementById("command-input");
+        const command = input.value.trim();
+        if (command) {
+          fetch("/api/command", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ command: command }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              addToConsole(`$ ${command}\\n${data.result}\\n`);
+              input.value = "";
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Configuration saved successfully!');
-                    bootstrap.Modal.getInstance(document.getElementById('configModal')).hide();
-                } else {
-                    alert('Error saving configuration: ' + data.error);
-                }
-            })
-            .catch(error => alert('Error: ' + error));
+            .catch((error) => {
+              addToConsole(`Error: ${error}\\n`);
+            });
         }
-        
-        function loadPlugins() {
-            fetch('/api/plugins')
-                .then(response => response.json())
-                .then(data => {
-                    let html = '<h6>Installed Plugins:</h6>';
-                    if (data.plugins && data.plugins.length > 0) {
-                        html += '<ul class="list-group">';
-                        data.plugins.forEach(plugin => {
-                            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+      }
+
+      function addToConsole(text) {
+        const output = document.getElementById("console-output");
+        output.innerHTML += text + "\\n";
+        output.scrollTop = output.scrollHeight;
+      }
+
+      function loadConfig() {
+        fetch("/api/config")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.config) {
+              document.getElementById("config-editor").value = data.config;
+            } else if (data.error) {
+              const errorMsg = `Error: ${data.error}\n\n`;
+              const debugInfo = data.checked_paths
+                ? `Checked paths:\n${data.checked_paths.join("\n")}\n\n` +
+                  `/data directory contents:\n${(data.data_dir_contents || []).join("\n")}`
+                : "";
+              document.getElementById("config-editor").value =
+                errorMsg + debugInfo;
+              document.getElementById("config-editor").style.color = "#dc3545";
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading config:", error);
+            document.getElementById("config-editor").value =
+              `Error loading configuration: ${error}`;
+            document.getElementById("config-editor").style.color = "#dc3545";
+          });
+      }
+
+      function saveConfig() {
+        const config = document.getElementById("config-editor").value;
+        fetch("/api/config", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ config: config }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Configuration saved successfully!");
+              bootstrap.Modal.getInstance(
+                document.getElementById("configModal"),
+              ).hide();
+            } else {
+              alert("Error saving configuration: " + data.error);
+            }
+          })
+          .catch((error) => alert("Error: " + error));
+      }
+
+      function loadPlugins() {
+        fetch("/api/plugins")
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "<h6>Installed Plugins:</h6>";
+            if (data.plugins && data.plugins.length > 0) {
+              html += '<ul class="list-group">';
+              data.plugins.forEach((plugin) => {
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center">
                                 ${plugin}
                                 <button class="btn btn-sm btn-danger" onclick="removePlugin('${plugin}')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </li>`;
-                        });
-                        html += '</ul>';
-                    } else {
-                        html += '<p class="text-muted">No plugins installed</p>';
-                    }
-                    document.getElementById('plugins-list').innerHTML = html;
-                })
-                .catch(error => console.error('Error loading plugins:', error));
-        }
-
-        function showPluginError(message, note) {
-            const errorDiv = document.getElementById('plugin-search-errors');
-            const messageSpan = document.getElementById('plugin-error-message');
-            messageSpan.innerHTML = `${message}${note ? `<br><small>${note}</small>` : ''}`;
-            errorDiv.style.display = 'block';
-        }
-
-        function hidePluginError() {
-            document.getElementById('plugin-search-errors').style.display = 'none';
-        }
-        
-        function removePlugin(pluginName) {
-            if (confirm(`Remove plugin ${pluginName}?`)) {
-                fetch(`/api/plugins/${pluginName}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        loadPlugins(); // Refresh the list
-                    } else {
-                        alert(`Error: ${data.error}`);
-                    }
-                })
-                .catch(error => console.error('Error removing plugin:', error));
-            }
-        }
-        
-        function searchPlugins() {
-            const query = document.getElementById('plugin-search').value.trim();
-            const source = document.querySelector('input[name="plugin-source"]:checked').id;
-            
-            if (!query) {
-                alert('Please enter a search term');
-                return;
-            }
-            
-            let apiEndpoint;
-            if (source === 'source-spiget') {
-                apiEndpoint = `/api/plugins/search/bukkit?q=${encodeURIComponent(query)}`;
-            } else if (source === 'source-bukkitdev') {
-                apiEndpoint = `/api/plugins/search/bukkitdev?q=${encodeURIComponent(query)}`;
-            } else if (source === 'source-curseforge') {
-                apiEndpoint = `/api/plugins/search/curseforge?q=${encodeURIComponent(query)}`;
+              });
+              html += "</ul>";
             } else {
-                apiEndpoint = `/api/plugins/search/github?q=${encodeURIComponent(query)}`;
+              html += '<p class="text-muted">No plugins installed</p>';
             }
-            
-            fetch(apiEndpoint)
-                .then(response => response.json())
-                .then(data => {
-                    // Hide any previous errors
-                    hidePluginError();
+            document.getElementById("plugins-list").innerHTML = html;
+          })
+          .catch((error) => console.error("Error loading plugins:", error));
+      }
 
-                    // Check if there's an error in the response
-                    if (data.error) {
-                        showPluginError(data.error, data.note);
-                        document.getElementById('plugin-search-results').innerHTML = '';
-                        return;
-                    }
+      function showPluginError(message, note) {
+        const errorDiv = document.getElementById("plugin-search-errors");
+        const messageSpan = document.getElementById("plugin-error-message");
+        messageSpan.innerHTML = `${message}${note ? `<br><small>${note}</small>` : ""}`;
+        errorDiv.style.display = "block";
+      }
 
-                    let html = '<h6>Search Results:</h6>';
-                    if (data.plugins && data.plugins.length > 0) {
-                        html += '<div class="row">';
-                        data.plugins.forEach(plugin => {
-                            const downloadBtn = plugin.download_url ?
-                                `<button class="btn btn-sm btn-success" onclick="downloadPlugin('${plugin.name}', '${plugin.source}', '${plugin.download_url}', '${plugin.id || ''}')">
+      function hidePluginError() {
+        document.getElementById("plugin-search-errors").style.display = "none";
+      }
+
+      function removePlugin(pluginName) {
+        if (confirm(`Remove plugin ${pluginName}?`)) {
+          fetch(`/api/plugins/${pluginName}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(data.message);
+                loadPlugins(); // Refresh the list
+              } else {
+                alert(`Error: ${data.error}`);
+              }
+            })
+            .catch((error) => console.error("Error removing plugin:", error));
+        }
+      }
+
+      function searchPlugins() {
+        const query = document.getElementById("plugin-search").value.trim();
+        const source = document.querySelector(
+          'input[name="plugin-source"]:checked',
+        ).id;
+
+        if (!query) {
+          alert("Please enter a search term");
+          return;
+        }
+
+        let apiEndpoint;
+        if (source === "source-spiget") {
+          apiEndpoint = `/api/plugins/search/bukkit?q=${encodeURIComponent(query)}`;
+        } else if (source === "source-bukkitdev") {
+          apiEndpoint = `/api/plugins/search/bukkitdev?q=${encodeURIComponent(query)}`;
+        } else if (source === "source-curseforge") {
+          apiEndpoint = `/api/plugins/search/curseforge?q=${encodeURIComponent(query)}`;
+        } else {
+          apiEndpoint = `/api/plugins/search/github?q=${encodeURIComponent(query)}`;
+        }
+
+        fetch(apiEndpoint)
+          .then((response) => response.json())
+          .then((data) => {
+            // Hide any previous errors
+            hidePluginError();
+
+            // Check if there's an error in the response
+            if (data.error) {
+              showPluginError(data.error, data.note);
+              document.getElementById("plugin-search-results").innerHTML = "";
+              return;
+            }
+
+            let html = "<h6>Search Results:</h6>";
+            if (data.plugins && data.plugins.length > 0) {
+              html += '<div class="row">';
+              data.plugins.forEach((plugin) => {
+                const downloadBtn = plugin.download_url
+                  ? `<button class="btn btn-sm btn-success" onclick="downloadPlugin('${plugin.name}', '${plugin.source}', '${plugin.download_url}', '${plugin.id || ""}')">
                                     <i class="fas fa-download"></i> Download
-                                </button>` :
-                                '<span class="text-muted small">No download available</span>';
+                                </button>`
+                  : '<span class="text-muted small">No download available</span>';
 
-                            html += `<div class="col-md-6 mb-3">
+                html += `<div class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-body">
                                         <h6 class="card-title">${plugin.name}</h6>
-                                        <p class="card-text">${plugin.description || 'No description available'}</p>
-                                        <small class="text-muted">Version: ${plugin.version || 'Unknown'}</small><br>
+                                        <p class="card-text">${plugin.description || "No description available"}</p>
+                                        <small class="text-muted">Version: ${plugin.version || "Unknown"}</small><br>
                                         <small class="text-muted">Source: ${plugin.source}</small>
-                                        ${plugin.downloads ? `<br><small class="text-muted">Downloads: ${plugin.downloads.toLocaleString()}</small>` : ''}
+                                        ${plugin.downloads ? `<br><small class="text-muted">Downloads: ${plugin.downloads.toLocaleString()}</small>` : ""}
                                         <div class="mt-2">
                                             ${downloadBtn}
                                         </div>
                                     </div>
                                 </div>
                             </div>`;
-                        });
-                        html += '</div>';
-                    } else {
-                        html += '<p class="text-muted">No plugins found</p>';
-                    }
-                    document.getElementById('plugin-search-results').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error searching plugins:', error);
-                    showPluginError('Network error occurred while searching plugins', 'Check your internet connection and try again.');
-                    document.getElementById('plugin-search-results').innerHTML = '';
-                });
-        }
-        
-        function downloadPlugin(name, source, downloadUrl, pluginId) {
-            let url = downloadUrl;
-            let filename = name + '.jar';
-            
-            if (source === 'spiget' && pluginId) {
-                // For Spiget, we need to get the download URL first
-                fetch(`/api/plugins/search/bukkit?q=${encodeURIComponent(name)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.plugins && data.plugins.length > 0) {
-                            const plugin = data.plugins.find(p => p.id == pluginId || p.name === name);
-                            if (plugin) {
-                                // Use Spiget download API
-                                url = `https://api.spiget.org/v2/resources/${plugin.id}/download`;
-                                downloadPluginFromUrl(url, filename, source);
-                            }
-                        }
-                    });
-            } else if (url) {
-                downloadPluginFromUrl(url, filename, source);
+              });
+              html += "</div>";
             } else {
-                alert('Download URL not available for this plugin');
+              html += '<p class="text-muted">No plugins found</p>';
             }
-        }
-        
-        function downloadPluginFromUrl(url, filename, source) {
-            fetch('/api/plugins/download', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url: url, filename: filename, source: source})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    loadPlugins(); // Refresh the installed plugins list
-                } else {
-                    alert(`Error downloading plugin: ${data.error}`);
+            document.getElementById("plugin-search-results").innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error searching plugins:", error);
+            showPluginError(
+              "Network error occurred while searching plugins",
+              "Check your internet connection and try again.",
+            );
+            document.getElementById("plugin-search-results").innerHTML = "";
+          });
+      }
+
+      function downloadPlugin(name, source, downloadUrl, pluginId) {
+        let url = downloadUrl;
+        let filename = name + ".jar";
+
+        if (source === "spiget" && pluginId) {
+          // For Spiget, we need to get the download URL first
+          fetch(`/api/plugins/search/bukkit?q=${encodeURIComponent(name)}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.plugins && data.plugins.length > 0) {
+                const plugin = data.plugins.find(
+                  (p) => p.id == pluginId || p.name === name,
+                );
+                if (plugin) {
+                  // Use Spiget download API
+                  url = `https://api.spiget.org/v2/resources/${plugin.id}/download`;
+                  downloadPluginFromUrl(url, filename, source);
                 }
-            })
-            .catch(error => {
-                console.error('Error downloading plugin:', error);
-                alert('Error downloading plugin');
+              }
             });
+        } else if (url) {
+          downloadPluginFromUrl(url, filename, source);
+        } else {
+          alert("Download URL not available for this plugin");
         }
-        
-        // Handle plugin upload
-        document.getElementById('upload-plugin-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('plugin-file');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert('Please select a file');
-                return;
+      }
+
+      function downloadPluginFromUrl(url, filename, source) {
+        fetch("/api/plugins/download", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: url,
+            filename: filename,
+            source: source,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert(data.message);
+              loadPlugins(); // Refresh the installed plugins list
+            } else {
+              alert(`Error downloading plugin: ${data.error}`);
             }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            fetch('/api/plugins/upload', {
-                method: 'POST',
-                body: formData
+          })
+          .catch((error) => {
+            console.error("Error downloading plugin:", error);
+            alert("Error downloading plugin");
+          });
+      }
+
+      // Handle plugin upload
+      document
+        .getElementById("upload-plugin-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const fileInput = document.getElementById("plugin-file");
+          const file = fileInput.files[0];
+
+          if (!file) {
+            alert("Please select a file");
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          fetch("/api/plugins/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(data.message);
+                fileInput.value = ""; // Clear the file input
+                // Switch to installed tab
+                document.getElementById("installed-tab").click();
+                loadPlugins(); // Refresh the installed plugins list
+              } else {
+                alert(`Error uploading plugin: ${data.error}`);
+              }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    fileInput.value = ''; // Clear the file input
-                    // Switch to installed tab
-                    document.getElementById('installed-tab').click();
-                    loadPlugins(); // Refresh the installed plugins list
-                } else {
-                    alert(`Error uploading plugin: ${data.error}`);
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading plugin:', error);
-                alert('Error uploading plugin');
+            .catch((error) => {
+              console.error("Error uploading plugin:", error);
+              alert("Error uploading plugin");
             });
         });
-        
-        function loadWorlds() {
-            fetch('/api/worlds')
-                .then(response => response.json())
-                .then(data => {
-                    let html = '<h6>Available Worlds:</h6>';
-                    if (data.worlds && data.worlds.length > 0) {
-                        html += '<div class="row">';
-                        data.worlds.forEach(world => {
-                            const isCurrent = world.name === data.current_world;
-                            const sizeMB = (world.size / (1024 * 1024)).toFixed(1);
-                            html += `<div class="col-md-6 mb-3">
-                                <div class="card ${isCurrent ? 'border-success' : ''}">
+
+      function loadWorlds() {
+        fetch("/api/worlds")
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "<h6>Available Worlds:</h6>";
+            if (data.worlds && data.worlds.length > 0) {
+              html += '<div class="row">';
+              data.worlds.forEach((world) => {
+                const isCurrent = world.name === data.current_world;
+                const sizeMB = (world.size / (1024 * 1024)).toFixed(1);
+                html += `<div class="col-md-6 mb-3">
+                                <div class="card ${isCurrent ? "border-success" : ""}">
                                     <div class="card-body">
-                                        <h6 class="card-title">${world.name} ${isCurrent ? '<span class="badge bg-success">Current</span>' : ''}</h6>
+                                        <h6 class="card-title">${world.name} ${isCurrent ? '<span class="badge bg-success">Current</span>' : ""}</h6>
                                         <p class="card-text">
                                             <small class="text-muted">Size: ${sizeMB} MB | Files: ${world.file_count}</small>
                                         </p>
                                         <div class="btn-group" role="group">
-                                            ${!isCurrent ? `<button class="btn btn-sm btn-primary" onclick="switchWorld('${world.name}')">
+                                            ${
+                                              !isCurrent
+                                                ? `<button class="btn btn-sm btn-primary" onclick="switchWorld('${world.name}')">
                                                 <i class="fas fa-play"></i> Switch
-                                            </button>` : ''}
+                                            </button>`
+                                                : ""
+                                            }
                                             <button class="btn btn-sm btn-warning" onclick="backupWorld('${world.name}')">
                                                 <i class="fas fa-save"></i> Backup
                                             </button>
@@ -828,32 +1104,33 @@
                                     </div>
                                 </div>
                             </div>`;
-                        });
-                        html += '</div>';
-                    } else {
-                        html += '<p class="text-muted">No worlds found</p>';
-                    }
-                    document.getElementById('worlds-list-content').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading worlds:', error);
-                    document.getElementById('worlds-list-content').innerHTML = '<p class="text-danger">Error loading worlds</p>';
-                });
-            
-            // Load backups
-            loadBackups();
-        }
-        
-        function loadBackups() {
-            fetch('/api/worlds/backups')
-                .then(response => response.json())
-                .then(data => {
-                    let html = '<h6>World Backups:</h6>';
-                    if (data.backups && data.backups.length > 0) {
-                        html += '<ul class="list-group">';
-                        data.backups.forEach(backup => {
-                            const sizeMB = (backup.size / (1024 * 1024)).toFixed(1);
-                            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+              });
+              html += "</div>";
+            } else {
+              html += '<p class="text-muted">No worlds found</p>';
+            }
+            document.getElementById("worlds-list-content").innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error loading worlds:", error);
+            document.getElementById("worlds-list-content").innerHTML =
+              '<p class="text-danger">Error loading worlds</p>';
+          });
+
+        // Load backups
+        loadBackups();
+      }
+
+      function loadBackups() {
+        fetch("/api/worlds/backups")
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "<h6>World Backups:</h6>";
+            if (data.backups && data.backups.length > 0) {
+              html += '<ul class="list-group">';
+              data.backups.forEach((backup) => {
+                const sizeMB = (backup.size / (1024 * 1024)).toFixed(1);
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <strong>${backup.world}</strong><br>
                                     <small class="text-muted">${backup.created} | ${sizeMB} MB</small>
@@ -862,97 +1139,106 @@
                                     <i class="fas fa-undo"></i> Restore
                                 </button>
                             </li>`;
-                        });
-                        html += '</ul>';
-                    } else {
-                        html += '<p class="text-muted">No backups available</p>';
-                    }
-                    document.getElementById('backups-list-content').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading backups:', error);
-                    document.getElementById('backups-list-content').innerHTML = '<p class="text-danger">Error loading backups</p>';
-                });
-        }
-        
-        function switchWorld(worldName) {
-            if (confirm(`Switch to world "${worldName}"? This will update server.properties and may require a server restart.`)) {
-                fetch(`/api/worlds/${worldName}/switch`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        loadWorlds(); // Refresh the worlds list
-                    } else {
-                        alert(`Error switching world: ${data.error}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error switching world:', error);
-                    alert('Error switching world');
-                });
+              });
+              html += "</ul>";
+            } else {
+              html += '<p class="text-muted">No backups available</p>';
             }
+            document.getElementById("backups-list-content").innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error loading backups:", error);
+            document.getElementById("backups-list-content").innerHTML =
+              '<p class="text-danger">Error loading backups</p>';
+          });
+      }
+
+      function switchWorld(worldName) {
+        if (
+          confirm(
+            `Switch to world "${worldName}"? This will update server.properties and may require a server restart.`,
+          )
+        ) {
+          fetch(`/api/worlds/${worldName}/switch`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(data.message);
+                loadWorlds(); // Refresh the worlds list
+              } else {
+                alert(`Error switching world: ${data.error}`);
+              }
+            })
+            .catch((error) => {
+              console.error("Error switching world:", error);
+              alert("Error switching world");
+            });
         }
-        
-        function backupWorld(worldName) {
-            if (confirm(`Create a backup of world "${worldName}"?`)) {
-                fetch(`/api/worlds/${worldName}/backup`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        loadBackups(); // Refresh the backups list
-                    } else {
-                        alert(`Error creating backup: ${data.error}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error creating backup:', error);
-                    alert('Error creating backup');
-                });
-            }
+      }
+
+      function backupWorld(worldName) {
+        if (confirm(`Create a backup of world "${worldName}"?`)) {
+          fetch(`/api/worlds/${worldName}/backup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(data.message);
+                loadBackups(); // Refresh the backups list
+              } else {
+                alert(`Error creating backup: ${data.error}`);
+              }
+            })
+            .catch((error) => {
+              console.error("Error creating backup:", error);
+              alert("Error creating backup");
+            });
         }
-        
-        function restoreWorld(worldName, backupFile) {
-            if (confirm(`Restore world "${worldName}" from backup "${backupFile}"? This will replace the current world.`)) {
-                fetch(`/api/worlds/${worldName}/restore`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({backup_file: backupFile})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        loadWorlds(); // Refresh the worlds list
-                    } else {
-                        alert(`Error restoring world: ${data.error}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error restoring world:', error);
-                    alert('Error restoring world');
-                });
-            }
+      }
+
+      function restoreWorld(worldName, backupFile) {
+        if (
+          confirm(
+            `Restore world "${worldName}" from backup "${backupFile}"? This will replace the current world.`,
+          )
+        ) {
+          fetch(`/api/worlds/${worldName}/restore`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ backup_file: backupFile }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(data.message);
+                loadWorlds(); // Refresh the worlds list
+              } else {
+                alert(`Error restoring world: ${data.error}`);
+              }
+            })
+            .catch((error) => {
+              console.error("Error restoring world:", error);
+              alert("Error restoring world");
+            });
         }
-        
-        function loadPlayers() {
-            fetch('/api/players')
-                .then(response => response.json())
-                .then(data => {
-                    let html = '<h6>Online Players:</h6>';
-                    if (data.online && data.online.length > 0) {
-                        html += '<ul class="list-group">';
-                        data.online.forEach(player => {
-                            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+      }
+
+      function loadPlayers() {
+        fetch("/api/players")
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "<h6>Online Players:</h6>";
+            if (data.online && data.online.length > 0) {
+              html += '<ul class="list-group">';
+              data.online.forEach((player) => {
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span>${player}</span>
                                 <div class="btn-group" role="group">
                                     <button class="btn btn-sm btn-success" onclick="opPlayer('${player}')" title="Grant OP">
@@ -969,235 +1255,249 @@
                                     </button>
                                 </div>
                             </li>`;
-                        });
-                        html += '</ul>';
-                    } else {
-                        html += '<p class="text-muted">No players online</p>';
-                    }
-                    
-                    html += '<h6 class="mt-3">All Players:</h6>';
-                    if (data.all && data.all.length > 0) {
-                        html += '<ul class="list-group">';
-                        data.all.forEach(player => {
-                            html += `<li class="list-group-item">
+              });
+              html += "</ul>";
+            } else {
+              html += '<p class="text-muted">No players online</p>';
+            }
+
+            html += '<h6 class="mt-3">All Players:</h6>';
+            if (data.all && data.all.length > 0) {
+              html += '<ul class="list-group">';
+              data.all.forEach((player) => {
+                html += `<li class="list-group-item">
                                 ${player.username} - Last seen: ${player.last_seen}
                             </li>`;
-                        });
-                        html += '</ul>';
-                    } else {
-                        html += '<p class="text-muted">No player data available</p>';
-                    }
-                    
-                    document.getElementById('players-list').innerHTML = html;
-                })
-                .catch(error => console.error('Error loading players:', error));
-        }
-        
-        function loadLogs() {
-            fetch('/api/logs')
-                .then(response => response.json())
-                .then(data => {
-                    displayLogs(data);
-                })
-                .catch(error => console.error('Error loading logs:', error));
-        }
-        
-        function displayLogs(logs) {
-            const output = document.getElementById('logs-output');
-            output.innerHTML = '';
-            logs.forEach(log => {
-                const timestamp = new Date(log.timestamp).toLocaleString();
-                output.innerHTML += `${timestamp} [${log.level}] ${log.message}\\n`;
+              });
+              html += "</ul>";
+            } else {
+              html += '<p class="text-muted">No player data available</p>';
+            }
+
+            document.getElementById("players-list").innerHTML = html;
+          })
+          .catch((error) => console.error("Error loading players:", error));
+      }
+
+      function loadLogs() {
+        fetch("/api/logs")
+          .then((response) => response.json())
+          .then((data) => {
+            displayLogs(data);
+          })
+          .catch((error) => console.error("Error loading logs:", error));
+      }
+
+      function displayLogs(logs) {
+        const output = document.getElementById("logs-output");
+        output.innerHTML = "";
+        logs.forEach((log) => {
+          const timestamp = new Date(log.timestamp).toLocaleString();
+          output.innerHTML += `${timestamp} [${log.level}] ${log.message}\\n`;
+        });
+        output.scrollTop = output.scrollHeight;
+      }
+
+      function kickPlayer(player) {
+        if (confirm(`Kick player ${player}?`)) {
+          fetch("/api/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ command: `kick ${player}` }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`Player ${player} kicked successfully`);
+                loadPlayers();
+              } else {
+                alert(`Error: ${data.result}`);
+              }
             });
-            output.scrollTop = output.scrollHeight;
         }
-        
-        function kickPlayer(player) {
-            if (confirm(`Kick player ${player}?`)) {
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({command: `kick ${player}`})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`Player ${player} kicked successfully`);
-                        loadPlayers();
-                    } else {
-                        alert(`Error: ${data.result}`);
+      }
+
+      function opPlayer(player) {
+        if (confirm(`Grant OP to ${player}?`)) {
+          fetch("/api/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ command: `op ${player}` }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`${player} is now an operator`);
+              } else {
+                alert(`Error: ${data.result}`);
+              }
+            });
+        }
+      }
+
+      function deopPlayer(player) {
+        if (confirm(`Remove OP from ${player}?`)) {
+          fetch("/api/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ command: `deop ${player}` }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`${player} is no longer an operator`);
+              } else {
+                alert(`Error: ${data.result}`);
+              }
+            });
+        }
+      }
+
+      function banPlayer(player) {
+        const reason = prompt(`Ban ${player}? Enter reason (optional):`);
+        if (reason !== null) {
+          const command = reason ? `ban ${player} ${reason}` : `ban ${player}`;
+          fetch("/api/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ command: command }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`${player} has been banned`);
+                loadPlayers();
+              } else {
+                alert(`Error: ${data.result}`);
+              }
+            });
+        }
+      }
+
+      function loadBanlist() {
+        fetch("/api/command", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command: "banlist" }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "<h6>Banned Players:</h6>";
+            if (data.success && data.result) {
+              const result = data.result;
+              // Parse the banlist result
+              if (
+                result.includes("There are") &&
+                result.includes("banned players")
+              ) {
+                const lines = result.split("\n");
+                const bannedPlayers = [];
+
+                // Extract player names from the result
+                for (let line of lines) {
+                  if (
+                    line.trim() &&
+                    !line.includes("There are") &&
+                    !line.includes("banned players")
+                  ) {
+                    const playerMatch = line.match(/([a-zA-Z0-9_]+)/);
+                    if (playerMatch) {
+                      bannedPlayers.push(playerMatch[1]);
                     }
-                });
-            }
-        }
-        
-        function opPlayer(player) {
-            if (confirm(`Grant OP to ${player}?`)) {
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({command: `op ${player}`})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`${player} is now an operator`);
-                    } else {
-                        alert(`Error: ${data.result}`);
-                    }
-                });
-            }
-        }
-        
-        function deopPlayer(player) {
-            if (confirm(`Remove OP from ${player}?`)) {
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({command: `deop ${player}`})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`${player} is no longer an operator`);
-                    } else {
-                        alert(`Error: ${data.result}`);
-                    }
-                });
-            }
-        }
-        
-        function banPlayer(player) {
-            const reason = prompt(`Ban ${player}? Enter reason (optional):`);
-            if (reason !== null) {
-                const command = reason ? `ban ${player} ${reason}` : `ban ${player}`;
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({command: command})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`${player} has been banned`);
-                        loadPlayers();
-                    } else {
-                        alert(`Error: ${data.result}`);
-                    }
-                });
-            }
-        }
-        
-        function loadBanlist() {
-            fetch('/api/command', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({command: 'banlist'})
-            })
-            .then(response => response.json())
-            .then(data => {
-                let html = '<h6>Banned Players:</h6>';
-                if (data.success && data.result) {
-                    const result = data.result;
-                    // Parse the banlist result
-                    if (result.includes('There are') && result.includes('banned players')) {
-                        const lines = result.split('\n');
-                        const bannedPlayers = [];
-                        
-                        // Extract player names from the result
-                        for (let line of lines) {
-                            if (line.trim() && !line.includes('There are') && !line.includes('banned players')) {
-                                const playerMatch = line.match(/([a-zA-Z0-9_]+)/);
-                                if (playerMatch) {
-                                    bannedPlayers.push(playerMatch[1]);
-                                }
-                            }
-                        }
-                        
-                        if (bannedPlayers.length > 0) {
-                            html += '<ul class="list-group">';
-                            bannedPlayers.forEach(player => {
-                                html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                  }
+                }
+
+                if (bannedPlayers.length > 0) {
+                  html += '<ul class="list-group">';
+                  bannedPlayers.forEach((player) => {
+                    html += `<li class="list-group-item d-flex justify-content-between align-items-center">
                                     ${player}
                                     <button class="btn btn-sm btn-success" onclick="unbanPlayer('${player}')">
                                         <i class="fas fa-check"></i> Unban
                                     </button>
                                 </li>`;
-                            });
-                            html += '</ul>';
-                        } else {
-                            html += '<p class="text-muted">No banned players</p>';
-                        }
-                    } else {
-                        html += '<p class="text-muted">No banned players</p>';
-                    }
+                  });
+                  html += "</ul>";
                 } else {
-                    html += '<p class="text-danger">Error loading banlist</p>';
+                  html += '<p class="text-muted">No banned players</p>';
                 }
-                document.getElementById('banlist-content').innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error loading banlist:', error);
-                document.getElementById('banlist-content').innerHTML = '<p class="text-danger">Error loading banlist</p>';
+              } else {
+                html += '<p class="text-muted">No banned players</p>';
+              }
+            } else {
+              html += '<p class="text-danger">Error loading banlist</p>';
+            }
+            document.getElementById("banlist-content").innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error loading banlist:", error);
+            document.getElementById("banlist-content").innerHTML =
+              '<p class="text-danger">Error loading banlist</p>';
+          });
+      }
+
+      function unbanPlayer(player) {
+        if (confirm(`Unban ${player}?`)) {
+          fetch("/api/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ command: `pardon ${player}` }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`${player} has been unbanned`);
+                loadBanlist();
+              } else {
+                alert(`Error: ${data.result}`);
+              }
             });
         }
-        
-        function unbanPlayer(player) {
-            if (confirm(`Unban ${player}?`)) {
-                fetch('/api/command', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({command: `pardon ${player}`})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`${player} has been unbanned`);
-                        loadBanlist();
-                    } else {
-                        alert(`Error: ${data.result}`);
-                    }
-                });
-            }
-        }
-        
-        // Handle Enter key in command input
-        document.getElementById('command-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendCommand();
-            }
+      }
+
+      // Handle Enter key in command input
+      document
+        .getElementById("command-input")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendCommand();
+          }
         });
-        
-        // Auto-refresh status every 30 seconds
-        setInterval(function() {
-            fetch('/api/status')
-                .then(response => response.json())
-                .then(data => updateStatus(data))
-                .catch(error => {
-                    console.error('Error updating status:', error);
-                    // Update navbar status on error
-                    const indicator = document.getElementById('server-status-indicator');
-                    const text = document.getElementById('server-status-text');
-                    indicator.className = 'fas fa-circle status-offline';
-                    text.textContent = 'Error';
-                });
-        }, 30000);
-        
-        // Initial status update
-        setTimeout(function() {
-            fetch('/api/status')
-                .then(response => response.json())
-                .then(data => updateStatus(data))
-                .catch(error => {
-                    console.error('Error loading initial status:', error);
-                    const indicator = document.getElementById('server-status-indicator');
-                    const text = document.getElementById('server-status-text');
-                    indicator.className = 'fas fa-circle status-offline';
-                    text.textContent = 'Error';
-                });
-        }, 1000);
+
+      // Auto-refresh status every 30 seconds
+      setInterval(function () {
+        fetch("/api/status")
+          .then((response) => response.json())
+          .then((data) => updateStatus(data))
+          .catch((error) => {
+            console.error("Error updating status:", error);
+            // Update navbar status on error
+            const indicator = document.getElementById(
+              "server-status-indicator",
+            );
+            const text = document.getElementById("server-status-text");
+            indicator.className = "fas fa-circle status-offline";
+            text.textContent = "Error";
+          });
+      }, 30000);
+
+      // Initial status update
+      setTimeout(function () {
+        fetch("/api/status")
+          .then((response) => response.json())
+          .then((data) => updateStatus(data))
+          .catch((error) => {
+            console.error("Error loading initial status:", error);
+            const indicator = document.getElementById(
+              "server-status-indicator",
+            );
+            const text = document.getElementById("server-status-text");
+            indicator.className = "fas fa-circle status-offline";
+            text.textContent = "Error";
+          });
+      }, 1000);
     </script>
-    
+
     {% block extra_js %}{% endblock %}
-</body>
+  </body>
 </html>

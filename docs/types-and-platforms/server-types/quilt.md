@@ -19,7 +19,7 @@ docker run -d --pull=always \
 
 !!! note
 
-    If you wish to use an alternative launcher you can: 
+    If you wish to use an alternative launcher you can:
 
     - Provide the path to a custom launcher jar available to the container with `QUILT_LAUNCHER`, relative to `/data` (such as `-e QUILT_LAUNCHER=quilt-server-custom.jar`)
     - Provide the URL to a custom launcher jar with `QUILT_LAUNCHER_URL` (such as `-e QUILT_LAUNCHER_URL=http://HOST/quilt-server-custom.jar`)

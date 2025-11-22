@@ -3,6 +3,7 @@ This directory provides a base to use with [kubectl kustomize](https://kubernete
 ## Example overlay content
 
 ### kustomization.yml
+
 ```yaml
 nameSuffix: "-forge"
 commonLabels:
@@ -19,6 +20,7 @@ patches:
 ```
 
 ### mc.env
+
 ```
 EULA=true
 TYPE=FORGE

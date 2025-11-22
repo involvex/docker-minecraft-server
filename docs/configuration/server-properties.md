@@ -3,14 +3,14 @@ In order to unify management of the Minecraft server container, all of the [`ser
 If you prefer to manually manage the `server.properties` file, set `OVERRIDE_SERVER_PROPERTIES` to "false". Similarly, you can entirely skip the startup script's creation of `server.properties` by setting `SKIP_SERVER_PROPERTIES` to "true".
 
 !!! note
-  
+
     To clear a server property, set the variable to an empty string, such as `-e RESOURCE_PACK=""`. An unset variable is ignored and the existing server property is left unchanged.
 
 To see what `server.properties` will get used by the server, set the environment variable `DUMP_SERVER_PROPERTIES` to "true" and the contents of `server.properties` will get output before the server starts.
 
 ## Placeholders
 
-When declaring a server properties via container environment variables, those values may contain placeholders that are processed when the `server.properties` file is updated. 
+When declaring a server properties via container environment variables, those values may contain placeholders that are processed when the `server.properties` file is updated.
 
 The syntax of placeholders is DOS-style, `%VAR%`, to avoid being processed by Docker or the shell and the following options are available:
 
@@ -22,7 +22,7 @@ The syntax of placeholders is DOS-style, `%VAR%`, to avoid being processed by Do
 
 : Formats the current date/time with the given `FMT` string processed by [Java's DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html).
 
-Any declared or resolved environment variable may be referenced, such as `VERSION` and `TYPE`. Additionally, [Modrinth](../types-and-platforms/mod-platforms/modrinth-modpacks.md) and [Auto CurseForge](../types-and-platforms/mod-platforms/auto-curseforge.md) modpacks will expose the environment variables `MODPACK_NAME` and `MODPACK_VERSION`. The originally declared version, such as "LATEST" or "SNAPSHOT", is available in the variable `DECLARED_VERSION` 
+Any declared or resolved environment variable may be referenced, such as `VERSION` and `TYPE`. Additionally, [Modrinth](../types-and-platforms/mod-platforms/modrinth-modpacks.md) and [Auto CurseForge](../types-and-platforms/mod-platforms/auto-curseforge.md) modpacks will expose the environment variables `MODPACK_NAME` and `MODPACK_VERSION`. The originally declared version, such as "LATEST" or "SNAPSHOT", is available in the variable `DECLARED_VERSION`
 
 !!! example
 
@@ -52,16 +52,16 @@ The section symbol (§) and other unicode characters are automatically converted
 !!! example
 
     With `docker run`
-    
+
          -e MOTD="A §l§cMinecraft§r §nserver"
-    
+
     or within a compose file
-    
+
         environment:
           MOTD: "A §l§cMinecraft§r §nserver"
 
     renders
-    
+
     ![](../img/motd-example.png)
 
 To produce a multi-line MOTD, embed a newline character as `\n` in the string, such as the following example.
@@ -69,13 +69,13 @@ To produce a multi-line MOTD, embed a newline character as `\n` in the string, s
 !!! example "Multi-line MOTD"
 
     With `docker run`
-    
+
     ```
     -e MOTD="Line one\nLine two"
     ```
-    
+
     or within a compose file
-    
+
     ```yaml
           MOTD: |
             line one
@@ -95,7 +95,7 @@ The following example combines a multi-line MOTD with [placeholders](#placeholde
       A %TYPE% server on %VERSION%
       running %MODPACK_NAME% %MODPACK_VERSION%
     ```
-    
+
     ![](../img/motd-with-placeholders.png)
 
 ### Difficulty
@@ -114,16 +114,16 @@ Refer to [the Minecraft wiki](https://minecraft.wiki/w/Difficulty)
 
 ### Whitelist Players
 
-!!! warning "For public servers" 
-    
+!!! warning "For public servers"
+
     It is very important to consider setting a whitelist of expected players.
 
-To whitelist players for your Minecraft server, you can:  
+To whitelist players for your Minecraft server, you can:
 
 - Provide a list of usernames and/or UUIDs separated by commas or newlines via the `WHITELIST` environment variable
 - Provide the URL or container path to a whitelist file via `WHITELIST_FILE` that will be retrieved/copied into the standard location
 
-!!! example 
+!!! example
 
     In a compose file, a text block can be used to improve maintainability, such as
 
@@ -150,7 +150,7 @@ To change the behavior when the whitelist file already exists, set the variable 
 `SYNC_FILE_MERGE_LIST` (default)
 : When `WHITELIST_FILE` is provided it will overwrite an existing whitelist file. Also, if `WHITELIST` is provided, then those users will be merged into the newly copied file.
 
-!!! note 
+!!! note
 
     For versions prior to 1.7.3, `white-list.txt` will be maintained instead. Only usernames are supported for those versions.
 
@@ -159,7 +159,6 @@ To [enforce the whitelist changes immediately](https://minecraft.wiki/w/Server.p
 !!! tip "Changing user API provider"
 
     The usernames provided for whitelist and ops processing are resolved using either [PlayerDB](https://playerdb.co/) or [Mojang's API](https://wiki.vg/Mojang_API#Username_to_UUID). The default uses PlayerDB, but can be changed by setting the environment variable `USER_API_PROVIDER` to "mojang". Sometimes one or the other service can become overloaded, which is why there is the ability to switch providers.
-
 
 ### Op/Administrator Players
 
@@ -212,20 +211,20 @@ A server icon can be configured by setting the `ICON` variable to a URL to downl
 !!! example
 
     Using `docker run`:
-    
+
     ```
     docker run -d -e ICON=http://..../some/image.png ...
     ```
-    
+
     In compose file:
-    
+
     ```yaml
     environment:
       ICON: http://..../some/image.png
     ```
-    
+
     Using a file from host filesystem:
-    
+
     ```yaml
     environment:
       ICON: /icon.png
@@ -246,9 +245,9 @@ RCON is **enabled by default** to allow for graceful shut down the server and co
 
 The default password is randomly generated on each startup; however, a specific one can be set with `RCON_PASSWORD`.
 
-**DO NOT MAP THE RCON PORT EXTERNALLY** unless you are aware of all the consequences and have set a **secure password** with `RCON_PASSWORD`. 
+**DO NOT MAP THE RCON PORT EXTERNALLY** unless you are aware of all the consequences and have set a **secure password** with `RCON_PASSWORD`.
 
-!!! info 
+!!! info
 
     Mapping ports (`-p` command line or `ports` in compose) outside the container and docker networking needs to be a purposeful choice. Most production Docker deployments do not need any of the Minecraft ports mapped externally from the server itself.
 
@@ -266,7 +265,7 @@ If using a negative value for the seed, make sure to quote the value such as:
 
 !!! example "Using docker run"
 
-    ``` 
+    ```
     -e SEED="-1785852800490497919"
     ```
 
@@ -315,24 +314,25 @@ Example for a superflat world:
 environment:
   LEVEL_TYPE: FLAT
   GENERATOR_SETTINGS: >-
-      {
-          "layers": [
-              {
-                  "block": "minecraft:bedrock",
-                  "height": 1
-              },
-              {
-                  "block": "minecraft:stone",
-                  "height": 2
-              },
-              {
-                  "block": "minecraft:sandstone",
-                  "height": 15
-              }
-          ],
-          "biome": "minecraft:desert"
-      }
+    {
+        "layers": [
+            {
+                "block": "minecraft:bedrock",
+                "height": 1
+            },
+            {
+                "block": "minecraft:stone",
+                "height": 2
+            },
+            {
+                "block": "minecraft:sandstone",
+                "height": 15
+            }
+        ],
+        "biome": "minecraft:desert"
+    }
 ```
+
 For more details, refer to the Minecraft Wiki sections for [Superflat Multiplayer](https://minecraft.wiki/w/Superflat#Multiplayer) and [generator options tag format](https://minecraft.wiki/w/Java_Edition_level_format#generatorOptions_tag_format).
 
 ### Custom Server Resource Pack
@@ -351,7 +351,7 @@ where the default is "world":
     docker run -d -e LEVEL=bonus ...
 
 > **NOTE:** if running multiple containers be sure to either specify a different `-v` host directory for each
-`LEVEL` in use or don't use `-v` and the container's filesystem will keep things encapsulated.
+> `LEVEL` in use or don't use `-v` and the container's filesystem will keep things encapsulated.
 
 > **INFO** Refer to the [data directory](../data-directory.md) section for a visual description of where the `$LEVEL` directory is situated.
 
@@ -383,9 +383,9 @@ Some mods/plugins utilize custom `server.properties` entries which can be declar
 Within a compose file, newline delimited entries can be declared as shown here:
 
 ```yaml
-      CUSTOM_SERVER_PROPERTIES: |
-        custom1=value1
-        defaultworldgenerator-port=f8c04631-f744-11ec-b260-f02f74b094e0
+CUSTOM_SERVER_PROPERTIES: |
+  custom1=value1
+  defaultworldgenerator-port=f8c04631-f744-11ec-b260-f02f74b094e0
 ```
 
 When using `docker run` from a bash shell, the entries must be quoted with the `$'` syntax, such as
@@ -397,7 +397,7 @@ When using `docker run` from a bash shell, the entries must be quoted with the `
 ### Other server property mappings
 
 | Environment Variable                    | Server Property                                                                                                               |
-|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | ACCEPTS_TRANSFERS                       | [accepts-transfers](https://minecraft.wiki/w/Server.properties#accepts-transfers)                                             |
 | ALLOW_FLIGHT                            | [allow-flight](https://minecraft.wiki/w/Server.properties#allow-flight)                                                       |
 | ALLOW_NETHER                            | [allow-nether](https://minecraft.wiki/w/Server.properties#allow-nether)                                                       |

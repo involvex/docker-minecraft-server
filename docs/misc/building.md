@@ -1,4 +1,3 @@
-
 !!! tip "For advanced use only"
 
     This page describes a capability that is not applicable to most users. It is only intended for rare cases when a very specific Java base image is needed or additional packages need to be installed that are not generally applicable or would bloat the image size.

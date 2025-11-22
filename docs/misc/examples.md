@@ -4,10 +4,9 @@ Various examples are [maintained in the repository](https://github.com/itzg/dock
 
 ## Bedrock compatible server
 
-Using the [GeyserMC plugin](https://geysermc.org/) with a Paper server (or similar) "enables clients from Minecraft Bedrock Edition to join your Minecraft Java server". The example also includes [Floodgate](https://wiki.geysermc.org/floodgate/) which "allows Xbox Live authenticated Bedrock users to join without a Java Edition account". 
+Using the [GeyserMC plugin](https://geysermc.org/) with a Paper server (or similar) "enables clients from Minecraft Bedrock Edition to join your Minecraft Java server". The example also includes [Floodgate](https://wiki.geysermc.org/floodgate/) which "allows Xbox Live authenticated Bedrock users to join without a Java Edition account".
 
 ```yaml title="compose.yaml"
-
 services:
   mc:
     image: itzg/minecraft-server:latest
@@ -47,7 +46,7 @@ With [lazymc-docker-proxy](https://github.com/joesturge/lazymc-docker-proxy) you
 # And that it is not in use by anything else.
 networks:
   minecraft-network:
-    driver: bridge    
+    driver: bridge
     ipam:
       config:
         - subnet: 172.18.0.0/16
@@ -100,9 +99,11 @@ services:
 volumes:
   data:
 ```
+
 [Source](https://github.com/joesturge/lazymc-docker-proxy/blob/master/docker-compose.yaml)
 
 ## Lazytainer - Stop Minecraft container based on traffic
+
 Monitors network traffic to the Minecraft containers. If there is traffic, the container runs, otherwise the container is stopped/paused.
 
 By using [Lazytainer](https://github.com/vmorganp/Lazytainer) with the [docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) a somehow similar behaviour to [Lazymc](https://github.com/timvisee/lazymc) can be archived.
@@ -142,4 +143,5 @@ services:
     stdin_open: true
     restart: unless-stopped
 ```
+
 [Source](https://github.com/itzg/docker-minecraft-server/blob/master/examples/lazytainer/docker-compose.yml)

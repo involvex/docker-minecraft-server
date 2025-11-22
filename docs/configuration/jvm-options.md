@@ -13,8 +13,8 @@ The values of all three are passed directly to the JVM and support format/units 
 To have control over heap size, without relying on absolute memory sizes percentages are also supported using `<size>%`.
 
 !!! info "RAMPercentage parameters"
-    Percentage based heap sizing is enabled using `-XX:InitialRAMPercentage` for `INIT_MEMORY` and `-XX:MaxRAMPercentage` for `MAX_MEMORY`.
-    For details on the function of these parameters look [here](https://www.baeldung.com/java-jvm-parameters-rampercentage).
+Percentage based heap sizing is enabled using `-XX:InitialRAMPercentage` for `INIT_MEMORY` and `-XX:MaxRAMPercentage` for `MAX_MEMORY`.
+For details on the function of these parameters look [here](https://www.baeldung.com/java-jvm-parameters-rampercentage).
 
 !!! example "Using docker run"
 
@@ -46,7 +46,7 @@ To have control over heap size, without relying on absolute memory sizes percent
 To let the JVM calculate the heap size from the container declared memory limit, unset `MEMORY` with an empty value, such as `-e MEMORY=""`. By default, the JVM will use 25% of the container memory limit as the heap limit.
 
 !!! important
-    The settings above only set the Java **heap** limits. Memory resource requests and limits on the overall container should also account for non-heap memory usage. An extra 25% is [a general best practice](https://dzone.com/articles/best-practices-java-memory-arguments-for-container).
+The settings above only set the Java **heap** limits. Memory resource requests and limits on the overall container should also account for non-heap memory usage. An extra 25% is [a general best practice](https://dzone.com/articles/best-practices-java-memory-arguments-for-container).
 
 ## Extra JVM Options
 
@@ -60,17 +60,17 @@ docker run ... -e JVM_OPTS="-XsomeJVMOption -DpropName=value" ...
 **NOTE** When declaring `JVM_OPTS` in a compose file's `environment` section with list syntax, **do not** include the quotes:
 
 ```yaml
-    environment:
-      - EULA=true
-      - JVM_OPTS=-XsomeJVMOption -DpropName=value
+environment:
+  - EULA=true
+  - JVM_OPTS=-XsomeJVMOption -DpropName=value
 ```
 
 Using object syntax is recommended and more intuitive:
 
 ```yaml
-    environment:
-      EULA: "true"
-      JVM_OPTS: "-XsomeJVMOption -DpropName=value"
+environment:
+  EULA: "true"
+  JVM_OPTS: "-XsomeJVMOption -DpropName=value"
 # or without quotes
 #     JVM_OPTS: -XsomeJVMOption -DpropName=value
 ```
@@ -80,13 +80,13 @@ As a shorthand for passing several system properties as `-D` arguments, you can 
 For example, instead of passing
 
 ```yaml
-  JVM_OPTS: -Dfml.queryResult=confirm -Dname=value
+JVM_OPTS: -Dfml.queryResult=confirm -Dname=value
 ```
 
 you can use
 
 ```yaml
-  JVM_DD_OPTS: fml.queryResult=confirm,name=value
+JVM_DD_OPTS: fml.queryResult=confirm,name=value
 ```
 
 ## Enable Remote JMX for Profiling

@@ -15,7 +15,7 @@ services:
       - sys_module
     restart: unless-stopped
     # ports: # Not needed, tailscale is directly linking to the container.
-      # - "25565:25565"
+    # - "25565:25565"
   minecraft-server:
     image: itzg/minecraft-server
     network_mode: container:tailscale
@@ -30,6 +30,5 @@ services:
       - minecraftserver:/data
     restart: unless-stopped
 
-    
 volumes:
   minecraftserver:
